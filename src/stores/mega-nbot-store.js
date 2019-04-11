@@ -26,7 +26,12 @@ export default class MegaNBOTStore {
 
     reaction(
       () => this.appStore.chainStore.blockNumber,
-      () => this.calculateBlocksLeft(),
+      () => {
+        this.fetchDrawingInterval()
+        this.fetchWinningAmount()
+        this.fetchLastDrawingBlockNumber()
+        this.calculateBlocksLeft()
+      },
     )
   }
 
