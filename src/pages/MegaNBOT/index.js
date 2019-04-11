@@ -12,6 +12,34 @@ import NotDeployedView from '../../components/NotDeployedView'
 const { NETWORK } = Constants
 const { TOKEN: { NBOT } } = Config
 
+const Heading = ({ classes, title }) => (
+  <Typography variant="h5" className={classes.headingText}>
+    {title}
+  </Typography>
+)
+Heading.propTypes = {
+  classes: PropTypes.object.isRequired,
+  title: PropTypes.string.isRequired,
+}
+
+const Content = ({ classes, text, subText }) => (
+  <div className={classes.contentContainer}>
+    <Typography variant="h2" color="primary">
+      {text}
+    </Typography>
+    {subText && (
+      <Typography variant="subtitle2" color="primary">
+        {subText}
+      </Typography>
+    )}
+  </div>
+)
+Content.propTypes = {
+  classes: PropTypes.object.isRequired,
+  text: PropTypes.string.isRequired,
+  subText: PropTypes.string,
+}
+
 @inject('store')
 @observer
 class MegaNBOT extends Component {
@@ -34,12 +62,8 @@ class MegaNBOT extends Component {
     const { winningAmount } = this.state
     return (
       <div className={classes.sectionContainer}>
-        <Typography variant="h5">
-          Current Drawing Reward:
-        </Typography>
-        <Typography variant="h4">
-          {winningAmount}
-        </Typography>
+        <Heading title="Current Drawing Reward" classes={classes} />
+        <Content text="100 NBOT" classes={classes} />
       </div>
     )
   }
@@ -49,15 +73,13 @@ class MegaNBOT extends Component {
     const { blocksLeft, estimatedTimeLeft } = this.state
     return (
       <div className={classes.sectionContainer}>
-        <Typography variant="h5">
-          Blocks Left:
-        </Typography>
-        <Typography variant="h4">
-          {blocksLeft}
-        </Typography>
-        <Typography variant="subtitle2">
-          approximately {estimatedTimeLeft}
-        </Typography>
+        <Heading
+          title="Blocks Left"
+          classes={classes} />
+        <Content
+          text="12345"
+          subText="approximately 20 hours 15 minutes"
+          classes={classes} />
       </div>
     )
   }
@@ -66,7 +88,9 @@ class MegaNBOT extends Component {
     const { classes } = this.props
     return (
       <div className={classes.sectionContainer}>
-        <Button title="Enter Drawing!" />
+        <Button variant="raised" color="primary" className={classes.enterButton}>
+          Enter Drawing
+        </Button>
       </div>
     )
   }
@@ -75,8 +99,11 @@ class MegaNBOT extends Component {
     const { classes } = this.props
     return (
       <div className={classes.sectionContainer}>
-        <Typography variant="h4">
-          New free drawings every day! Enter to win NBOT!
+        <Typography variant="h3">
+          New free drawings every day!
+        </Typography>
+        <Typography variant="h3">
+          Enter to win NBOT!
         </Typography>
       </div>
     )
@@ -115,7 +142,7 @@ class MegaNBOT extends Component {
   }
 
   render() {
-    const { store: { walletStore: { account } } } = this.props
+    const { classes, store: { walletStore: { account } } } = this.props
     const { contract, nbotContract, owner } = this.state
 
     // Show not deployed view
@@ -124,7 +151,7 @@ class MegaNBOT extends Component {
     }
 
     return (
-      <div>
+      <div className={classes.root}>
         {this.renderRewardSection()}
         {this.renderBlocksLeftSection()}
         {this.renderEntrySection()}
