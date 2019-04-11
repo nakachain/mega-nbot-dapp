@@ -56,7 +56,8 @@ class MegaNBOT extends Component {
       classes,
       store: {
         megaNBOTStore: {
-          lastDrawingBlockNumber,
+          blocksLeft,
+          timeLeft,
         },
       },
     } = this.props
@@ -66,8 +67,8 @@ class MegaNBOT extends Component {
           title="Blocks Left"
           classes={classes} />
         <Content
-          text={lastDrawingBlockNumber}
-          subText="approximately 20 hours 15 minutes"
+          text={blocksLeft}
+          subText={`approx. ${timeLeft}`}
           classes={classes} />
       </div>
     )

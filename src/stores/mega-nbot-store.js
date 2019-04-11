@@ -1,4 +1,6 @@
-import { observable, action } from 'mobx'
+import { observable, action, reaction } from 'mobx'
+import BN from 'bn.js'
+import prettyMs from 'pretty-ms'
 import MegaNBOTMeta from '../contracts/mega-nbot'
 import NBOTMeta from '../contracts/nbot'
 import { formatNumberResponse } from '../utils/format'
@@ -6,18 +8,25 @@ import Constants from '../constants'
 import Config from '../config'
 
 const { NETWORK } = Constants
-const { TOKEN: { NBOT } } = Config
+const { TOKEN: { NBOT }, INTERVAL: { BLOCK_TIME } } = Config
 
 export default class MegaNBOTStore {
   contract = undefined
   nbotContract = undefined
   @observable deployed = false
   @observable winningAmount = undefined
-  @observable drawingInterval = undefined
-  @observable lastDrawingBlockNumber = undefined
+  drawingInterval = undefined
+  lastDrawingBlockNumber = undefined
+  @observable blocksLeft = undefined
+  @observable timeLeft = undefined
 
   constructor(appStore) {
     this.appStore = appStore
+
+    reaction(
+      () => this.appStore.chainStore.blockNumber,
+      () => this.calculateBlocksLeft(),
+    )
   }
 
   @action
@@ -81,5 +90,26 @@ export default class MegaNBOTStore {
 
       this.lastDrawingBlockNumber = res.toString()
     })
+  }
+
+  @action
+  calculateBlocksLeft = () => {
+    if (this.appStore.chainStore.blockNumber
+      && this.drawingInterval
+      && this.lastDrawingBlockNumber) {
+      const nextDrawing = new BN(this.lastDrawingBlockNumber)
+        .add(new BN(this.drawingInterval))
+      const blocksLeft = nextDrawing.sub(
+        new BN(this.appStore.chainStore.blockNumber),
+      )
+
+      if (blocksLeft.isZero() || blocksLeft.isNeg()) {
+        this.blocksLeft = '0'
+        this.timeLeft = prettyMs(0)
+      } else {
+        this.blocksLeft = blocksLeft.toString()
+        this.timeLeft = prettyMs(blocksLeft.toNumber() * BLOCK_TIME)
+      }
+    }
   }
 }

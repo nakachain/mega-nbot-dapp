@@ -15,4 +15,7 @@ export default Object.freeze({
       decimals: 8,
     },
   },
+  INTERVAL: {
+    BLOCK_TIME: 3000,
+  },
 })
