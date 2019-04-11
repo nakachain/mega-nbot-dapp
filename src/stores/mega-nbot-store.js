@@ -13,8 +13,8 @@ export default class MegaNBOTStore {
   nbotContract = undefined
   @observable deployed = false
   @observable winningAmount = undefined
-  @observable lastDrawingBlockNumber = undefined
   @observable drawingInterval = undefined
+  @observable lastDrawingBlockNumber = undefined
 
   constructor(appStore) {
     this.appStore = appStore
@@ -38,8 +38,22 @@ export default class MegaNBOTStore {
       this.nbotContract = window.naka.eth.contract(NBOTMeta.abi).at(nbotAddr)
       this.deployed = true
 
+      this.fetchDrawingInterval()
       this.fetchWinningAmount()
+      this.fetchLastDrawingBlockNumber()
     }
+  }
+
+  @action
+  fetchDrawingInterval = () => {
+    this.contract.withdrawInterval((err, res) => {
+      if (err) {
+        console.error('Error fetching withdrawInterval.', err)
+        return
+      }
+
+      this.drawingInterval = res.toString()
+    })
   }
 
   @action
@@ -54,6 +68,18 @@ export default class MegaNBOTStore {
         symbol: NBOT.symbol,
         decimals: NBOT.decimals,
       })
+    })
+  }
+
+  @action
+  fetchLastDrawingBlockNumber = () => {
+    this.contract.lastDrawingBlockNum((err, res) => {
+      if (err) {
+        console.error('Error fetching lastDrawingBlockNumber.', err)
+        return
+      }
+
+      this.lastDrawingBlockNumber = res.toString()
     })
   }
 }

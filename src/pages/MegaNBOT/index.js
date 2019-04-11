@@ -52,14 +52,21 @@ class MegaNBOT extends Component {
   }
 
   renderBlocksLeftSection = () => {
-    const { classes } = this.props
+    const {
+      classes,
+      store: {
+        megaNBOTStore: {
+          lastDrawingBlockNumber,
+        },
+      },
+    } = this.props
     return (
       <div className={classes.sectionContainer}>
         <Heading
           title="Blocks Left"
           classes={classes} />
         <Content
-          text="12345"
+          text={lastDrawingBlockNumber}
           subText="approximately 20 hours 15 minutes"
           classes={classes} />
       </div>
