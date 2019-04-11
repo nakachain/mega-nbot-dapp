@@ -1,0 +1,23 @@
+{
+  "parser": "babel-eslint",
+  "plugins": ["react"],
+  "extends": [
+    "plugin:react/recommended",
+    "airbnb-base"
+  ],
+  "rules": {
+    "class-methods-use-this": "off",
+    "consistent-return": "warn",
+    "import/prefer-default-export": "off",
+    "no-unused-vars": "warn",
+    "object-curly-newline": [
+      "error", {
+        "ImportDeclaration": "never"
+      }
+    ],
+    "semi": "off"
+  },
+  "globals": {
+    "window": true
+  }
+}
