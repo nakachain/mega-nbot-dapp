@@ -7,6 +7,6 @@ echo 'Rebuilding...'
 npm run build
 
 echo 'Deploying...'
-sudo cp -r ./dist/. /var/www/dapp
+sudo cp -r ./dist/. /var/www/meganbot
 
 echo 'Deployed!'
