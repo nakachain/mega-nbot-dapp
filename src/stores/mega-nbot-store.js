@@ -117,4 +117,15 @@ export default class MegaNBOTStore {
       }
     }
   }
+
+  enterDrawing = () => {
+    this.contract.enterDrawingFromSender((err, res) => {
+      if (err) {
+        console.error('Error enterDrawingFromSender.', err)
+        return
+      }
+
+      console.log(res)
+    })
+  }
 }

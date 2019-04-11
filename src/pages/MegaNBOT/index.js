@@ -81,6 +81,7 @@ class MegaNBOT extends Component {
         megaNBOTStore: {
           blocksLeft,
           drawButtonDisabled,
+          enterDrawing,
         },
       },
     } = this.props
@@ -91,6 +92,7 @@ class MegaNBOT extends Component {
           color="primary"
           className={classes.enterButton}
           disabled={drawButtonDisabled}
+          onClick={enterDrawing}
         >
           {Number(blocksLeft) === 0 ? 'Draw Winner' : 'Enter Drawing'}
         </Button>
@@ -102,10 +104,10 @@ class MegaNBOT extends Component {
     const { classes } = this.props
     return (
       <div className={classes.sectionContainer}>
-        <Typography variant="h3">
-          New FREE drawings every day.
+        <Typography variant="h4">
+          FREE drawings every day.
         </Typography>
-        <Typography variant="h3">
+        <Typography variant="h4">
           Enter to win NBOT!
         </Typography>
       </div>
