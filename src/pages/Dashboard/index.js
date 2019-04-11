@@ -5,8 +5,7 @@ import { inject, observer } from 'mobx-react'
 import styles from './styles'
 import NotLoggedIn from './NotLoggedIn'
 import TopBar from './TopBar'
-import Sidebar from './Sidebar'
-import Content from './Content'
+import MegaNBOT from '../MegaNBOT'
 import { getAccount, getNetwork } from '../../utils/web3'
 
 @inject('store')
@@ -35,8 +34,7 @@ class Dashboard extends Component {
       <div className={classes.root}>
         <TopBar title="Home" />
         <div className={classes.container}>
-          <Sidebar />
-          <Content />
+          <MegaNBOT />
         </div>
       </div>
     )
