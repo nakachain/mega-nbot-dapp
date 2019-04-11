@@ -7,6 +7,6 @@ echo 'Rebuilding...'
 npm run build
 
 echo 'Deploying...'
-sudo cp -r ./dist/. /var/www/meganbot
+sudo cp -r ./dist/. /var/www/mega-nbot
 
 echo 'Deployed!'
