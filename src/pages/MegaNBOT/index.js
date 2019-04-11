@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
-import { Typography, Button, withStyles } from '@material-ui/core'
+import { Typography, Button, Grid, withStyles } from '@material-ui/core'
 import styles from './styles'
 import NotDeployedView from '../../components/NotDeployedView'
 
@@ -51,25 +51,41 @@ class MegaNBOT extends Component {
     )
   }
 
-  renderBlocksLeftSection = () => {
+  renderBlocksSection = () => {
     const {
       classes,
       store: {
+        chainStore: {
+          blockNumber,
+        },
         megaNBOTStore: {
           blocksLeft,
           timeLeft,
         },
       },
     } = this.props
+
     return (
       <div className={classes.sectionContainer}>
-        <Heading
-          title="Blocks Left"
-          classes={classes} />
-        <Content
-          text={blocksLeft}
-          subText={`approx. ${timeLeft}`}
-          classes={classes} />
+        <div className={classes.blocksContainer}>
+          <div className={`${classes.contentContainer} marginRight`}>
+            <Heading
+              title="Current Block"
+              classes={classes} />
+            <Content
+              text={blockNumber}
+              classes={classes} />
+          </div>
+          <div className={classes.contentContainer}>
+            <Heading
+              title="Next Drawing"
+              classes={classes} />
+            <Content
+              text={blocksLeft}
+              subText={`approx. ${timeLeft}`}
+              classes={classes} />
+          </div>
+        </div>
       </div>
     )
   }
@@ -105,7 +121,7 @@ class MegaNBOT extends Component {
     return (
       <div className={classes.sectionContainer}>
         <Typography variant="h4">
-          FREE drawings every day.
+          FREE drawings every day!
         </Typography>
         <Typography variant="h4">
           Enter to win NBOT!
@@ -138,7 +154,7 @@ class MegaNBOT extends Component {
     return (
       <div className={classes.root}>
         {this.renderRewardSection()}
-        {this.renderBlocksLeftSection()}
+        {this.renderBlocksSection()}
         {this.renderEntrySection()}
         {this.renderNoticeSection()}
       </div>

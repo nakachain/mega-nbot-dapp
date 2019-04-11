@@ -16,6 +16,13 @@ export default theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    '&.marginRight': {
+      marginRight: theme.spacing.eight,
+    },
+  },
+  blocksContainer: {
+    display: 'flex',
+    flexDirection: 'row',
   },
   headingText: {
     marginBottom: theme.spacing.unit,
