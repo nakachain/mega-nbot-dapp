@@ -75,15 +75,24 @@ class MegaNBOT extends Component {
   }
 
   renderEntrySection = () => {
-    const { classes } = this.props
+    const {
+      classes,
+      store: {
+        megaNBOTStore: {
+          blocksLeft,
+          drawButtonDisabled,
+        },
+      },
+    } = this.props
     return (
       <div className={classes.sectionContainer}>
         <Button
           variant="contained"
           color="primary"
           className={classes.enterButton}
+          disabled={drawButtonDisabled}
         >
-          Enter Drawing
+          {Number(blocksLeft) === 0 ? 'Draw Winner' : 'Enter Drawing'}
         </Button>
       </div>
     )

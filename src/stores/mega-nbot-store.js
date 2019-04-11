@@ -1,5 +1,6 @@
-import { observable, action, reaction } from 'mobx'
+import { observable, action, reaction, computed } from 'mobx'
 import BN from 'bn.js'
+import { isUndefined } from 'lodash'
 import prettyMs from 'pretty-ms'
 import MegaNBOTMeta from '../contracts/mega-nbot'
 import NBOTMeta from '../contracts/nbot'
@@ -27,6 +28,10 @@ export default class MegaNBOTStore {
       () => this.appStore.chainStore.blockNumber,
       () => this.calculateBlocksLeft(),
     )
+  }
+
+  @computed get drawButtonDisabled() {
+    return isUndefined(this.blocksLeft)
   }
 
   @action
