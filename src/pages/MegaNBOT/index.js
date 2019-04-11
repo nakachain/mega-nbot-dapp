@@ -3,14 +3,7 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import { Typography, Button, withStyles } from '@material-ui/core'
 import styles from './styles'
-import MegaNBOTMeta from '../../contracts/mega-nbot'
-import NBOTMeta from '../../contracts/nbot'
-import Constants from '../../constants'
-import Config from '../../config'
 import NotDeployedView from '../../components/NotDeployedView'
-
-const { NETWORK } = Constants
-const { TOKEN: { NBOT } } = Config
 
 const Heading = ({ classes, title }) => (
   <Typography variant="h5" className={classes.headingText}>
@@ -36,7 +29,7 @@ const Content = ({ classes, text, subText }) => (
 )
 Content.propTypes = {
   classes: PropTypes.object.isRequired,
-  text: PropTypes.string.isRequired,
+  text: PropTypes.string,
   subText: PropTypes.string,
 }
 
@@ -48,29 +41,18 @@ class MegaNBOT extends Component {
     store: PropTypes.object,
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      contract: undefined,
-      nbotContract: undefined,
-      owner: undefined,
-    }
-  }
-
   renderRewardSection = () => {
-    const { classes } = this.props
-    const { winningAmount } = this.state
+    const { classes, store: { megaNBOTStore: { winningAmount } } } = this.props
     return (
       <div className={classes.sectionContainer}>
         <Heading title="Current Drawing Reward" classes={classes} />
-        <Content text="100 NBOT" classes={classes} />
+        <Content text={winningAmount} classes={classes} />
       </div>
     )
   }
 
   renderBlocksLeftSection = () => {
     const { classes } = this.props
-    const { blocksLeft, estimatedTimeLeft } = this.state
     return (
       <div className={classes.sectionContainer}>
         <Heading
@@ -88,7 +70,11 @@ class MegaNBOT extends Component {
     const { classes } = this.props
     return (
       <div className={classes.sectionContainer}>
-        <Button variant="raised" color="primary" className={classes.enterButton}>
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.enterButton}
+        >
           Enter Drawing
         </Button>
       </div>
@@ -100,7 +86,7 @@ class MegaNBOT extends Component {
     return (
       <div className={classes.sectionContainer}>
         <Typography variant="h3">
-          New free drawings every day!
+          New FREE drawings every day.
         </Typography>
         <Typography variant="h3">
           Enter to win NBOT!
@@ -110,43 +96,23 @@ class MegaNBOT extends Component {
   }
 
   componentDidMount() {
-    const { store: { walletStore: { network } } } = this.props
-    if (network) {
-      let contract = window.naka.eth.contract(MegaNBOTMeta.abi)
-      let nbotContract = window.naka.eth.contract(NBOTMeta.abi)
-
-      let addr
-      let nbotAddr
-      if (network === NETWORK.MAINNET) {
-        addr = MegaNBOTMeta.mainnet
-        nbotAddr = NBOTMeta.mainnet
-      } else if (network === NETWORK.TESTNET) {
-        addr = MegaNBOTMeta.testnet
-        nbotAddr = NBOTMeta.testnet
-      }
-
-      if (addr && nbotAddr) {
-        contract = contract.at(addr)
-        nbotContract = nbotContract.at(nbotAddr)
-        this.setState({ contract, nbotContract })
-
-        contract.owner((err, res) => {
-          if (err) {
-            console.error('Error fetching owner.', err)
-            return
-          }
-          this.setState({ owner: res })
-        })
-      }
-    }
+    const {
+      store: {
+        walletStore: { network },
+        megaNBOTStore: { initContracts },
+      },
+    } = this.props
+    if (network) initContracts()
   }
 
   render() {
-    const { classes, store: { walletStore: { account } } } = this.props
-    const { contract, nbotContract, owner } = this.state
+    const {
+      classes,
+      store: { megaNBOTStore: { deployed } },
+    } = this.props
 
     // Show not deployed view
-    if (!contract && !nbotContract) {
+    if (!deployed) {
       return <NotDeployedView name="MegaNBOT" />
     }
 
