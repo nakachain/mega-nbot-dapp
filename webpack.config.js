@@ -50,4 +50,7 @@ module.exports = {
       { from: './public/index.html' },
     ]),
   ],
+  node: {
+    fs: 'empty',
+  },
 }
