@@ -1,6 +1,6 @@
 import { observable, action, reaction, computed } from 'mobx'
 import BN from 'bn.js'
-import { isUndefined } from 'lodash'
+import { isUndefined, each } from 'lodash'
 import prettyMs from 'pretty-ms'
 import MegaNBOTMeta from '../contracts/mega-nbot'
 import NBOTMeta from '../contracts/nbot'
@@ -120,7 +120,15 @@ export default class MegaNBOTStore {
           return
         }
 
-        console.log(res)
+        const winners = []
+        each(res, (event) => {
+          const { args: { winner, amount } } = event
+          winners.push({
+            address: winner,
+            amount: this.toNBOTStr(amount.toString()),
+          })
+        })
+        this.winners = winners
       })
   }
 
