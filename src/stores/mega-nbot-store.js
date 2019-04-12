@@ -20,6 +20,7 @@ export default class MegaNBOTStore {
   lastDrawingBlockNumber = undefined
   @observable blocksLeft = undefined
   @observable timeLeft = undefined
+  @observable inCurrentDrawing = false
   @observable winners = []
 
   constructor(appStore) {
@@ -37,6 +38,7 @@ export default class MegaNBOTStore {
         this.fetchWinningAmount()
         this.fetchLastDrawingBlockNumber()
         this.calculateBlocksLeft()
+        this.checkIfInCurrentDrawing()
         this.fetchUserWonEvents()
       },
     )
@@ -45,6 +47,11 @@ export default class MegaNBOTStore {
   @computed get drawButtonDisabled() {
     return isUndefined(this.blocksLeft)
   }
+
+  toNBOTStr = amount => formatNumberResponse(amount, {
+    symbol: NBOT.symbol,
+    decimals: NBOT.decimals,
+  })
 
   @action
   initContracts = () => {
@@ -67,6 +74,7 @@ export default class MegaNBOTStore {
       this.fetchDrawingInterval()
       this.fetchWinningAmount()
       this.fetchLastDrawingBlockNumber()
+      this.checkIfInCurrentDrawing()
       this.fetchUserWonEvents()
     }
   }
@@ -108,6 +116,20 @@ export default class MegaNBOTStore {
 
       this.lastDrawingBlockNumber = res.toString()
     })
+  }
+
+  @action
+  checkIfInCurrentDrawing = () => {
+    if (!this.appStore.walletStore.account || !this.contract) return
+    this.contract.isInCurrentDrawing(this.appStore.walletStore.account,
+      (err, res) => {
+        if (err) {
+          console.error('Error fetching isInCurrentDrawing.', err)
+          return
+        }
+
+        this.inCurrentDrawing = res
+      })
   }
 
   @action
@@ -164,9 +186,4 @@ export default class MegaNBOTStore {
       console.log(res)
     })
   }
-
-  toNBOTStr = amount => formatNumberResponse(amount, {
-    symbol: NBOT.symbol,
-    decimals: NBOT.decimals,
-  })
 }

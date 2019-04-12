@@ -24,9 +24,14 @@ export default theme => ({
   headingText: {
     marginBottom: theme.spacing.unit,
   },
+  entrySection: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginBottom: theme.spacing.four,
+  },
   enterButton: {
     fontSize: 20,
     padding: `${theme.spacing.two}px ${theme.spacing.six}px`,
-    marginBottom: theme.spacing.three,
   },
 })

@@ -71,11 +71,12 @@ class MegaNBOT extends Component {
           blocksLeft,
           drawButtonDisabled,
           enterDrawing,
+          inCurrentDrawing,
         },
       },
     } = this.props
     return (
-      <div>
+      <div className={classes.entrySection}>
         <Button
           variant="contained"
           color="primary"
@@ -85,6 +86,11 @@ class MegaNBOT extends Component {
         >
           {Number(blocksLeft) === 0 ? 'Draw Winner' : 'Enter Drawing'}
         </Button>
+        {inCurrentDrawing && (
+          <Typography variant="subtitle2" color="error">
+            You are already in this drawing.
+          </Typography>
+        )}
       </div>
     )
   }
