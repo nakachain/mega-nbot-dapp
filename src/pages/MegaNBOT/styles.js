@@ -10,15 +10,12 @@ export default theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    marginBottom: theme.spacing.eight,
+    marginBottom: theme.spacing.seven,
   },
   contentContainer: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    '&.marginRight': {
-      marginRight: theme.spacing.eight,
-    },
   },
   blocksContainer: {
     display: 'flex',

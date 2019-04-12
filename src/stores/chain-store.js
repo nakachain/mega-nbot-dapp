@@ -5,7 +5,7 @@ const { INTERVAL: { BLOCK_TIME } } = Config
 
 export default class ChainStore {
   blockInterval = undefined
-  @observable blockNumber = 0
+  @observable blockNumber = undefined
 
   constructor(appStore) {
     this.appStore = appStore

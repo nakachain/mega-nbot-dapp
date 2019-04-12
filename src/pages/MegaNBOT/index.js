@@ -41,25 +41,23 @@ class MegaNBOT extends Component {
     } = this.props
 
     return (
-      <div className={classes.sectionContainer}>
-        <div className={classes.blocksContainer}>
-          <div className={`${classes.contentContainer} marginRight`}>
-            <Heading
-              title="Current Block"
-              classes={classes} />
-            <Content
-              text={blockNumber.toString()}
-              classes={classes} />
-          </div>
-          <div className={classes.contentContainer}>
-            <Heading
-              title="Blocks Left"
-              classes={classes} />
-            <Content
-              text={blocksLeft}
-              subText={`approx. ${timeLeft}`}
-              classes={classes} />
-          </div>
+      <div>
+        <div className={classes.sectionContainer}>
+          <Heading
+            title="Blocks Left"
+            classes={classes} />
+          <Content
+            text={blocksLeft}
+            subText={`approx. ${timeLeft}`}
+            classes={classes} />
+        </div>
+        <div className={classes.sectionContainer}>
+          <Heading
+            title="Current Block"
+            classes={classes} />
+          <Content
+            text={blockNumber && blockNumber.toString()}
+            classes={classes} />
         </div>
       </div>
     )
