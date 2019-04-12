@@ -14,6 +14,7 @@ export default createMuiTheme({
   },
   typography: {
     fontFamily: 'Roboto',
+    useNextVariants: true,
   },
   spacing: {
     unit: 8,
