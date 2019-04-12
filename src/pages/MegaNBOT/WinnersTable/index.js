@@ -15,7 +15,7 @@ class WinnersTable extends Component {
   renderTableHead = () => {
     const { classes } = this.props
     return (
-      <TableHead className={classes.tableHead}>
+      <TableHead>
         <TableRow>
           <TableCell className={classes.tableHeadText}>
             <Typography variant="subtitle1" color="secondary">

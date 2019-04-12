@@ -29,5 +29,12 @@ export default createMuiTheme({
     borderRadius: 4,
   },
   overrides: {
+    MuiTableHead: {
+      root: {
+        backgroundColor: '#48A9A6',
+        borderTopLeftRadius: 4,
+        borderTopRightRadius: 4,
+      },
+    },
   },
 })
