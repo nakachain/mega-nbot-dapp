@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
-import { Table, TableHead, TableBody, TableRow, TableCell, withStyles, Typography } from '@material-ui/core'
+import { Paper, Table, TableHead, TableBody, TableRow, TableCell, withStyles, Typography } from '@material-ui/core'
 import styles from './styles'
 
 @inject('store')
@@ -62,10 +62,12 @@ class WinnersTable extends Component {
     const { classes } = this.props
 
     return (
-      <Table className={classes.table}>
-        {this.renderTableHead()}
-        {this.renderTableBody()}
-      </Table>
+      <Paper elevation={2}>
+        <Table className={classes.table}>
+          {this.renderTableHead()}
+          {this.renderTableBody()}
+        </Table>
+      </Paper>
     )
   }
 }
