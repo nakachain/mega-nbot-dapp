@@ -1,37 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
-import { Typography, Button, Grid, withStyles } from '@material-ui/core'
+import { Typography, Button, withStyles } from '@material-ui/core'
 import styles from './styles'
+import Heading from './Heading'
+import Content from './Content'
 import NotDeployedView from '../../components/NotDeployedView'
-
-const Heading = ({ classes, title }) => (
-  <Typography variant="h5" className={classes.headingText}>
-    {title}
-  </Typography>
-)
-Heading.propTypes = {
-  classes: PropTypes.object.isRequired,
-  title: PropTypes.string.isRequired,
-}
-
-const Content = ({ classes, text, subText }) => (
-  <div className={classes.contentContainer}>
-    <Typography variant="h2" color="primary">
-      {text}
-    </Typography>
-    {subText && (
-      <Typography variant="subtitle2" color="primary">
-        {subText}
-      </Typography>
-    )}
-  </div>
-)
-Content.propTypes = {
-  classes: PropTypes.object.isRequired,
-  text: PropTypes.string,
-  subText: PropTypes.string,
-}
 
 @inject('store')
 @observer
@@ -73,7 +47,7 @@ class MegaNBOT extends Component {
               title="Current Block"
               classes={classes} />
             <Content
-              text={blockNumber}
+              text={blockNumber.toString()}
               classes={classes} />
           </div>
           <div className={classes.contentContainer}>
