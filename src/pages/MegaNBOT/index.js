@@ -52,9 +52,6 @@ class MegaNBOT extends Component {
     const {
       classes,
       store: {
-        chainStore: {
-          blockNumber,
-        },
         megaNBOTStore: {
           blocksLeft,
           timeLeft,
@@ -63,24 +60,14 @@ class MegaNBOT extends Component {
     } = this.props
 
     return (
-      <div>
-        <div className={classes.sectionContainer}>
-          <Heading
-            title="Blocks Left"
-            classes={classes} />
-          <Content
-            text={blocksLeft}
-            subText={`approx. ${timeLeft}`}
-            classes={classes} />
-        </div>
-        <div className={classes.sectionContainer}>
-          <Heading
-            title="Current Block"
-            classes={classes} />
-          <Content
-            text={blockNumber && blockNumber.toString()}
-            classes={classes} />
-        </div>
+      <div className={classes.sectionContainer}>
+        <Heading
+          title="Blocks Left"
+          classes={classes} />
+        <Content
+          text={blocksLeft}
+          subText={`approx. ${timeLeft}`}
+          classes={classes} />
       </div>
     )
   }
