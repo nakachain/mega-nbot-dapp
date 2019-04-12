@@ -3,7 +3,7 @@ export default theme => ({
     width: 600,
   },
   tableHead: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: '#48A9A6',
   },
   tableHeadText: {
     color: theme.palette.secondary.main,
