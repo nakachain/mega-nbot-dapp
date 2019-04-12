@@ -26,8 +26,10 @@ export const getAccount = (callback) => {
 
 export const getNetwork = (callback) => {
   const { naka } = window
+  console.log('NAKA: getNetwork -> naka', naka)
   if (naka) {
     naka.version.getNetwork((err, network) => {
+      console.log('NAKA: getNetwork -> network', network)
       if (err) {
         console.error(`Error getting NakaWallet network: ${err.message}`)
         callback()

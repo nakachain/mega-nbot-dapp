@@ -2,7 +2,6 @@ import { observable, action, reaction, computed } from 'mobx'
 import BN from 'bn.js'
 import { isUndefined } from 'lodash'
 import prettyMs from 'pretty-ms'
-import { sha3 } from 'web3-utils'
 import MegaNBOTMeta from '../contracts/mega-nbot'
 import NBOTMeta from '../contracts/nbot'
 import { formatNumberResponse } from '../utils/format'
@@ -69,6 +68,7 @@ export default class MegaNBOTStore {
 
   @action
   fetchDrawingInterval = () => {
+    if (!this.contract) return
     this.contract.withdrawInterval((err, res) => {
       if (err) {
         console.error('Error fetching withdrawInterval.', err)
@@ -81,6 +81,7 @@ export default class MegaNBOTStore {
 
   @action
   fetchWinningAmount = () => {
+    if (!this.contract) return
     this.contract.winningAmount((err, res) => {
       if (err) {
         console.error('Error fetching winningAmount.', err)
@@ -93,6 +94,7 @@ export default class MegaNBOTStore {
 
   @action
   fetchLastDrawingBlockNumber = () => {
+    if (!this.contract) return
     this.contract.lastDrawingBlockNum((err, res) => {
       if (err) {
         console.error('Error fetching lastDrawingBlockNumber.', err)
@@ -105,6 +107,7 @@ export default class MegaNBOTStore {
 
   @action
   fetchUserWonEvents = () => {
+    if (!this.contract) return
     this.contract.UserWon({}, { fromBlock: 0, toBlock: 'latest' })
       .get((err, res) => {
         if (err) {
@@ -138,6 +141,7 @@ export default class MegaNBOTStore {
   }
 
   enterDrawing = () => {
+    if (!this.contract) return
     this.contract.enterDrawingFromSender((err, res) => {
       if (err) {
         console.error('Error enterDrawingFromSender.', err)
