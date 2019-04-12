@@ -2,6 +2,7 @@ import { observable, action, reaction, computed } from 'mobx'
 import BN from 'bn.js'
 import { isUndefined } from 'lodash'
 import prettyMs from 'pretty-ms'
+import { sha3 } from 'web3-utils'
 import MegaNBOTMeta from '../contracts/mega-nbot'
 import NBOTMeta from '../contracts/nbot'
 import { formatNumberResponse } from '../utils/format'
@@ -24,18 +25,6 @@ export default class MegaNBOTStore {
 
   constructor(appStore) {
     this.appStore = appStore
-    this.winners = [
-      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
-      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
-      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
-      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
-      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
-      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
-      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
-      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
-      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
-      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
-    ]
 
     reaction(
       () => this.appStore.chainStore.blockNumber,
@@ -44,6 +33,7 @@ export default class MegaNBOTStore {
         this.fetchWinningAmount()
         this.fetchLastDrawingBlockNumber()
         this.calculateBlocksLeft()
+        this.fetchUserWonEvents()
       },
     )
   }
@@ -73,6 +63,7 @@ export default class MegaNBOTStore {
       this.fetchDrawingInterval()
       this.fetchWinningAmount()
       this.fetchLastDrawingBlockNumber()
+      this.fetchUserWonEvents()
     }
   }
 
@@ -110,6 +101,19 @@ export default class MegaNBOTStore {
 
       this.lastDrawingBlockNumber = res.toString()
     })
+  }
+
+  @action
+  fetchUserWonEvents = () => {
+    this.contract.UserWon({}, { fromBlock: 0, toBlock: 'latest' })
+      .get((err, res) => {
+        if (err) {
+          console.error('Error fetching UserWon events:', err)
+          return
+        }
+
+        console.log(res)
+      })
   }
 
   @action
