@@ -49,6 +49,9 @@ module.exports = {
     new CopyPlugin([
       { from: './public/index.html' },
     ]),
+    new CopyPlugin([
+      { from: './public/images/favicon.ico' },
+    ]),
   ],
   node: {
     fs: 'empty',
