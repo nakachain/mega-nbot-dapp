@@ -8,6 +8,9 @@ export default createMuiTheme({
     secondary: {
       main: '#ffffff',
     },
+    background: {
+      default: '#e0e0e0',
+    },
   },
   typography: {
     fontFamily: 'Roboto',
@@ -21,6 +24,9 @@ export default createMuiTheme({
     six: 48,
     seven: 56,
     eight: 64,
+  },
+  shape: {
+    borderRadius: 4,
   },
   overrides: {
   },

@@ -20,9 +20,18 @@ export default class MegaNBOTStore {
   lastDrawingBlockNumber = undefined
   @observable blocksLeft = undefined
   @observable timeLeft = undefined
+  @observable winners = []
 
   constructor(appStore) {
     this.appStore = appStore
+    this.winners = [
+      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: '10000000000' },
+      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: '10000000000' },
+      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: '10000000000' },
+      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: '10000000000' },
+      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: '10000000000' },
+      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: '10000000000' },
+    ]
 
     reaction(
       () => this.appStore.chainStore.blockNumber,

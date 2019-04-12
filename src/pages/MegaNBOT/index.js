@@ -5,6 +5,7 @@ import { Typography, Button, withStyles } from '@material-ui/core'
 import styles from './styles'
 import Heading from './Heading'
 import Content from './Content'
+import WinnersTable from './WinnersTable'
 import NotDeployedView from '../../components/NotDeployedView'
 
 @inject('store')
@@ -131,6 +132,7 @@ class MegaNBOT extends Component {
         {this.renderBlocksSection()}
         {this.renderEntrySection()}
         {this.renderNoticeSection()}
+        <WinnersTable />
       </div>
     )
   }
