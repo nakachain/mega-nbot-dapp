@@ -1,10 +1,4 @@
 import winston from 'winston'
-import fs from 'fs'
-
-// Create logs dir if needed
-if (!fs.existsSync('./logs')) {
-  fs.mkdirSync('./logs')
-}
 
 const logger = winston.createLogger({
   level: 'info',
@@ -21,11 +15,11 @@ if (process.env.NODE_ENV !== 'production') {
 // Add file transports
 if (process.env.NODE_ENV === 'production') {
   logger.add(new winston.transports.File({
-    filename: './logs/error.log',
+    filename: 'error.log',
     level: 'error',
   }))
   logger.add(new winston.transports.File({
-    filename: './logs/combined.log',
+    filename: 'combined.log',
   }))
 }
 
