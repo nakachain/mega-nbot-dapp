@@ -4,13 +4,13 @@ export default theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: theme.spacing.five,
+    padding: theme.spacing.four,
   },
   sectionContainer: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    marginBottom: theme.spacing.seven,
+    marginBottom: theme.spacing.six,
   },
   contentContainer: {
     display: 'flex',

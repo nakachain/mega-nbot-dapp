@@ -5,7 +5,6 @@ import { Typography, Button, withStyles } from '@material-ui/core'
 import styles from './styles'
 import Heading from './Heading'
 import Content from './Content'
-import WinnersTable from './WinnersTable'
 import NotDeployedView from '../../components/NotDeployedView'
 
 @inject('store')
@@ -22,6 +21,29 @@ class MegaNBOT extends Component {
       <div className={classes.sectionContainer}>
         <Heading title="Drawing Reward" classes={classes} />
         <Content text={winningAmount} classes={classes} />
+      </div>
+    )
+  }
+
+  renderWinnerSection = () => {
+    const {
+      classes,
+      store: {
+        walletStore: {
+          account,
+        },
+        megaNBOTStore: {
+          lastWinner,
+        },
+      },
+    } = this.props
+    const address = lastWinner && lastWinner.address
+    const text = account === address ? 'You' : address
+
+    return (
+      <div className={classes.sectionContainer}>
+        <Heading title="Last Winner" classes={classes} />
+        <Content text={text} classes={classes} />
       </div>
     )
   }
@@ -120,10 +142,10 @@ class MegaNBOT extends Component {
     return (
       <div className={classes.root}>
         {this.renderRewardSection()}
+        {this.renderWinnerSection()}
         {this.renderBlocksSection()}
         {this.renderEntrySection()}
         {this.renderNoticeSection()}
-        <WinnersTable />
       </div>
     )
   }
