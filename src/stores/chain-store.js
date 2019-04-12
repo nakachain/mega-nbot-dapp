@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx'
+import { observable, action, reaction } from 'mobx'
 import Config from '../config'
 
 const { INTERVAL: { BLOCK_TIME } } = Config
@@ -9,7 +9,11 @@ export default class ChainStore {
 
   constructor(appStore) {
     this.appStore = appStore
-    this.init()
+
+    reaction(
+      () => this.appStore.walletStore.network,
+      () => this.init(),
+    )
   }
 
   @action

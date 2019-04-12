@@ -26,6 +26,11 @@ export default class MegaNBOTStore {
     this.appStore = appStore
 
     reaction(
+      () => this.appStore.walletStore.network,
+      () => this.initContracts(),
+    )
+
+    reaction(
       () => this.appStore.chainStore.blockNumber,
       () => {
         this.fetchDrawingInterval()

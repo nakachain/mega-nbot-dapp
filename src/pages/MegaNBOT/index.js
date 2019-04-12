@@ -102,16 +102,6 @@ class MegaNBOT extends Component {
     )
   }
 
-  componentDidMount() {
-    const {
-      store: {
-        walletStore: { network },
-        megaNBOTStore: { initContracts },
-      },
-    } = this.props
-    if (network) initContracts()
-  }
-
   render() {
     const {
       classes,

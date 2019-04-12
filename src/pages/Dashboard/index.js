@@ -6,16 +6,13 @@ import styles from './styles'
 import NotLoggedIn from './NotLoggedIn'
 import TopBar from './TopBar'
 import MegaNBOT from '../MegaNBOT'
-import { getAccount, getNetwork } from '../../utils/web3'
 
 @inject('store')
 @observer
 class Dashboard extends Component {
-  componentDidMount() {
-    const { store: { walletStore: { setAccount, setNetwork } } } = this.props
-
-    getAccount(account => setAccount(account))
-    getNetwork(network => setNetwork(network))
+  static propTypes = {
+    classes: PropTypes.object.isRequired,
+    store: PropTypes.object,
   }
 
   render() {
@@ -39,11 +36,6 @@ class Dashboard extends Component {
       </div>
     )
   }
-}
-
-Dashboard.propTypes = {
-  classes: PropTypes.object.isRequired,
-  store: PropTypes.object,
 }
 
 export default withStyles(styles)(Dashboard)
