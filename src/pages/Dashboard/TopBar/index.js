@@ -4,7 +4,7 @@ import { AppBar, Toolbar, Typography, withStyles } from '@material-ui/core'
 import { withRouter } from 'react-router'
 import { inject, observer } from 'mobx-react'
 import styles from './styles'
-import Logo from '../../../../public/images/naka_text_logo_white.png'
+import Logo from '../../../../static/images/naka_text_logo_white.png'
 
 const TopBar = ({ classes, store: { walletStore: { account, network } } }) => (
   <div className={classes.root}>

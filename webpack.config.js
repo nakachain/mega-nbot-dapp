@@ -47,10 +47,10 @@ module.exports = {
   },
   plugins: [
     new CopyPlugin([
-      { from: './public/index.html' },
+      { from: './static/index.html' },
     ]),
     new CopyPlugin([
-      { from: './public/images/favicon.ico' },
+      { from: './static/images/favicon.ico' },
     ]),
   ],
   node: {
