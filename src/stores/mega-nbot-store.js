@@ -25,12 +25,16 @@ export default class MegaNBOTStore {
   constructor(appStore) {
     this.appStore = appStore
     this.winners = [
-      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: '10000000000' },
-      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: '10000000000' },
-      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: '10000000000' },
-      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: '10000000000' },
-      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: '10000000000' },
-      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: '10000000000' },
+      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
+      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
+      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
+      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
+      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
+      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
+      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
+      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
+      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
+      { address: '0xD5D087daABC73Fc6Cc5D9C1131b93ACBD53A2428', amount: this.toNBOTStr('10000000000') },
     ]
 
     reaction(
@@ -92,10 +96,7 @@ export default class MegaNBOTStore {
         return
       }
 
-      this.winningAmount = formatNumberResponse(res, {
-        symbol: NBOT.symbol,
-        decimals: NBOT.decimals,
-      })
+      this.winningAmount = this.toNBOTStr(res)
     })
   }
 
@@ -142,4 +143,9 @@ export default class MegaNBOTStore {
       console.log(res)
     })
   }
+
+  toNBOTStr = amount => formatNumberResponse(amount, {
+    symbol: NBOT.symbol,
+    decimals: NBOT.decimals,
+  })
 }
