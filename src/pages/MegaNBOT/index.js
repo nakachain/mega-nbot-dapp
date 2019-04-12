@@ -20,7 +20,7 @@ class MegaNBOT extends Component {
     const { classes, store: { megaNBOTStore: { winningAmount } } } = this.props
     return (
       <div className={classes.sectionContainer}>
-        <Heading title="Current Drawing Reward" classes={classes} />
+        <Heading title="Drawing Reward" classes={classes} />
         <Content text={winningAmount} classes={classes} />
       </div>
     )
@@ -53,7 +53,7 @@ class MegaNBOT extends Component {
           </div>
           <div className={classes.contentContainer}>
             <Heading
-              title="Next Drawing"
+              title="Blocks Left"
               classes={classes} />
             <Content
               text={blocksLeft}
@@ -77,7 +77,7 @@ class MegaNBOT extends Component {
       },
     } = this.props
     return (
-      <div className={classes.sectionContainer}>
+      <div>
         <Button
           variant="contained"
           color="primary"
@@ -95,11 +95,8 @@ class MegaNBOT extends Component {
     const { classes } = this.props
     return (
       <div className={classes.sectionContainer}>
-        <Typography variant="h4">
-          FREE drawings every day!
-        </Typography>
-        <Typography variant="h4">
-          Enter to win NBOT!
+        <Typography variant="h5">
+          FREE drawings every day. Enter to win NBOT!
         </Typography>
       </div>
     )

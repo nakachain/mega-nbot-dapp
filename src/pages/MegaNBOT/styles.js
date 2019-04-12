@@ -30,5 +30,6 @@ export default theme => ({
   enterButton: {
     fontSize: 20,
     padding: `${theme.spacing.two}px ${theme.spacing.six}px`,
+    marginBottom: theme.spacing.three,
   },
 })
