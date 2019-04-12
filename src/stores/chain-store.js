@@ -1,5 +1,6 @@
 import { observable, action, reaction } from 'mobx'
 import Config from '../config'
+import logger from '../utils/logger'
 
 const { INTERVAL: { BLOCK_TIME } } = Config
 
@@ -31,7 +32,7 @@ export default class ChainStore {
   getBlockNumber = () => {
     window.naka.eth.getBlockNumber((err, res) => {
       if (err) {
-        console.error('Error getting block number:', err)
+        logger.error(`Error getting block number: ${err.message}`)
         return
       }
 

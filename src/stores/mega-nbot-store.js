@@ -4,6 +4,7 @@ import { isUndefined, each } from 'lodash'
 import prettyMs from 'pretty-ms'
 import MegaNBOTMeta from '../contracts/mega-nbot'
 import NBOTMeta from '../contracts/nbot'
+import logger from '../utils/logger'
 import { formatNumberResponse } from '../utils/format'
 import Constants from '../constants'
 import Config from '../config'
@@ -84,7 +85,7 @@ export default class MegaNBOTStore {
     if (!this.contract) return
     this.contract.withdrawInterval((err, res) => {
       if (err) {
-        console.error('Error fetching withdrawInterval.', err)
+        logger.error(`Error fetching withdrawInterval: ${err.message}`)
         return
       }
 
@@ -97,7 +98,7 @@ export default class MegaNBOTStore {
     if (!this.contract) return
     this.contract.winningAmount((err, res) => {
       if (err) {
-        console.error('Error fetching winningAmount.', err)
+        logger.error(`Error fetching winningAmount: ${err.message}`)
         return
       }
 
@@ -110,7 +111,7 @@ export default class MegaNBOTStore {
     if (!this.contract) return
     this.contract.lastDrawingBlockNum((err, res) => {
       if (err) {
-        console.error('Error fetching lastDrawingBlockNumber.', err)
+        logger.error(`Error fetching lastDrawingBlockNumber: ${err.message}`)
         return
       }
 
@@ -124,7 +125,7 @@ export default class MegaNBOTStore {
     this.contract.isInCurrentDrawing(this.appStore.walletStore.account,
       (err, res) => {
         if (err) {
-          console.error('Error fetching isInCurrentDrawing.', err)
+          logger.error(`Error fetching isInCurrentDrawing: ${err.message}`)
           return
         }
 
@@ -138,7 +139,7 @@ export default class MegaNBOTStore {
     this.contract.UserWon({}, { fromBlock: 0, toBlock: 'latest' })
       .get((err, res) => {
         if (err) {
-          console.error('Error fetching UserWon events:', err)
+          logger.error(`Error fetching UserWon events: ${err.message}`)
           return
         }
 
@@ -179,11 +180,11 @@ export default class MegaNBOTStore {
     if (!this.contract) return
     this.contract.enterDrawingFromSender((err, res) => {
       if (err) {
-        console.error('Error enterDrawingFromSender.', err)
+        logger.error(`Error enterDrawingFromSender: ${err.message}`)
         return
       }
 
-      console.log(res)
+      logger.info(`txid: ${res}`)
     })
   }
 }
