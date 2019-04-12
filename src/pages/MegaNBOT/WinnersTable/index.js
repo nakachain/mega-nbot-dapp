@@ -36,6 +36,9 @@ class WinnersTable extends Component {
     const {
       classes,
       store: {
+        walletStore: {
+          account,
+        },
         megaNBOTStore: {
           winners,
         },
@@ -47,7 +50,7 @@ class WinnersTable extends Component {
         {winners.map((winner, index) => (
           <TableRow key={index} className={classes.tableBodyRow}>
             <TableCell>
-              {winner.address}
+              {`${account === winner.address && '(You) '}${winner.address}`}
             </TableCell>
             <TableCell align="right">
               {winner.amount}
