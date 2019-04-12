@@ -1,4 +1,9 @@
 export default theme => ({
+  winnersTableContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
   table: {
     width: 600,
   },

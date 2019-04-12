@@ -62,12 +62,17 @@ class WinnersTable extends Component {
     const { classes } = this.props
 
     return (
-      <Paper elevation={2}>
-        <Table className={classes.table}>
-          {this.renderTableHead()}
-          {this.renderTableBody()}
-        </Table>
-      </Paper>
+      <div className={classes.winnersTableContainer}>
+        <Typography variant="h6">
+          Winners List
+        </Typography>
+        <Paper elevation={2}>
+          <Table className={classes.table}>
+            {this.renderTableHead()}
+            {this.renderTableBody()}
+          </Table>
+        </Paper>
+      </div>
     )
   }
 }
