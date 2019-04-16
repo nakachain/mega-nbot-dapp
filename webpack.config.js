@@ -55,5 +55,6 @@ module.exports = {
   ],
   node: {
     global: true,
+    fs: 'empty',
   },
 }

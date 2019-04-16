@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import { Provider as StoreProvider } from 'mobx-react'
+import { IntlProvider } from 'react-intl'
 import theme from './theme'
 import css from './style.css' // eslint-disable-line
 import Dashboard from './pages/Dashboard'
@@ -17,7 +18,9 @@ class App extends Component {
       <BrowserRouter>
         <StoreProvider store={store}>
           <MuiThemeProvider theme={theme}>
-            <Dashboard />
+            <IntlProvider locale="en">
+              <Dashboard />
+            </IntlProvider>
           </MuiThemeProvider>
         </StoreProvider>
       </BrowserRouter>
