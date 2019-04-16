@@ -21,7 +21,6 @@ export default class MegaNBOTStore {
   lastDrawingBlockNumber = undefined
   @observable blocksLeft = undefined
   @observable timeLeft = undefined
-  @observable inCurrentDrawing = false
   @observable previousWinner = undefined
   @observable currentTempWinner = undefined
 
@@ -42,7 +41,6 @@ export default class MegaNBOTStore {
         this.fetchPreviousWinner()
         this.fetchCurrentTempWinner()
         this.calculateBlocksLeft()
-        this.checkIfInCurrentDrawing()
       },
     )
   }
@@ -79,7 +77,6 @@ export default class MegaNBOTStore {
       this.fetchLastDrawingBlockNumber()
       this.fetchPreviousWinner()
       this.fetchCurrentTempWinner()
-      this.checkIfInCurrentDrawing()
     }
   }
 
@@ -146,20 +143,6 @@ export default class MegaNBOTStore {
 
       this.currentTempWinner = res
     })
-  }
-
-  @action
-  checkIfInCurrentDrawing = () => {
-    if (!this.appStore.walletStore.account || !this.contract) return
-    this.contract.isInCurrentDrawing(this.appStore.walletStore.account,
-      (err, res) => {
-        if (err) {
-          logger.error(`Error fetching isInCurrentDrawing: ${err.message}`)
-          return
-        }
-
-        this.inCurrentDrawing = res
-      })
   }
 
   @action

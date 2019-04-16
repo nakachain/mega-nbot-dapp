@@ -6,6 +6,9 @@ import styles from './styles'
 import Heading from './Heading'
 import Content from './Content'
 import NotDeployedView from '../../components/NotDeployedView'
+import Constants from '../../constants'
+
+const { ADDRESS } = Constants
 
 @inject('store')
 @observer
@@ -15,7 +18,7 @@ class MegaNBOT extends Component {
     store: PropTypes.object,
   }
 
-  renderRewardSection = () => {
+  renderReward = () => {
     const { classes, store: { megaNBOTStore: { winningAmount } } } = this.props
     return (
       <div className={classes.sectionContainer}>
@@ -25,7 +28,33 @@ class MegaNBOT extends Component {
     )
   }
 
-  renderWinnerSection = () => {
+  renderCurrentWinner = () => {
+    const {
+      classes,
+      store: {
+        walletStore: {
+          account,
+        },
+        megaNBOTStore: {
+          currentTempWinner,
+        },
+      },
+    } = this.props
+
+    let text
+    if (currentTempWinner === ADDRESS.INVALID) text = 'None'
+    else if (account === currentTempWinner) text = 'You'
+    else text = currentTempWinner
+
+    return (
+      <div className={classes.sectionContainer}>
+        <Heading title="Current Winner" classes={classes} />
+        <Content type="address" text={text} classes={classes} />
+      </div>
+    )
+  }
+
+  renderLastWinner = () => {
     const {
       classes,
       store: {
@@ -37,7 +66,11 @@ class MegaNBOT extends Component {
         },
       },
     } = this.props
-    const text = account === previousWinner ? 'You' : previousWinner
+
+    let text
+    if (previousWinner === ADDRESS.INVALID) text = 'None'
+    else if (account === previousWinner) text = 'You'
+    else text = previousWinner
 
     return (
       <div className={classes.sectionContainer}>
@@ -47,7 +80,7 @@ class MegaNBOT extends Component {
     )
   }
 
-  renderBlocksSection = () => {
+  renderBlocksLeft = () => {
     const {
       classes,
       store: {
@@ -72,7 +105,7 @@ class MegaNBOT extends Component {
     )
   }
 
-  renderEntrySection = () => {
+  renderEntryButton = () => {
     const {
       classes,
       store: {
@@ -80,7 +113,6 @@ class MegaNBOT extends Component {
           blocksLeft,
           drawButtonDisabled,
           enterDrawing,
-          inCurrentDrawing,
         },
       },
     } = this.props
@@ -95,21 +127,22 @@ class MegaNBOT extends Component {
         >
           {Number(blocksLeft) === 0 ? 'Draw Winner' : 'Enter Drawing'}
         </Button>
-        {inCurrentDrawing && (
-          <Typography variant="subtitle2" color="error">
-            You are already in this drawing.
-          </Typography>
-        )}
       </div>
     )
   }
 
-  renderNoticeSection = () => {
+  renderNotice = () => {
     const { classes } = this.props
     return (
       <div className={classes.sectionContainer}>
         <Typography variant="h5">
-          FREE drawings every day. Enter to win NBOT!
+          FREE drawings every day!
+        </Typography>
+        <Typography variant="h5">
+          Enter to win NBOT!
+        </Typography>
+        <Typography variant="h5">
+          Unlimited entries!
         </Typography>
       </div>
     )
@@ -128,11 +161,12 @@ class MegaNBOT extends Component {
 
     return (
       <div className={classes.root}>
-        {this.renderRewardSection()}
-        {this.renderWinnerSection()}
-        {this.renderBlocksSection()}
-        {this.renderEntrySection()}
-        {this.renderNoticeSection()}
+        {this.renderReward()}
+        {this.renderBlocksLeft()}
+        {this.renderCurrentWinner()}
+        {this.renderLastWinner()}
+        {this.renderEntryButton()}
+        {this.renderNotice()}
       </div>
     )
   }
