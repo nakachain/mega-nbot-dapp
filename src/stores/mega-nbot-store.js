@@ -17,6 +17,7 @@ export default class MegaNBOTStore {
   nbotContract = undefined
   nbotAddress = undefined
   @observable deployed = false
+  @observable owner = undefined
   @observable winningAmount = undefined
   drawingInterval = undefined
   lastDrawingBlockNumber = undefined
@@ -74,12 +75,26 @@ export default class MegaNBOTStore {
       this.nbotAddress = nbotAddr
       this.deployed = true
 
+      this.fetchOwner()
       this.fetchDrawingInterval()
       this.fetchWinningAmount()
       this.fetchLastDrawingBlockNumber()
       this.fetchPreviousWinner()
       this.fetchCurrentTempWinner()
     }
+  }
+
+  @action
+  fetchOwner = () => {
+    if (!this.contract) return
+    this.contract.owner((err, res) => {
+      if (err) {
+        logger.error(`Error fetching owner: ${err.message}`)
+        return
+      }
+
+      this.owner = res
+    })
   }
 
   @action
@@ -170,10 +185,11 @@ export default class MegaNBOTStore {
 
   enterDrawing = () => {
     if (!this.contract) return
+    const { exchangeRate } = this.appStore.tokenExchangeStore
     this.contract.enterDrawing({
       token: this.nbotAddress,
-      exchanger: '0xd5d087daabc73fc6cc5d9c1131b93acbd53a2428',
-      exchangeRate: '0xDE0B6B3A7640000',
+      exchanger: this.owner,
+      exchangeRate,
     }, (err, res) => {
       if (err) {
         logger.error(`Error enterDrawing: ${err.message}`)
