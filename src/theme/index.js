@@ -1,4 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles'
+import 'typeface-abel'
 
 export default createMuiTheme({
   palette: {
@@ -13,7 +14,7 @@ export default createMuiTheme({
     },
   },
   typography: {
-    fontFamily: 'Abel',
+    fontFamily: 'Abel, Roboto, sans-serif',
     useNextVariants: true,
   },
   spacing: {
