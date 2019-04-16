@@ -7,6 +7,7 @@ module.exports = {
     contentBase: './dist',
     historyApiFallback: true,
   },
+  target: 'node',
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
