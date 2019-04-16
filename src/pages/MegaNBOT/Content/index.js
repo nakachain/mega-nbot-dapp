@@ -5,7 +5,7 @@ import { Typography } from '@material-ui/core'
 const Content = ({ classes, type, text, subText }) => (
   <div className={classes.contentContainer}>
     <Typography
-      variant={type === 'normal' ? 'h2' : 'h6'}
+      variant={type === 'normal' ? 'h2' : 'h5'}
       color="primary"
     >
       {text}
