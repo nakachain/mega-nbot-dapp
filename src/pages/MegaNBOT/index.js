@@ -9,6 +9,8 @@ import NotDeployedView from '../../components/NotDeployedView'
 import Constants from '../../constants'
 
 const { ADDRESS } = Constants
+const TYPE_NORMAL = 'normal'
+const TYPE_ADDRESS = 'address'
 
 @inject('store')
 @observer
@@ -23,33 +25,44 @@ class MegaNBOT extends Component {
     return (
       <div className={classes.sectionContainer}>
         <Heading title="Drawing Reward" classes={classes} />
-        <Content type="normal" text={winningAmount} classes={classes} />
+        <Content type={TYPE_NORMAL} text={winningAmount} classes={classes} />
       </div>
     )
+  }
+
+  getWinnerTypeAndText = (address) => {
+    const { store: { walletStore: { account } } } = this.props
+
+    let type
+    let text
+    if (address === ADDRESS.INVALID) {
+      type = TYPE_NORMAL
+      text = 'None'
+    } else if (account === address) {
+      type = TYPE_NORMAL
+      text = 'You'
+    } else {
+      type = TYPE_ADDRESS
+      text = address
+    }
+    return { type, text }
   }
 
   renderCurrentWinner = () => {
     const {
       classes,
       store: {
-        walletStore: {
-          account,
-        },
         megaNBOTStore: {
           currentTempWinner,
         },
       },
     } = this.props
-
-    let text
-    if (currentTempWinner === ADDRESS.INVALID) text = 'None'
-    else if (account === currentTempWinner) text = 'You'
-    else text = currentTempWinner
+    const { type, text } = this.getWinnerTypeAndText(currentTempWinner)
 
     return (
       <div className={classes.sectionContainer}>
         <Heading title="Current Winner" classes={classes} />
-        <Content type="address" text={text} classes={classes} />
+        <Content type={type} text={text} classes={classes} />
       </div>
     )
   }
@@ -58,24 +71,17 @@ class MegaNBOT extends Component {
     const {
       classes,
       store: {
-        walletStore: {
-          account,
-        },
         megaNBOTStore: {
           previousWinner,
         },
       },
     } = this.props
-
-    let text
-    if (previousWinner === ADDRESS.INVALID) text = 'None'
-    else if (account === previousWinner) text = 'You'
-    else text = previousWinner
+    const { type, text } = this.getWinnerTypeAndText(previousWinner)
 
     return (
       <div className={classes.sectionContainer}>
         <Heading title="Last Winner" classes={classes} />
-        <Content type="address" text={text} classes={classes} />
+        <Content type={type} text={text} classes={classes} />
       </div>
     )
   }
