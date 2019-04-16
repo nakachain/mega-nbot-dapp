@@ -12,6 +12,7 @@ const TopBar = ({ classes, store: { walletStore: { account, network } } }) => (
       <Toolbar className={classes.toolbar}>
         <div className={classes.leftContainer}>
           <img src={Logo} className={classes.logo} />
+          <Typography variant="h4" color="secondary">MegaNBOT</Typography>
         </div>
         <div className={classes.infoContainer}>
           <Typography color="secondary">{network}</Typography>
