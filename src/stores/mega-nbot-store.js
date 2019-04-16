@@ -15,6 +15,7 @@ const { TOKEN: { NBOT }, INTERVAL: { BLOCK_TIME } } = Config
 export default class MegaNBOTStore {
   contract = undefined
   nbotContract = undefined
+  nbotAddress = undefined
   @observable deployed = false
   @observable winningAmount = undefined
   drawingInterval = undefined
@@ -70,6 +71,7 @@ export default class MegaNBOTStore {
     if (addr && nbotAddr) {
       this.contract = window.naka.eth.contract(MegaNBOTMeta.abi).at(addr)
       this.nbotContract = window.naka.eth.contract(NBOTMeta.abi).at(nbotAddr)
+      this.nbotAddress = nbotAddr
       this.deployed = true
 
       this.fetchDrawingInterval()
@@ -168,7 +170,11 @@ export default class MegaNBOTStore {
 
   enterDrawing = () => {
     if (!this.contract) return
-    this.contract.enterDrawing((err, res) => {
+    this.contract.enterDrawing({
+      token: this.nbotAddress,
+      exchanger: '0xd5d087daabc73fc6cc5d9c1131b93acbd53a2428',
+      exchangeRate: '0xDE0B6B3A7640000',
+    }, (err, res) => {
       if (err) {
         logger.error(`Error enterDrawing: ${err.message}`)
         return
