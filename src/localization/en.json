@@ -1,3 +1,5 @@
 {
-    
+  "notLoggedIn.notDetected": "Naka Wallet was not detected.",
+  "notLoggedIn.loggedInAndRefresh": "Please make sure you are logged in and refresh the page.",
+  "notLoggedIn.downloadExtension": "Download Naka Wallet Chrome Extension"
 }

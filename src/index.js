@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import { Provider as StoreProvider } from 'mobx-react'
-import { IntlProvider, addLocaleData } from 'react-intl'
-import localeEn from 'react-intl/locale-data/en'
-import localeZh from 'react-intl/locale-data/zh'
+import { IntlProvider } from 'react-intl'
 import theme from './theme'
 import css from './style.css' // eslint-disable-line
+import getLocalizedData from './localization'
 import Dashboard from './pages/Dashboard'
 import AppStore from './stores/app-store'
 
@@ -15,8 +14,8 @@ import AppStore from './stores/app-store'
 const store = new AppStore()
 window.store = store // Expose store in window for debugging
 
-// React Intl setup
-addLocaleData([...localeEn, ...localeZh])
+// React intl setup
+const { locale, messages } = getLocalizedData()
 
 class App extends Component {
   render() {
@@ -24,7 +23,7 @@ class App extends Component {
       <BrowserRouter>
         <StoreProvider store={store}>
           <MuiThemeProvider theme={theme}>
-            <IntlProvider locale="en">
+            <IntlProvider locale={locale} messages={messages}>
               <Dashboard />
             </IntlProvider>
           </MuiThemeProvider>
