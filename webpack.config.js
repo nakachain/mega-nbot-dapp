@@ -61,7 +61,7 @@ module.exports = {
     ]),
     new GoogleFontsPlugin({
       fonts: [
-        { family: 'Lato', variants: ['400', '700', '900'] },
+        { family: 'Lato' },
       ],
     }),
   ],
