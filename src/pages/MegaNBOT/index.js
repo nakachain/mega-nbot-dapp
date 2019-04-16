@@ -20,7 +20,7 @@ class MegaNBOT extends Component {
     return (
       <div className={classes.sectionContainer}>
         <Heading title="Drawing Reward" classes={classes} />
-        <Content text={winningAmount} classes={classes} />
+        <Content type="normal" text={winningAmount} classes={classes} />
       </div>
     )
   }
@@ -33,17 +33,16 @@ class MegaNBOT extends Component {
           account,
         },
         megaNBOTStore: {
-          lastWinner,
+          previousWinner,
         },
       },
     } = this.props
-    const address = lastWinner && lastWinner.address
-    const text = account === address ? 'You' : address
+    const text = account === previousWinner ? 'You' : previousWinner
 
     return (
       <div className={classes.sectionContainer}>
         <Heading title="Last Winner" classes={classes} />
-        <Content text={text} classes={classes} />
+        <Content type="address" text={text} classes={classes} />
       </div>
     )
   }
@@ -65,6 +64,7 @@ class MegaNBOT extends Component {
           title="Blocks Left"
           classes={classes} />
         <Content
+          type="normal"
           text={blocksLeft}
           subText={`approx. ${timeLeft}`}
           classes={classes} />

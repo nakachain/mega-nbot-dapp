@@ -2,9 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Typography } from '@material-ui/core'
 
-const Content = ({ classes, text, subText }) => (
+const Content = ({ classes, type, text, subText }) => (
   <div className={classes.contentContainer}>
-    <Typography variant="h2" color="primary">
+    <Typography
+      variant={type === 'normal' ? 'h2' : 'h6'}
+      color="primary"
+    >
       {text}
     </Typography>
     {subText && (
@@ -17,6 +20,7 @@ const Content = ({ classes, text, subText }) => (
 
 Content.propTypes = {
   classes: PropTypes.object.isRequired,
+  type: PropTypes.string,
   text: PropTypes.string,
   subText: PropTypes.string,
 }
