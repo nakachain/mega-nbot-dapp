@@ -22,7 +22,8 @@ export default class MegaNBOTStore {
   @observable blocksLeft = undefined
   @observable timeLeft = undefined
   @observable inCurrentDrawing = false
-  @observable lastWinner = undefined
+  @observable previousWinner = undefined
+  @observable currentTempWinner = undefined
 
   constructor(appStore) {
     this.appStore = appStore
@@ -40,7 +41,6 @@ export default class MegaNBOTStore {
         this.fetchLastDrawingBlockNumber()
         this.calculateBlocksLeft()
         this.checkIfInCurrentDrawing()
-        this.fetchUserWonEvents()
       },
     )
   }
@@ -76,7 +76,6 @@ export default class MegaNBOTStore {
       this.fetchWinningAmount()
       this.fetchLastDrawingBlockNumber()
       this.checkIfInCurrentDrawing()
-      this.fetchUserWonEvents()
     }
   }
 
@@ -134,27 +133,6 @@ export default class MegaNBOTStore {
   }
 
   @action
-  fetchUserWonEvents = () => {
-    if (!this.contract) return
-    this.contract.UserWon({}, { fromBlock: 0, toBlock: 'latest' })
-      .get((err, res) => {
-        if (err) {
-          logger.error(`Error fetching UserWon events: ${err.message}`)
-          return
-        }
-
-        if (res.length === 0) return
-
-        const lastWinner = res[res.length - 1]
-        const { args: { winner, amount } } = lastWinner
-        this.lastWinner = {
-          address: winner,
-          amount: this.toNBOTStr(amount.toString()),
-        }
-      })
-  }
-
-  @action
   calculateBlocksLeft = () => {
     if (this.appStore.chainStore.blockNumber
       && this.drawingInterval
@@ -177,9 +155,9 @@ export default class MegaNBOTStore {
 
   enterDrawing = () => {
     if (!this.contract) return
-    this.contract.enterDrawingFromSender((err, res) => {
+    this.contract.enterDrawing((err, res) => {
       if (err) {
-        logger.error(`Error enterDrawingFromSender: ${err.message}`)
+        logger.error(`Error enterDrawing: ${err.message}`)
         return
       }
 
