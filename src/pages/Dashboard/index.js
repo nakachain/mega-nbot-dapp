@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core'
+import { Paper, withStyles } from '@material-ui/core'
 import { inject, observer } from 'mobx-react'
 import styles from './styles'
 import NotLoggedIn from './NotLoggedIn'
@@ -31,7 +31,9 @@ class Dashboard extends Component {
       <div className={classes.root}>
         <TopBar title="Home" />
         <div className={classes.container}>
-          <MegaNBOT />
+          <Paper className={classes.paper} elevation={8}>
+            <MegaNBOT />
+          </Paper>
         </div>
       </div>
     )
