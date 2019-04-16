@@ -83,7 +83,7 @@ export default class MegaNBOTStore {
   @action
   fetchDrawingInterval = () => {
     if (!this.contract) return
-    this.contract.withdrawInterval((err, res) => {
+    this.contract.drawingInterval((err, res) => {
       if (err) {
         logger.error(`Error fetching withdrawInterval: ${err.message}`)
         return
