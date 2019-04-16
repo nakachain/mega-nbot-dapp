@@ -13,7 +13,7 @@ export default createMuiTheme({
     },
   },
   typography: {
-    fontFamily: 'Abel, Roboto, sans-serif',
+    fontFamily: 'Lato, Roboto, sans-serif',
     useNextVariants: true,
   },
   spacing: {

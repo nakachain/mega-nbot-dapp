@@ -1,5 +1,6 @@
 const path = require('path')
 const CopyPlugin = require('copy-webpack-plugin')
+const GoogleFontsPlugin = require('@beyonk/google-fonts-webpack-plugin')
 
 module.exports = {
   entry: './src/index.js',
@@ -58,6 +59,11 @@ module.exports = {
     new CopyPlugin([
       { from: './static/images/favicon.ico' },
     ]),
+    new GoogleFontsPlugin({
+      fonts: [
+        { family: 'Lato', variants: ['400', '700', '900'] },
+      ],
+    }),
   ],
   node: {
     global: true,

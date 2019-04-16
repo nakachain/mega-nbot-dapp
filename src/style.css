@@ -1,19 +1,11 @@
-@font-face {
-  font-family: 'Abel';
-  src: url('./theme/fonts/Abel-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
 * {
-  font-family: 'Abel', sans-serif;
+  font-family: 'Lato', sans-serif;
 }
 
 body {
   width: 100vw;
   height: 100vh;
   margin: 0;
-  font-family: 'Abel', sans-serif;
 }
 
 #app {
