@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import { Typography, Button, withStyles } from '@material-ui/core'
+import { FormattedMessage } from 'react-intl'
 import styles from './styles'
 import Heading from './Heading'
 import Content from './Content'
@@ -24,8 +25,13 @@ class MegaNBOT extends Component {
     const { classes, store: { megaNBOTStore: { winningAmount } } } = this.props
     return (
       <div className={classes.sectionContainer}>
-        <Heading title="Drawing Reward" classes={classes} />
-        <Content type={TYPE_NORMAL} text={winningAmount} classes={classes} />
+        <Heading
+          title={<FormattedMessage id="drawingReward" />}
+          classes={classes} />
+        <Content
+          type={TYPE_NORMAL}
+          text={<span>{winningAmount}</span>}
+          classes={classes} />
       </div>
     )
   }
@@ -37,13 +43,13 @@ class MegaNBOT extends Component {
     let text
     if (address === ADDRESS.INVALID) {
       type = TYPE_NORMAL
-      text = 'None'
+      text = <FormattedMessage id="none" />
     } else if (account === address) {
       type = TYPE_NORMAL
-      text = 'You'
+      text = <FormattedMessage id="you" />
     } else {
       type = TYPE_ADDRESS
-      text = address
+      text = <span>{address}</span>
     }
     return { type, text }
   }
@@ -61,7 +67,9 @@ class MegaNBOT extends Component {
 
     return (
       <div className={classes.sectionContainer}>
-        <Heading title="Current Winner" classes={classes} />
+        <Heading
+          title={<FormattedMessage id="currentWinner" />}
+          classes={classes} />
         <Content type={type} text={text} classes={classes} />
       </div>
     )
@@ -80,7 +88,9 @@ class MegaNBOT extends Component {
 
     return (
       <div className={classes.sectionContainer}>
-        <Heading title="Last Winner" classes={classes} />
+        <Heading
+          title={<FormattedMessage id="yesterdaysFinalWinner" />}
+          classes={classes} />
         <Content type={type} text={text} classes={classes} />
       </div>
     )
@@ -100,12 +110,12 @@ class MegaNBOT extends Component {
     return (
       <div className={classes.sectionContainer}>
         <Heading
-          title="Blocks Left"
+          title={<FormattedMessage id="blocksLeft" />}
           classes={classes} />
         <Content
           type="normal"
-          text={blocksLeft}
-          subText={`approx. ${timeLeft}`}
+          text={<span>{blocksLeft}</span>}
+          subText={<FormattedMessage id="approxTimeLeft" values={{ timeLeft }} />}
           classes={classes} />
       </div>
     )
@@ -131,7 +141,9 @@ class MegaNBOT extends Component {
           disabled={drawButtonDisabled}
           onClick={enterDrawing}
         >
-          {Number(blocksLeft) === 0 ? 'Draw Winner' : 'Enter Drawing'}
+          {Number(blocksLeft) === 0
+            ? <FormattedMessage id="drawWinner" />
+            : <FormattedMessage id="enterDrawing" />}
         </Button>
       </div>
     )
@@ -142,13 +154,13 @@ class MegaNBOT extends Component {
     return (
       <div className={classes.sectionContainer}>
         <Typography variant="h5">
-          FREE drawings every day!
+          <FormattedMessage id="freeDrawingsEveryDay" />
         </Typography>
         <Typography variant="h5">
-          Enter to win NBOT!
+          <FormattedMessage id="enterToWinNBOT" />
         </Typography>
         <Typography variant="h5">
-          Unlimited entries!
+          <FormattedMessage id="unlimitedEntries" />
         </Typography>
       </div>
     )

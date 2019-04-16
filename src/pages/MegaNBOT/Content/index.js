@@ -20,9 +20,9 @@ const Content = ({ classes, type, text, subText }) => (
 
 Content.propTypes = {
   classes: PropTypes.object.isRequired,
-  type: PropTypes.string,
-  text: PropTypes.string,
-  subText: PropTypes.string,
+  type: PropTypes.string.isRequired,
+  text: PropTypes.object.isRequired,
+  subText: PropTypes.object,
 }
 
 export default Content
