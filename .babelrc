@@ -7,6 +7,6 @@
   "plugins": [
     ["@babel/plugin-proposal-decorators", { "legacy": true }],
     ["@babel/plugin-proposal-class-properties", { "loose": true }],
-    ["react-intl", { "messagesDir": "./build/messages/" }]
+    ["react-intl", { "messagesDir": "./build/messages" }]
   ],
 }
