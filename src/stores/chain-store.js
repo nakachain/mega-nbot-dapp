@@ -1,8 +1,5 @@
 import { observable, action, reaction } from 'mobx'
-import Config from '../config'
 import logger from '../utils/logger'
-
-const { INTERVAL: { BLOCK_TIME } } = Config
 
 export default class ChainStore {
   blockInterval = undefined
@@ -12,31 +9,24 @@ export default class ChainStore {
     this.appStore = appStore
 
     reaction(
-      () => this.appStore.walletStore.network,
+      () => this.appStore.walletStore.web3,
       () => this.init(),
     )
   }
 
   @action
   init = () => {
-    if (this.blockInterval) {
-      clearInterval(this.blockInterval)
-    }
+    const { web3 } = this.appStore.walletStore
+    if (!web3) return
 
-    this.blockInterval = setInterval(() => {
-      this.getBlockNumber()
-    }, BLOCK_TIME)
-  }
-
-  @action
-  getBlockNumber = () => {
-    window.naka.eth.getBlockNumber((err, res) => {
+    web3.eth.subscribe('newBlockHeaders', (err, res) => {
       if (err) {
-        logger.error(`Error getting block number: ${err.message}`)
+        logger.error(`Error getting new block: ${err.message}`)
         return
       }
-
-      this.blockNumber = res
+      logger.info(`Subscribed to newBlockHeaders: ${res}`)
+    }).on('data', (blockHeader) => {
+      this.blockNumber = blockHeader.number
     })
   }
 }
