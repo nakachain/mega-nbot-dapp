@@ -18,6 +18,7 @@
     "semi": "off"
   },
   "globals": {
-    "window": true
+    "window": true,
+    "localStorage": true
   }
 }

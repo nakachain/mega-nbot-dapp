@@ -6,6 +6,7 @@ import Constants from '../constants'
 
 const { URL } = Config
 const { NETWORK } = Constants
+const KEY_SELECTED_NETWORK = 'selectedNetwork'
 
 export default class ChainStore {
   @observable selectedNetwork = NETWORK.MAINNET
@@ -15,6 +16,11 @@ export default class ChainStore {
   constructor(appStore) {
     this.appStore = appStore
     this.setWeb3()
+
+    // Restore network selection if found
+    const storedNetwork = localStorage.getItem(KEY_SELECTED_NETWORK)
+    if (storedNetwork) this.selectedNetwork = storedNetwork
+    else localStorage.setItem(KEY_SELECTED_NETWORK, this.selectedNetwork)
 
     reaction(
       () => this.selectedNetwork,
@@ -47,5 +53,6 @@ export default class ChainStore {
   @action
   setSelectedNetwork = (network) => {
     this.selectedNetwork = network
+    localStorage.setItem(KEY_SELECTED_NETWORK, network)
   }
 }
