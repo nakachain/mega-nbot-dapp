@@ -1,16 +1,14 @@
 import { observable, action } from 'mobx'
-import Web3 from 'web3'
 import Config from '../config'
 import Constants from '../constants'
 import logger from '../utils/logger'
 
-const { CHAIN_ID, URL } = Config
+const { CHAIN_ID } = Config
 const { NETWORK } = Constants
 
 export default class WalletStore {
   @observable account = undefined
   @observable network = undefined
-  @observable web3 = undefined
 
   constructor(appStore) {
     this.appStore = appStore
@@ -37,10 +35,8 @@ export default class WalletStore {
       }
 
       if (network === CHAIN_ID.MAINNET) {
-        this.web3 = new Web3(URL.RPC_WS_MAINNET)
         this.network = NETWORK.MAINNET
       } else if (network === CHAIN_ID.TESTNET) {
-        this.web3 = new Web3(URL.RPC_WS_TESTNET)
         this.network = NETWORK.TESTNET
       }
     })

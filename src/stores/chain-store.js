@@ -1,28 +1,39 @@
 import { observable, action, reaction } from 'mobx'
+import Web3 from 'web3'
 import logger from '../utils/logger'
+import Config from '../config'
 import Constants from '../constants'
 
+const { URL } = Config
 const { NETWORK } = Constants
 
 export default class ChainStore {
-  @observable network = NETWORK.MAINNET
+  @observable selectedNetwork = NETWORK.MAINNET
+  @observable web3 = undefined
   @observable blockNumber = undefined
 
   constructor(appStore) {
     this.appStore = appStore
+    this.setWeb3()
 
     reaction(
-      () => this.appStore.walletStore.web3,
-      () => this.init(),
+      () => this.selectedNetwork,
+      () => this.setWeb3(),
     )
   }
 
   @action
-  init = () => {
-    const { web3 } = this.appStore.walletStore
-    if (!web3) return
+  setWeb3 = () => {
+    if (this.selectedNetwork === NETWORK.MAINNET) {
+      this.web3 = new Web3(URL.RPC_WS_MAINNET)
+    } else {
+      this.web3 = new Web3(URL.RPC_WS_TESTNET)
+    }
+  }
 
-    web3.eth.subscribe('newBlockHeaders', (err, res) => {
+  @action
+  init = () => {
+    this.web3.eth.subscribe('newBlockHeaders', (err, res) => {
       if (err) {
         logger.error(`Error getting new block: ${err.message}`)
         return
@@ -34,7 +45,7 @@ export default class ChainStore {
   }
 
   @action
-  setNetwork = (network) => {
-    this.network = network
+  setSelectedNetwork = (network) => {
+    this.selectedNetwork = network
   }
 }

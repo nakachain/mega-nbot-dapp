@@ -7,11 +7,24 @@ import NBOTMeta from '../contracts/nbot'
 import logger from '../utils/logger'
 import { getContractAddress } from '../utils'
 import { formatNumberResponse } from '../utils/format'
-import Constants from '../constants'
 import Config from '../config'
 
-const { NETWORK } = Constants
 const { TOKEN: { NBOT }, INTERVAL: { BLOCK_TIME } } = Config
+
+const DEFAULT_VALUES = {
+  contract: undefined,
+  nbotContract: undefined,
+  nbotAddress: undefined,
+  deployed: false,
+  owner: undefined,
+  winningAmount: undefined,
+  drawingInterval: undefined,
+  lastDrawingBlockNumber: undefined,
+  blocksLeft: undefined,
+  timeLeft: undefined,
+  previousWinner: undefined,
+  currentTempWinner: undefined,
+}
 
 export default class MegaNBOTStore {
   contract = undefined
@@ -31,13 +44,8 @@ export default class MegaNBOTStore {
     this.appStore = appStore
 
     reaction(
-      () => this.appStore.walletStore.network,
-      () => this.initContracts(),
-    )
-
-    reaction(
-      () => this.appStore.walletStore.web3,
-      () => this.initContracts(),
+      () => this.appStore.chainStore.web3,
+      () => this.init(),
     )
 
     reaction(
@@ -63,21 +71,15 @@ export default class MegaNBOTStore {
   })
 
   @action
-  initContracts = () => {
-    const { network, web3 } = this.appStore.walletStore
-    if (!network || !web3) return
+  init = () => {
+    // Reset
+    Object.assign(this, DEFAULT_VALUES)
 
-    let addr
-    let nbotAddr
-    if (network === NETWORK.MAINNET) {
-      addr = MegaNBOTMeta.mainnet
-      nbotAddr = NBOTMeta.mainnet
-    } else if (network === NETWORK.TESTNET) {
-      addr = MegaNBOTMeta.testnet
-      nbotAddr = NBOTMeta.testnet
-    }
+    const { selectedNetwork, web3 } = this.appStore.chainStore
+    const addr = getContractAddress(selectedNetwork, MegaNBOTMeta)
+    const nbotAddr = getContractAddress(selectedNetwork, NBOTMeta)
 
-    if (addr && nbotAddr && web3) {
+    if (addr && nbotAddr) {
       this.contract = new web3.eth.Contract(MegaNBOTMeta.abi, addr)
       this.nbotContract = new web3.eth.Contract(NBOTMeta.abi, nbotAddr)
       this.nbotAddress = nbotAddr

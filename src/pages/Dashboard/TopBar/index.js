@@ -20,7 +20,7 @@ class TopBar extends Component {
   }
 
   onChange = (event) => {
-    this.props.store.chainStore.setNetwork(event.target.value)
+    this.props.store.chainStore.setSelectedNetwork(event.target.value)
   }
 
   render() {
@@ -28,7 +28,7 @@ class TopBar extends Component {
       classes,
       store: {
         walletStore: { account },
-        chainStore: { network },
+        chainStore: { selectedNetwork },
       },
     } = this.props
 
@@ -49,7 +49,7 @@ class TopBar extends Component {
                       icon: classes.networkSelectIcon,
                     },
                   }}
-                  value={network}
+                  value={selectedNetwork}
                   onChange={this.onChange}
                   disableUnderline
                 >
