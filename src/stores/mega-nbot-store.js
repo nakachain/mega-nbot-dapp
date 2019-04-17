@@ -146,7 +146,7 @@ export default class MegaNBOTStore {
 
     try {
       const res = await this.contract.methods.previousWinner().call()
-      this.previousWinner = res
+      this.previousWinner = res.toLowerCase()
     } catch (err) {
       logger.error(`Error fetching previousWinner: ${err.message}`)
     }
@@ -158,7 +158,7 @@ export default class MegaNBOTStore {
 
     try {
       const res = await this.contract.methods.currentTempWinner().call()
-      this.currentTempWinner = res
+      this.currentTempWinner = res.toLowerCase()
     } catch (err) {
       logger.error(`Error fetching currentTempWinner: ${err.message}`)
     }
