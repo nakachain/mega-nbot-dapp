@@ -43,9 +43,10 @@ export default class ChainStore {
   init = () => {
     this.loadSelectedNetworkFromStorage()
 
+    this.web3.eth.clearSubscriptions()
     this.web3.eth.subscribe('newBlockHeaders', (err, res) => {
       if (err) {
-        logger.error(`Error getting new block: ${err.message}`)
+        logger.error(`Error subscribing to newBlockHeaders: ${err.message}`)
         return
       }
       logger.info(`Subscribed to newBlockHeaders: ${res}`)
