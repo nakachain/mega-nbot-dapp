@@ -13,6 +13,8 @@ export default Object.freeze({
     NBOT: {
       symbol: 'NBOT',
       decimals: 8,
+      mainnet: '0x1a4f4787d4e2382c3d2259ccdf587cc11b3ba7d9',
+      testnet: '0x809388c8770c578cb87df1d1e84e3436d8156fda',
     },
   },
   INTERVAL: {

@@ -10,7 +10,7 @@ const Heading = ({ classes, title }) => (
 
 Heading.propTypes = {
   classes: PropTypes.object.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.object.isRequired,
 }
 
 export default Heading

@@ -10,7 +10,7 @@ export default theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    marginBottom: theme.spacing.six,
+    marginBottom: theme.spacing.five,
   },
   contentContainer: {
     display: 'flex',

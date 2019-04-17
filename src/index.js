@@ -3,13 +3,19 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import { Provider as StoreProvider } from 'mobx-react'
+import { IntlProvider } from 'react-intl'
 import theme from './theme'
 import css from './style.css' // eslint-disable-line
+import getLocalizedData from './localization'
 import Dashboard from './pages/Dashboard'
 import AppStore from './stores/app-store'
 
+// MobX setup
 const store = new AppStore()
 window.store = store // Expose store in window for debugging
+
+// React intl setup
+const { locale, messages } = getLocalizedData()
 
 class App extends Component {
   render() {
@@ -17,7 +23,9 @@ class App extends Component {
       <BrowserRouter>
         <StoreProvider store={store}>
           <MuiThemeProvider theme={theme}>
-            <Dashboard />
+            <IntlProvider locale={locale} messages={messages}>
+              <Dashboard />
+            </IntlProvider>
           </MuiThemeProvider>
         </StoreProvider>
       </BrowserRouter>

@@ -3,4 +3,7 @@ export default Object.freeze({
     MAINNET: 'MAINNET',
     TESTNET: 'TESTNET',
   },
+  ADDRESS: {
+    INVALID: '0x0000000000000000000000000000000000000000',
+  },
 })

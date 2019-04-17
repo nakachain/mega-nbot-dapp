@@ -15,14 +15,16 @@ const { TOKEN: { NBOT }, INTERVAL: { BLOCK_TIME } } = Config
 export default class MegaNBOTStore {
   contract = undefined
   nbotContract = undefined
+  nbotAddress = undefined
   @observable deployed = false
+  @observable owner = undefined
   @observable winningAmount = undefined
   drawingInterval = undefined
   lastDrawingBlockNumber = undefined
   @observable blocksLeft = undefined
   @observable timeLeft = undefined
-  @observable inCurrentDrawing = false
-  @observable lastWinner = undefined
+  @observable previousWinner = undefined
+  @observable currentTempWinner = undefined
 
   constructor(appStore) {
     this.appStore = appStore
@@ -38,9 +40,9 @@ export default class MegaNBOTStore {
         this.fetchDrawingInterval()
         this.fetchWinningAmount()
         this.fetchLastDrawingBlockNumber()
+        this.fetchPreviousWinner()
+        this.fetchCurrentTempWinner()
         this.calculateBlocksLeft()
-        this.checkIfInCurrentDrawing()
-        this.fetchUserWonEvents()
       },
     )
   }
@@ -70,20 +72,35 @@ export default class MegaNBOTStore {
     if (addr && nbotAddr) {
       this.contract = window.naka.eth.contract(MegaNBOTMeta.abi).at(addr)
       this.nbotContract = window.naka.eth.contract(NBOTMeta.abi).at(nbotAddr)
+      this.nbotAddress = nbotAddr
       this.deployed = true
 
+      this.fetchOwner()
       this.fetchDrawingInterval()
       this.fetchWinningAmount()
       this.fetchLastDrawingBlockNumber()
-      this.checkIfInCurrentDrawing()
-      this.fetchUserWonEvents()
+      this.fetchPreviousWinner()
+      this.fetchCurrentTempWinner()
     }
+  }
+
+  @action
+  fetchOwner = () => {
+    if (!this.contract) return
+    this.contract.owner((err, res) => {
+      if (err) {
+        logger.error(`Error fetching owner: ${err.message}`)
+        return
+      }
+
+      this.owner = res
+    })
   }
 
   @action
   fetchDrawingInterval = () => {
     if (!this.contract) return
-    this.contract.withdrawInterval((err, res) => {
+    this.contract.drawingInterval((err, res) => {
       if (err) {
         logger.error(`Error fetching withdrawInterval: ${err.message}`)
         return
@@ -120,38 +137,29 @@ export default class MegaNBOTStore {
   }
 
   @action
-  checkIfInCurrentDrawing = () => {
-    if (!this.appStore.walletStore.account || !this.contract) return
-    this.contract.isInCurrentDrawing(this.appStore.walletStore.account,
-      (err, res) => {
-        if (err) {
-          logger.error(`Error fetching isInCurrentDrawing: ${err.message}`)
-          return
-        }
+  fetchPreviousWinner = () => {
+    if (!this.contract) return
+    this.contract.previousWinner((err, res) => {
+      if (err) {
+        logger.error(`Error fetching previousWinner: ${err.message}`)
+        return
+      }
 
-        this.inCurrentDrawing = res
-      })
+      this.previousWinner = res
+    })
   }
 
   @action
-  fetchUserWonEvents = () => {
+  fetchCurrentTempWinner = () => {
     if (!this.contract) return
-    this.contract.UserWon({}, { fromBlock: 0, toBlock: 'latest' })
-      .get((err, res) => {
-        if (err) {
-          logger.error(`Error fetching UserWon events: ${err.message}`)
-          return
-        }
+    this.contract.currentTempWinner((err, res) => {
+      if (err) {
+        logger.error(`Error fetching currentTempWinner: ${err.message}`)
+        return
+      }
 
-        if (res.length === 0) return
-
-        const lastWinner = res[res.length - 1]
-        const { args: { winner, amount } } = lastWinner
-        this.lastWinner = {
-          address: winner,
-          amount: this.toNBOTStr(amount.toString()),
-        }
-      })
+      this.currentTempWinner = res
+    })
   }
 
   @action
@@ -177,9 +185,14 @@ export default class MegaNBOTStore {
 
   enterDrawing = () => {
     if (!this.contract) return
-    this.contract.enterDrawingFromSender((err, res) => {
+    const { exchangeRate } = this.appStore.tokenExchangeStore
+    this.contract.enterDrawing({
+      token: this.nbotAddress,
+      exchanger: this.owner,
+      exchangeRate,
+    }, (err, res) => {
       if (err) {
-        logger.error(`Error enterDrawingFromSender: ${err.message}`)
+        logger.error(`Error enterDrawing: ${err.message}`)
         return
       }
 

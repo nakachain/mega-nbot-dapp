@@ -2,13 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Typography, withStyles } from '@material-ui/core'
 import { MoodBad } from '@material-ui/icons'
+import { FormattedMessage } from 'react-intl'
 import styles from './styles'
 
 const NotFound = ({ classes }) => (
   <div className={classes.root}>
     <MoodBad className={classes.icon} />
     <Typography variant="h6">
-      Page not found.
+      <FormattedMessage id="pageNotFound" />
     </Typography>
   </div>
 )

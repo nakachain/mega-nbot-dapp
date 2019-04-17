@@ -1,0 +1,19 @@
+{
+  "approxTimeLeft": "approx. {timeLeft}",
+  "blocksLeft": "Blocks Left",
+  "currentWinner": "Current Winner",
+  "downloadExtension": "Download Naka Wallet Chrome Extension",
+  "drawWinner": "Draw Winner",
+  "drawingReward": "Drawing Reward",
+  "enterDrawing": "Enter Drawing",
+  "enterToWinNBOT": "Enter to win NBOT!",
+  "freeDrawingsEveryDay": "FREE drawings every day!",
+  "loggedInAndRefresh": "Please make sure you are logged in and refresh the page.",
+  "none": "None",
+  "notDetected": "Naka Wallet was not detected.",
+  "pageNotFound": "Page not found.",
+  "unlimitedEntries": "Unlimited entries!",
+  "xNotDeployedYet": "{name} has not been deployed yet.",
+  "yesterdaysFinalWinner": "Yesterday's Final Winner",
+  "you": "You"
+}
