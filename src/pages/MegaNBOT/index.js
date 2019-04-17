@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl'
 import styles from './styles'
 import Heading from './Heading'
 import Content from './Content'
-import NotDeployedView from '../../components/NotDeployedView'
+import NoWalletDialog from '../../components/NoWalletDialog'
 import Constants from '../../constants'
 
 const { ADDRESS } = Constants
@@ -127,13 +127,19 @@ class MegaNBOT extends Component {
     const {
       classes,
       store: {
+        walletStore: {
+          account,
+          network,
+        },
         megaNBOTStore: {
           blocksLeft,
           drawButtonDisabled,
           enterDrawing,
+          showNoWalletDialog,
         },
       },
     } = this.props
+
     return (
       <div className={classes.entrySection}>
         <Button
@@ -141,7 +147,7 @@ class MegaNBOT extends Component {
           color="primary"
           className={classes.enterButton}
           disabled={drawButtonDisabled}
-          onClick={enterDrawing}
+          onClick={account && network ? enterDrawing : showNoWalletDialog}
         >
           {Number(blocksLeft) === 0
             ? <FormattedMessage id="drawWinner" />
@@ -169,15 +175,7 @@ class MegaNBOT extends Component {
   }
 
   render() {
-    const {
-      classes,
-      store: { megaNBOTStore: { deployed } },
-    } = this.props
-
-    // Show not deployed view
-    // if (!deployed) {
-    //   return <NotDeployedView name="MegaNBOT" />
-    // }
+    const { classes } = this.props
 
     return (
       <div className={classes.root}>
@@ -187,6 +185,7 @@ class MegaNBOT extends Component {
         {this.renderLastWinner()}
         {this.renderEntryButton()}
         {this.renderNotice()}
+        <NoWalletDialog />
       </div>
     )
   }

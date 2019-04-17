@@ -23,6 +23,7 @@ const DEFAULT_VALUES = {
   timeLeft: undefined,
   previousWinner: undefined,
   currentTempWinner: undefined,
+  noWalletDialogVisible: false,
 }
 
 export default class MegaNBOTStore {
@@ -37,6 +38,7 @@ export default class MegaNBOTStore {
   @observable timeLeft = undefined
   @observable previousWinner = undefined
   @observable currentTempWinner = undefined
+  @observable noWalletDialogVisible = false
 
   constructor(appStore) {
     this.appStore = appStore
@@ -89,6 +91,16 @@ export default class MegaNBOTStore {
       this.fetchPreviousWinner()
       this.fetchCurrentTempWinner()
     }
+  }
+
+  @action
+  showNoWalletDialog = () => {
+    this.noWalletDialogVisible = true
+  }
+
+  @action
+  hideNoWalletDialog = () => {
+    this.noWalletDialogVisible = false
   }
 
   @action
