@@ -10,7 +10,7 @@ const { NETWORK } = Constants
 export default class WalletStore {
   @observable account = undefined
   @observable network = undefined
-  web3 = undefined
+  @observable web3 = undefined
 
   constructor(appStore) {
     this.appStore = appStore

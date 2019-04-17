@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { Paper, withStyles } from '@material-ui/core'
 import { inject, observer } from 'mobx-react'
 import styles from './styles'
-import NotLoggedIn from './NotLoggedIn'
 import TopBar from './TopBar'
 import MegaNBOT from '../MegaNBOT'
 
@@ -16,16 +15,7 @@ class Dashboard extends Component {
   }
 
   render() {
-    const {
-      classes,
-      store: {
-        walletStore: { account, network },
-      },
-    } = this.props
-
-    if (!account || !network) {
-      return <NotLoggedIn />
-    }
+    const { classes } = this.props
 
     return (
       <div className={classes.root}>

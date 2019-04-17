@@ -35,6 +35,11 @@ export default class MegaNBOTStore {
     )
 
     reaction(
+      () => this.appStore.walletStore.web3,
+      () => this.initContracts(),
+    )
+
+    reaction(
       () => this.appStore.chainStore.blockNumber,
       () => {
         this.fetchDrawingInterval()
@@ -58,9 +63,11 @@ export default class MegaNBOTStore {
 
   @action
   initContracts = () => {
+    const { network, web3 } = this.appStore.walletStore
+    if (!network || !web3) return
+
     let addr
     let nbotAddr
-    const { network } = this.appStore.walletStore
     if (network === NETWORK.MAINNET) {
       addr = MegaNBOTMeta.mainnet
       nbotAddr = NBOTMeta.mainnet
@@ -69,9 +76,9 @@ export default class MegaNBOTStore {
       nbotAddr = NBOTMeta.testnet
     }
 
-    if (addr && nbotAddr) {
-      this.contract = window.naka.eth.contract(MegaNBOTMeta.abi).at(addr)
-      this.nbotContract = window.naka.eth.contract(NBOTMeta.abi).at(nbotAddr)
+    if (addr && nbotAddr && web3) {
+      this.contract = new web3.eth.Contract(MegaNBOTMeta.abi, addr)
+      this.nbotContract = new web3.eth.Contract(NBOTMeta.abi, nbotAddr)
       this.nbotAddress = nbotAddr
       this.deployed = true
 
@@ -85,22 +92,21 @@ export default class MegaNBOTStore {
   }
 
   @action
-  fetchOwner = () => {
+  fetchOwner = async () => {
     if (!this.contract) return
-    this.contract.owner((err, res) => {
-      if (err) {
-        logger.error(`Error fetching owner: ${err.message}`)
-        return
-      }
 
-      this.owner = res
-    })
+    try {
+      const owner = await this.contract.methods.owner().call()
+      this.owner = owner
+    } catch (err) {
+      logger.error(`Error fetching owner: ${err.message}`)
+    }
   }
 
   @action
   fetchDrawingInterval = () => {
     if (!this.contract) return
-    this.contract.drawingInterval((err, res) => {
+    this.contract.methods.drawingInterval((err, res) => {
       if (err) {
         logger.error(`Error fetching withdrawInterval: ${err.message}`)
         return
@@ -113,7 +119,7 @@ export default class MegaNBOTStore {
   @action
   fetchWinningAmount = () => {
     if (!this.contract) return
-    this.contract.winningAmount((err, res) => {
+    this.contract.methods.winningAmount((err, res) => {
       if (err) {
         logger.error(`Error fetching winningAmount: ${err.message}`)
         return
@@ -126,7 +132,7 @@ export default class MegaNBOTStore {
   @action
   fetchLastDrawingBlockNumber = () => {
     if (!this.contract) return
-    this.contract.lastDrawingBlockNum((err, res) => {
+    this.contract.methods.lastDrawingBlockNum((err, res) => {
       if (err) {
         logger.error(`Error fetching lastDrawingBlockNumber: ${err.message}`)
         return
@@ -139,7 +145,7 @@ export default class MegaNBOTStore {
   @action
   fetchPreviousWinner = () => {
     if (!this.contract) return
-    this.contract.previousWinner((err, res) => {
+    this.contract.methods.previousWinner((err, res) => {
       if (err) {
         logger.error(`Error fetching previousWinner: ${err.message}`)
         return
@@ -152,7 +158,7 @@ export default class MegaNBOTStore {
   @action
   fetchCurrentTempWinner = () => {
     if (!this.contract) return
-    this.contract.currentTempWinner((err, res) => {
+    this.contract.methods.currentTempWinner((err, res) => {
       if (err) {
         logger.error(`Error fetching currentTempWinner: ${err.message}`)
         return
