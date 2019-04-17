@@ -74,6 +74,7 @@ export default class MegaNBOTStore {
 
   @action
   init = () => {
+    console.log('NAKA: MegaNBOTStore -> init')
     // Reset
     Object.assign(this, DEFAULT_VALUES)
 

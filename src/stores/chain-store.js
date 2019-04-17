@@ -17,15 +17,17 @@ export default class ChainStore {
     this.appStore = appStore
     this.setWeb3()
 
-    // Restore network selection if found
-    const storedNetwork = localStorage.getItem(KEY_SELECTED_NETWORK)
-    if (storedNetwork) this.selectedNetwork = storedNetwork
-    else localStorage.setItem(KEY_SELECTED_NETWORK, this.selectedNetwork)
-
     reaction(
       () => this.selectedNetwork,
       () => this.setWeb3(),
     )
+  }
+
+  @action
+  loadSelectedNetworkFromStorage = () => {
+    const storedNetwork = localStorage.getItem(KEY_SELECTED_NETWORK)
+    if (storedNetwork) this.selectedNetwork = storedNetwork
+    else localStorage.setItem(KEY_SELECTED_NETWORK, this.selectedNetwork)
   }
 
   @action
@@ -39,6 +41,8 @@ export default class ChainStore {
 
   @action
   init = () => {
+    this.loadSelectedNetworkFromStorage()
+
     this.web3.eth.subscribe('newBlockHeaders', (err, res) => {
       if (err) {
         logger.error(`Error getting new block: ${err.message}`)
