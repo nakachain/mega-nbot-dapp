@@ -4,8 +4,8 @@ export default Object.freeze({
     TESTNET: '2018',
   },
   URL: {
-    RPC_WS_MAINNET: 'https://api.nakachain.org/mainnet',
-    RPC_WS_TESTNET: 'https://api.nakachain.org/testnet',
+    RPC_WS_MAINNET: 'wss://api.nakachain.org/mainnet/ws',
+    RPC_WS_TESTNET: 'wss://api.nakachain.org/testnet/ws',
   },
   LINKS: {
     EXPLORER_MAINNET: 'https://explorer.nakachain.org',
