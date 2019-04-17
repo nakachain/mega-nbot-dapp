@@ -15,6 +15,11 @@ export default class TokenExchangeStore {
     )
 
     reaction(
+      () => this.appStore.walletStore.web3,
+      () => this.initContract(),
+    )
+
+    reaction(
       () => this.appStore.chainStore.blockNumber,
       () => this.fetchExchangeRate(),
     )
@@ -22,23 +27,23 @@ export default class TokenExchangeStore {
 
   @action
   initContract = () => {
+    const { network, web3 } = this.appStore.walletStore
+    if (!network || !web3) return
+
     const { abi, address } = TokenExchangeMeta
-    this.contract = window.naka.eth.contract(abi).at(address)
+    this.contract = new web3.eth.Contract(abi, address)
   }
 
   @action
-  fetchExchangeRate = () => {
+  fetchExchangeRate = async () => {
     const { nbotAddress, owner } = this.appStore.megaNBOTStore
+    if (!this.contract || !nbotAddress || !owner) return
 
-    if (nbotAddress && owner) {
-      this.contract.getRate(nbotAddress, owner, (err, res) => {
-        if (err) {
-          logger.error(`Error getRate: ${err.message}`)
-          return
-        }
-
-        this.exchangeRate = res.toString(16)
-      })
+    try {
+      const res = await this.contract.methods.getRate(nbotAddress, owner).call()
+      this.exchangeRate = res._hex // eslint-disable-line
+    } catch (err) {
+      logger.error(`Error getRate: ${err.message}`)
     }
   }
 }
