@@ -5,6 +5,7 @@ import prettyMs from 'pretty-ms'
 import MegaNBOTMeta from '../contracts/mega-nbot'
 import NBOTMeta from '../contracts/nbot'
 import logger from '../utils/logger'
+import { getContractAddress } from '../utils'
 import { formatNumberResponse } from '../utils/format'
 import Constants from '../constants'
 import Config from '../config'
@@ -185,19 +186,25 @@ export default class MegaNBOTStore {
   }
 
   enterDrawing = () => {
-    if (!this.contract) return
-    const { exchangeRate } = this.appStore.tokenExchangeStore
-    this.contract.enterDrawing({
-      token: this.nbotAddress,
-      exchanger: this.owner,
-      exchangeRate,
-    }, (err, res) => {
-      if (err) {
-        logger.error(`Error enterDrawing: ${err.message}`)
-        return
-      }
+    const { network } = this.appStore.walletStore
+    if (!window.naka || !network) return
 
-      logger.info(`txid: ${res}`)
-    })
+    const { exchangeRate } = this.appStore.tokenExchangeStore
+    const address = getContractAddress(MegaNBOTMeta)
+    const contract = window.naka.eth.contract(MegaNBOTMeta.abi).at(address)
+    if (contract) {
+      contract.enterDrawing({
+        token: this.nbotAddress,
+        exchanger: this.owner,
+        exchangeRate,
+      }, (err, res) => {
+        if (err) {
+          logger.error(`Error enterDrawing: ${err.message}`)
+          return
+        }
+
+        logger.info(`txid: ${res}`)
+      })
+    }
   }
 }
