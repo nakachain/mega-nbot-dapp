@@ -3,6 +3,10 @@ export default Object.freeze({
     MAINNET: '2019',
     TESTNET: '2018',
   },
+  URL: {
+    RPC_WS_MAINNET: 'https://api.nakachain.org/mainnet/ws',
+    RPC_WS_TESTNET: 'https://api.nakachain.org/testnet/ws',
+  },
   LINKS: {
     EXPLORER_MAINNET: 'https://explorer.nakachain.org',
     EXPLORER_TESTNET: 'https://testnet.explorer.nakachain.org',
