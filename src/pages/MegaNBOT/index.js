@@ -13,6 +13,7 @@ const { ADDRESS } = Constants
 const TYPE_NORMAL = 'normal'
 const TYPE_ADDRESS = 'address'
 
+@withStyles(styles)
 @inject('store')
 @observer
 class MegaNBOT extends Component {
@@ -191,4 +192,4 @@ class MegaNBOT extends Component {
   }
 }
 
-export default withStyles(styles)(MegaNBOT)
+export default MegaNBOT

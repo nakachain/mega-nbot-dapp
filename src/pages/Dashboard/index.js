@@ -6,6 +6,7 @@ import styles from './styles'
 import TopBar from './TopBar'
 import MegaNBOT from '../MegaNBOT'
 
+@withStyles(styles)
 @inject('store')
 @observer
 class Dashboard extends Component {
@@ -30,4 +31,4 @@ class Dashboard extends Component {
   }
 }
 
-export default withStyles(styles)(Dashboard)
+export default Dashboard

@@ -15,7 +15,6 @@ const DEFAULT_VALUES = {
   contract: undefined,
   nbotContract: undefined,
   nbotAddress: undefined,
-  deployed: false,
   owner: undefined,
   winningAmount: undefined,
   drawingInterval: undefined,
@@ -30,7 +29,6 @@ export default class MegaNBOTStore {
   contract = undefined
   nbotContract = undefined
   nbotAddress = undefined
-  @observable deployed = false
   @observable owner = undefined
   @observable winningAmount = undefined
   drawingInterval = undefined
@@ -83,7 +81,6 @@ export default class MegaNBOTStore {
       this.contract = new web3.eth.Contract(MegaNBOTMeta.abi, addr)
       this.nbotContract = new web3.eth.Contract(NBOTMeta.abi, nbotAddr)
       this.nbotAddress = nbotAddr
-      this.deployed = true
 
       this.fetchOwner()
       this.fetchDrawingInterval()
