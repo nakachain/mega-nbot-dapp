@@ -173,9 +173,9 @@ class MegaNBOT extends Component {
     } = this.props
 
     // Show not deployed view
-    if (!deployed) {
-      return <NotDeployedView name="MegaNBOT" />
-    }
+    // if (!deployed) {
+    //   return <NotDeployedView name="MegaNBOT" />
+    // }
 
     return (
       <div className={classes.root}>

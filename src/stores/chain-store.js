@@ -1,8 +1,11 @@
 import { observable, action, reaction } from 'mobx'
 import logger from '../utils/logger'
+import Constants from '../constants'
+
+const { NETWORK } = Constants
 
 export default class ChainStore {
-  blockInterval = undefined
+  @observable network = NETWORK.MAINNET
   @observable blockNumber = undefined
 
   constructor(appStore) {
@@ -28,5 +31,10 @@ export default class ChainStore {
     }).on('data', (blockHeader) => {
       this.blockNumber = blockHeader.number
     })
+  }
+
+  @action
+  setNetwork = (network) => {
+    this.network = network
   }
 }
