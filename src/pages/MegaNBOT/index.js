@@ -38,6 +38,7 @@ class MegaNBOT extends Component {
 
   getWinnerTypeAndText = (address) => {
     const { store: { walletStore: { account } } } = this.props
+    if (!address && !account) return { type: 'normal', text: '' }
 
     let type
     let text
