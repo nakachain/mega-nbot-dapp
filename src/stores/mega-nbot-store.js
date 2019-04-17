@@ -96,76 +96,71 @@ export default class MegaNBOTStore {
     if (!this.contract) return
 
     try {
-      const owner = await this.contract.methods.owner().call()
-      this.owner = owner
+      const res = await this.contract.methods.owner().call()
+      this.owner = res
     } catch (err) {
       logger.error(`Error fetching owner: ${err.message}`)
     }
   }
 
   @action
-  fetchDrawingInterval = () => {
+  fetchDrawingInterval = async () => {
     if (!this.contract) return
-    this.contract.methods.drawingInterval((err, res) => {
-      if (err) {
-        logger.error(`Error fetching withdrawInterval: ${err.message}`)
-        return
-      }
 
+    try {
+      const res = await this.contract.methods.drawingInterval().call()
       this.drawingInterval = res.toString()
-    })
+    } catch (err) {
+      logger.error(`Error fetching withdrawInterval: ${err.message}`)
+    }
   }
 
   @action
-  fetchWinningAmount = () => {
+  fetchWinningAmount = async () => {
     if (!this.contract) return
-    this.contract.methods.winningAmount((err, res) => {
-      if (err) {
-        logger.error(`Error fetching winningAmount: ${err.message}`)
-        return
-      }
 
+    try {
+      const res = await this.contract.methods.winningAmount().call()
       this.winningAmount = this.toNBOTStr(res)
-    })
+    } catch (err) {
+      logger.error(`Error fetching winningAmount: ${err.message}`)
+    }
   }
 
   @action
-  fetchLastDrawingBlockNumber = () => {
+  fetchLastDrawingBlockNumber = async () => {
     if (!this.contract) return
-    this.contract.methods.lastDrawingBlockNum((err, res) => {
-      if (err) {
-        logger.error(`Error fetching lastDrawingBlockNumber: ${err.message}`)
-        return
-      }
 
+    try {
+      const res = await this.contract.methods.lastDrawingBlockNum().call()
       this.lastDrawingBlockNumber = res.toString()
-    })
+    } catch (err) {
+      logger.error(`Error fetching lastDrawingBlockNumber: ${err.message}`)
+    }
   }
 
   @action
-  fetchPreviousWinner = () => {
+  fetchPreviousWinner = async () => {
     if (!this.contract) return
-    this.contract.methods.previousWinner((err, res) => {
-      if (err) {
-        logger.error(`Error fetching previousWinner: ${err.message}`)
-        return
-      }
 
+    try {
+      const res = await this.contract.methods.previousWinner().call()
       this.previousWinner = res
-    })
+    } catch (err) {
+      logger.error(`Error fetching previousWinner: ${err.message}`)
+    }
   }
 
   @action
-  fetchCurrentTempWinner = () => {
+  fetchCurrentTempWinner = async () => {
     if (!this.contract) return
-    this.contract.methods.currentTempWinner((err, res) => {
-      if (err) {
-        logger.error(`Error fetching currentTempWinner: ${err.message}`)
-        return
-      }
 
+    try {
+      const res = await this.contract.methods.currentTempWinner().call()
       this.currentTempWinner = res
-    })
+    } catch (err) {
+      logger.error(`Error fetching currentTempWinner: ${err.message}`)
+    }
   }
 
   @action
