@@ -7,6 +7,7 @@ import styles from './styles'
 import Heading from './Heading'
 import Content from './Content'
 import NoWalletDialog from '../../components/NoWalletDialog'
+import WrongNetworkDialog from '../../components/WrongNetworkDialog'
 import Constants from '../../constants'
 
 const { ADDRESS } = Constants
@@ -123,19 +124,39 @@ class MegaNBOT extends Component {
     )
   }
 
-  renderEntryButton = () => {
+  onEntryButtonClick = () => {
     const {
-      classes,
       store: {
         walletStore: {
           account,
           network,
         },
+        chainStore: {
+          selectedNetwork,
+        },
+        megaNBOTStore: {
+          enterDrawing,
+          showNoWalletDialog,
+          showWrongNetworkDialog,
+        },
+      },
+    } = this.props
+
+    if (account && network) {
+      if (network !== selectedNetwork) showWrongNetworkDialog()
+      else enterDrawing()
+    } else {
+      showNoWalletDialog()
+    }
+  }
+
+  renderEntryButton = () => {
+    const {
+      classes,
+      store: {
         megaNBOTStore: {
           blocksLeft,
           drawButtonDisabled,
-          enterDrawing,
-          showNoWalletDialog,
         },
       },
     } = this.props
@@ -147,7 +168,7 @@ class MegaNBOT extends Component {
           color="primary"
           className={classes.enterButton}
           disabled={drawButtonDisabled}
-          onClick={account && network ? enterDrawing : showNoWalletDialog}
+          onClick={this.onEntryButtonClick}
         >
           {Number(blocksLeft) === 0
             ? <FormattedMessage id="drawWinner" />
@@ -186,6 +207,7 @@ class MegaNBOT extends Component {
         {this.renderEntryButton()}
         {this.renderNotice()}
         <NoWalletDialog />
+        <WrongNetworkDialog />
       </div>
     )
   }

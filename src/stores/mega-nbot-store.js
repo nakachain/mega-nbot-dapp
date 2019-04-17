@@ -24,6 +24,7 @@ const DEFAULT_VALUES = {
   previousWinner: undefined,
   currentTempWinner: undefined,
   noWalletDialogVisible: false,
+  wrongNetworkDialogVisible: false,
 }
 
 export default class MegaNBOTStore {
@@ -39,6 +40,7 @@ export default class MegaNBOTStore {
   @observable previousWinner = undefined
   @observable currentTempWinner = undefined
   @observable noWalletDialogVisible = false
+  @observable wrongNetworkDialogVisible = false
 
   constructor(appStore) {
     this.appStore = appStore
@@ -101,6 +103,16 @@ export default class MegaNBOTStore {
   @action
   hideNoWalletDialog = () => {
     this.noWalletDialogVisible = false
+  }
+
+  @action
+  showWrongNetworkDialog = () => {
+    this.wrongNetworkDialogVisible = true
+  }
+
+  @action
+  hideWrongNetworkDialog = () => {
+    this.wrongNetworkDialogVisible = false
   }
 
   @action
