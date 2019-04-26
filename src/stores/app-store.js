@@ -11,6 +11,9 @@ export default class AppStore {
     this.tokenExchangeStore = new TokenExchangeStore(this)
 
     // Wait for window to finish loading so we ensure web3 is injected first
-    window.onload = () => this.walletStore.init()
+    window.onload = () => {
+      this.walletStore.init()
+      this.chainStore.init()
+    }
   }
 }

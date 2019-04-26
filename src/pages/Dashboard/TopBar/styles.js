@@ -16,4 +16,10 @@ export default theme => ({
   infoContainer: {
     textAlign: 'right',
   },
+  networkSelect: {
+    color: theme.palette.secondary.main,
+  },
+  networkSelectIcon: {
+    fill: theme.palette.secondary.main,
+  },
 })

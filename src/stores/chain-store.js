@@ -1,42 +1,63 @@
 import { observable, action, reaction } from 'mobx'
-import Config from '../config'
+import Web3 from 'web3'
 import logger from '../utils/logger'
+import Config from '../config'
+import Constants from '../constants'
 
-const { INTERVAL: { BLOCK_TIME } } = Config
+const { URL } = Config
+const { NETWORK } = Constants
+const KEY_SELECTED_NETWORK = 'selectedNetwork'
 
 export default class ChainStore {
-  blockInterval = undefined
+  @observable selectedNetwork = NETWORK.MAINNET
+  @observable web3 = undefined
   @observable blockNumber = undefined
 
   constructor(appStore) {
     this.appStore = appStore
+    this.setWeb3()
 
     reaction(
-      () => this.appStore.walletStore.network,
-      () => this.init(),
+      () => this.selectedNetwork,
+      () => this.setWeb3(),
     )
   }
 
   @action
-  init = () => {
-    if (this.blockInterval) {
-      clearInterval(this.blockInterval)
-    }
-
-    this.blockInterval = setInterval(() => {
-      this.getBlockNumber()
-    }, BLOCK_TIME)
+  loadSelectedNetworkFromStorage = () => {
+    const storedNetwork = localStorage.getItem(KEY_SELECTED_NETWORK)
+    if (storedNetwork) this.selectedNetwork = storedNetwork
+    else localStorage.setItem(KEY_SELECTED_NETWORK, this.selectedNetwork)
   }
 
   @action
-  getBlockNumber = () => {
-    window.naka.eth.getBlockNumber((err, res) => {
+  setWeb3 = () => {
+    if (this.selectedNetwork === NETWORK.MAINNET) {
+      this.web3 = new Web3(URL.RPC_WS_MAINNET)
+    } else {
+      this.web3 = new Web3(URL.RPC_WS_TESTNET)
+    }
+  }
+
+  @action
+  init = () => {
+    this.loadSelectedNetworkFromStorage()
+
+    this.web3.eth.clearSubscriptions()
+    this.web3.eth.subscribe('newBlockHeaders', (err, res) => {
       if (err) {
-        logger.error(`Error getting block number: ${err.message}`)
+        logger.error(`Error subscribing to newBlockHeaders: ${err.message}`)
         return
       }
-
-      this.blockNumber = res
+      logger.info(`Subscribed to newBlockHeaders: ${res}`)
+    }).on('data', (blockHeader) => {
+      this.blockNumber = blockHeader.number
     })
+  }
+
+  @action
+  setSelectedNetwork = (network) => {
+    this.selectedNetwork = network
+    localStorage.setItem(KEY_SELECTED_NETWORK, network)
   }
 }

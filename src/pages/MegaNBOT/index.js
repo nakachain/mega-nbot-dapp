@@ -6,13 +6,15 @@ import { FormattedMessage } from 'react-intl'
 import styles from './styles'
 import Heading from './Heading'
 import Content from './Content'
-import NotDeployedView from '../../components/NotDeployedView'
+import NoWalletDialog from '../../components/NoWalletDialog'
+import WrongNetworkDialog from '../../components/WrongNetworkDialog'
 import Constants from '../../constants'
 
 const { ADDRESS } = Constants
 const TYPE_NORMAL = 'normal'
 const TYPE_ADDRESS = 'address'
 
+@withStyles(styles)
 @inject('store')
 @observer
 class MegaNBOT extends Component {
@@ -38,6 +40,7 @@ class MegaNBOT extends Component {
 
   getWinnerTypeAndText = (address) => {
     const { store: { walletStore: { account } } } = this.props
+    if (!address && !account) return { type: 'normal', text: <span /> }
 
     let type
     let text
@@ -121,6 +124,32 @@ class MegaNBOT extends Component {
     )
   }
 
+  onEntryButtonClick = () => {
+    const {
+      store: {
+        walletStore: {
+          account,
+          network,
+        },
+        chainStore: {
+          selectedNetwork,
+        },
+        megaNBOTStore: {
+          enterDrawing,
+          showNoWalletDialog,
+          showWrongNetworkDialog,
+        },
+      },
+    } = this.props
+
+    if (account && network) {
+      if (network !== selectedNetwork) showWrongNetworkDialog()
+      else enterDrawing()
+    } else {
+      showNoWalletDialog()
+    }
+  }
+
   renderEntryButton = () => {
     const {
       classes,
@@ -128,10 +157,10 @@ class MegaNBOT extends Component {
         megaNBOTStore: {
           blocksLeft,
           drawButtonDisabled,
-          enterDrawing,
         },
       },
     } = this.props
+
     return (
       <div className={classes.entrySection}>
         <Button
@@ -139,7 +168,7 @@ class MegaNBOT extends Component {
           color="primary"
           className={classes.enterButton}
           disabled={drawButtonDisabled}
-          onClick={enterDrawing}
+          onClick={this.onEntryButtonClick}
         >
           {Number(blocksLeft) === 0
             ? <FormattedMessage id="drawWinner" />
@@ -167,15 +196,7 @@ class MegaNBOT extends Component {
   }
 
   render() {
-    const {
-      classes,
-      store: { megaNBOTStore: { deployed } },
-    } = this.props
-
-    // Show not deployed view
-    if (!deployed) {
-      return <NotDeployedView name="MegaNBOT" />
-    }
+    const { classes } = this.props
 
     return (
       <div className={classes.root}>
@@ -185,9 +206,11 @@ class MegaNBOT extends Component {
         {this.renderLastWinner()}
         {this.renderEntryButton()}
         {this.renderNotice()}
+        <NoWalletDialog />
+        <WrongNetworkDialog />
       </div>
     )
   }
 }
 
-export default withStyles(styles)(MegaNBOT)
+export default MegaNBOT

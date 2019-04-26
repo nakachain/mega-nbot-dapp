@@ -5,18 +5,32 @@ import prettyMs from 'pretty-ms'
 import MegaNBOTMeta from '../contracts/mega-nbot'
 import NBOTMeta from '../contracts/nbot'
 import logger from '../utils/logger'
+import { getContractAddress } from '../utils'
 import { formatNumberResponse } from '../utils/format'
-import Constants from '../constants'
 import Config from '../config'
 
-const { NETWORK } = Constants
 const { TOKEN: { NBOT }, INTERVAL: { BLOCK_TIME } } = Config
+
+const DEFAULT_VALUES = {
+  contract: undefined,
+  nbotContract: undefined,
+  nbotAddress: undefined,
+  owner: undefined,
+  winningAmount: undefined,
+  drawingInterval: undefined,
+  lastDrawingBlockNumber: undefined,
+  blocksLeft: undefined,
+  timeLeft: undefined,
+  previousWinner: undefined,
+  currentTempWinner: undefined,
+  noWalletDialogVisible: false,
+  wrongNetworkDialogVisible: false,
+}
 
 export default class MegaNBOTStore {
   contract = undefined
   nbotContract = undefined
   nbotAddress = undefined
-  @observable deployed = false
   @observable owner = undefined
   @observable winningAmount = undefined
   drawingInterval = undefined
@@ -25,13 +39,15 @@ export default class MegaNBOTStore {
   @observable timeLeft = undefined
   @observable previousWinner = undefined
   @observable currentTempWinner = undefined
+  @observable noWalletDialogVisible = false
+  @observable wrongNetworkDialogVisible = false
 
   constructor(appStore) {
     this.appStore = appStore
 
     reaction(
-      () => this.appStore.walletStore.network,
-      () => this.initContracts(),
+      () => this.appStore.chainStore.web3,
+      () => this.init(),
     )
 
     reaction(
@@ -57,23 +73,18 @@ export default class MegaNBOTStore {
   })
 
   @action
-  initContracts = () => {
-    let addr
-    let nbotAddr
-    const { network } = this.appStore.walletStore
-    if (network === NETWORK.MAINNET) {
-      addr = MegaNBOTMeta.mainnet
-      nbotAddr = NBOTMeta.mainnet
-    } else if (network === NETWORK.TESTNET) {
-      addr = MegaNBOTMeta.testnet
-      nbotAddr = NBOTMeta.testnet
-    }
+  init = () => {
+    // Reset
+    Object.assign(this, DEFAULT_VALUES)
+
+    const { selectedNetwork, web3 } = this.appStore.chainStore
+    const addr = getContractAddress(selectedNetwork, MegaNBOTMeta)
+    const nbotAddr = getContractAddress(selectedNetwork, NBOTMeta)
 
     if (addr && nbotAddr) {
-      this.contract = window.naka.eth.contract(MegaNBOTMeta.abi).at(addr)
-      this.nbotContract = window.naka.eth.contract(NBOTMeta.abi).at(nbotAddr)
+      this.contract = new web3.eth.Contract(MegaNBOTMeta.abi, addr)
+      this.nbotContract = new web3.eth.Contract(NBOTMeta.abi, nbotAddr)
       this.nbotAddress = nbotAddr
-      this.deployed = true
 
       this.fetchOwner()
       this.fetchDrawingInterval()
@@ -85,81 +96,95 @@ export default class MegaNBOTStore {
   }
 
   @action
-  fetchOwner = () => {
-    if (!this.contract) return
-    this.contract.owner((err, res) => {
-      if (err) {
-        logger.error(`Error fetching owner: ${err.message}`)
-        return
-      }
+  showNoWalletDialog = () => {
+    this.noWalletDialogVisible = true
+  }
 
+  @action
+  hideNoWalletDialog = () => {
+    this.noWalletDialogVisible = false
+  }
+
+  @action
+  showWrongNetworkDialog = () => {
+    this.wrongNetworkDialogVisible = true
+  }
+
+  @action
+  hideWrongNetworkDialog = () => {
+    this.wrongNetworkDialogVisible = false
+  }
+
+  @action
+  fetchOwner = async () => {
+    if (!this.contract) return
+
+    try {
+      const res = await this.contract.methods.owner().call()
       this.owner = res
-    })
+    } catch (err) {
+      logger.error(`Error fetching owner: ${err.message}`)
+    }
   }
 
   @action
-  fetchDrawingInterval = () => {
+  fetchDrawingInterval = async () => {
     if (!this.contract) return
-    this.contract.drawingInterval((err, res) => {
-      if (err) {
-        logger.error(`Error fetching withdrawInterval: ${err.message}`)
-        return
-      }
 
+    try {
+      const res = await this.contract.methods.drawingInterval().call()
       this.drawingInterval = res.toString()
-    })
+    } catch (err) {
+      logger.error(`Error fetching withdrawInterval: ${err.message}`)
+    }
   }
 
   @action
-  fetchWinningAmount = () => {
+  fetchWinningAmount = async () => {
     if (!this.contract) return
-    this.contract.winningAmount((err, res) => {
-      if (err) {
-        logger.error(`Error fetching winningAmount: ${err.message}`)
-        return
-      }
 
+    try {
+      const res = await this.contract.methods.winningAmount().call()
       this.winningAmount = this.toNBOTStr(res)
-    })
+    } catch (err) {
+      logger.error(`Error fetching winningAmount: ${err.message}`)
+    }
   }
 
   @action
-  fetchLastDrawingBlockNumber = () => {
+  fetchLastDrawingBlockNumber = async () => {
     if (!this.contract) return
-    this.contract.lastDrawingBlockNum((err, res) => {
-      if (err) {
-        logger.error(`Error fetching lastDrawingBlockNumber: ${err.message}`)
-        return
-      }
 
+    try {
+      const res = await this.contract.methods.lastDrawingBlockNum().call()
       this.lastDrawingBlockNumber = res.toString()
-    })
+    } catch (err) {
+      logger.error(`Error fetching lastDrawingBlockNumber: ${err.message}`)
+    }
   }
 
   @action
-  fetchPreviousWinner = () => {
+  fetchPreviousWinner = async () => {
     if (!this.contract) return
-    this.contract.previousWinner((err, res) => {
-      if (err) {
-        logger.error(`Error fetching previousWinner: ${err.message}`)
-        return
-      }
 
-      this.previousWinner = res
-    })
+    try {
+      const res = await this.contract.methods.previousWinner().call()
+      this.previousWinner = res.toLowerCase()
+    } catch (err) {
+      logger.error(`Error fetching previousWinner: ${err.message}`)
+    }
   }
 
   @action
-  fetchCurrentTempWinner = () => {
+  fetchCurrentTempWinner = async () => {
     if (!this.contract) return
-    this.contract.currentTempWinner((err, res) => {
-      if (err) {
-        logger.error(`Error fetching currentTempWinner: ${err.message}`)
-        return
-      }
 
-      this.currentTempWinner = res
-    })
+    try {
+      const res = await this.contract.methods.currentTempWinner().call()
+      this.currentTempWinner = res.toLowerCase()
+    } catch (err) {
+      logger.error(`Error fetching currentTempWinner: ${err.message}`)
+    }
   }
 
   @action
@@ -184,19 +209,25 @@ export default class MegaNBOTStore {
   }
 
   enterDrawing = () => {
-    if (!this.contract) return
-    const { exchangeRate } = this.appStore.tokenExchangeStore
-    this.contract.enterDrawing({
-      token: this.nbotAddress,
-      exchanger: this.owner,
-      exchangeRate,
-    }, (err, res) => {
-      if (err) {
-        logger.error(`Error enterDrawing: ${err.message}`)
-        return
-      }
+    const { network } = this.appStore.walletStore
+    if (!window.naka || !network) return
 
-      logger.info(`txid: ${res}`)
-    })
+    const { exchangeRate } = this.appStore.tokenExchangeStore
+    const address = getContractAddress(MegaNBOTMeta)
+    const contract = window.naka.eth.contract(MegaNBOTMeta.abi).at(address)
+    if (contract) {
+      contract.enterDrawing({
+        token: this.nbotAddress,
+        exchanger: this.owner,
+        exchangeRate,
+      }, (err, res) => {
+        if (err) {
+          logger.error(`Error enterDrawing: ${err.message}`)
+          return
+        }
+
+        logger.info(`txid: ${res}`)
+      })
+    }
   }
 }

@@ -1,6 +1,7 @@
 {
   "approxTimeLeft": "approx. {timeLeft}",
   "blocksLeft": "Blocks Left",
+  "changeWalletNetworkToX": "Change your wallet network to {network}.",
   "currentWinner": "Current Winner",
   "downloadExtension": "Download Naka Wallet Chrome Extension",
   "drawWinner": "Draw Winner",
@@ -13,6 +14,7 @@
   "notDetected": "Naka Wallet was not detected.",
   "pageNotFound": "Page not found.",
   "unlimitedEntries": "Unlimited entries!",
+  "wrongNetworkDetected": "Wrong network detected.",
   "xNotDeployedYet": "{name} has not been deployed yet.",
   "yesterdaysFinalWinner": "Yesterday's Final Winner",
   "you": "You"

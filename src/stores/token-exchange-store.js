@@ -2,6 +2,11 @@ import { observable, action, reaction } from 'mobx'
 import logger from '../utils/logger'
 import TokenExchangeMeta from '../contracts/token-exchange'
 
+const DEFAULT_VALUES = {
+  contract: undefined,
+  exchangeRate: undefined,
+}
+
 export default class TokenExchangeStore {
   contract = undefined
   @observable exchangeRate = undefined
@@ -10,8 +15,8 @@ export default class TokenExchangeStore {
     this.appStore = appStore
 
     reaction(
-      () => this.appStore.walletStore.network,
-      () => this.initContract(),
+      () => this.appStore.chainStore.web3,
+      () => this.init(),
     )
 
     reaction(
@@ -21,24 +26,26 @@ export default class TokenExchangeStore {
   }
 
   @action
-  initContract = () => {
+  init = () => {
+    // Reset
+    Object.assign(this, DEFAULT_VALUES)
+
+    const { web3 } = this.appStore.chainStore
     const { abi, address } = TokenExchangeMeta
-    this.contract = window.naka.eth.contract(abi).at(address)
+    this.contract = new web3.eth.Contract(abi, address)
+    this.fetchExchangeRate()
   }
 
   @action
-  fetchExchangeRate = () => {
+  fetchExchangeRate = async () => {
     const { nbotAddress, owner } = this.appStore.megaNBOTStore
+    if (!this.contract || !nbotAddress || !owner) return
 
-    if (nbotAddress && owner) {
-      this.contract.getRate(nbotAddress, owner, (err, res) => {
-        if (err) {
-          logger.error(`Error getRate: ${err.message}`)
-          return
-        }
-
-        this.exchangeRate = res.toString(16)
-      })
+    try {
+      const res = await this.contract.methods.getRate(nbotAddress, owner).call()
+      this.exchangeRate = res._hex // eslint-disable-line
+    } catch (err) {
+      logger.error(`Error getRate: ${err.message}`)
     }
   }
 }
