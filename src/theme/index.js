@@ -13,7 +13,7 @@ const theme = createMuiTheme({
     },
   },
   typography: {
-    fontFamily: 'Lato, sans-serif',
+    fontFamily: 'Noto Sans, sans-serif',
     useNextVariants: true,
   },
   spacing: {
