@@ -1,8 +1,5 @@
-import Constants from '../constants'
-import Config from '../config'
-
-const { NETWORK } = Constants
-const { LINKS } = Config
+import { NETWORK } from '../constants'
+import { LINKS } from '../config'
 
 export const getExplorerLink = (network) => {
   switch (network) {

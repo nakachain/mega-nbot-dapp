@@ -13,6 +13,12 @@ const messages = {
   zh: messagesZh,
 }
 
+// const loadLangFromStorage = () => {
+//   const storedNetwork = localStorage.getItem(KEY_SELECTED_NETWORK)
+//   if (storedNetwork) this.selectedNetwork = storedNetwork
+//   else localStorage.setItem(KEY_SELECTED_NETWORK, this.selectedNetwork)
+// }
+
 export default () => {
   let lang = window.navigator.language.split(/[-_]/)[0]
 

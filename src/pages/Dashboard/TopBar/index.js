@@ -4,10 +4,11 @@ import { AppBar, Toolbar, Grid, FormControl, Select, MenuItem, Typography, withS
 import { withRouter } from 'react-router'
 import { inject, observer } from 'mobx-react'
 import styles from './styles'
-import Constants from '../../../constants'
+import { NETWORK } from '../../../constants'
 import Logo from '../../../../static/images/naka_text_logo_white.png'
 
-const { NETWORK: { MAINNET, TESTNET } } = Constants
+const { MAINNET, TESTNET } = NETWORK
+
 @withStyles(styles)
 @withRouter
 @inject('store')

@@ -1,11 +1,9 @@
 import { observable, action, reaction } from 'mobx'
 import Web3 from 'web3'
 import logger from '../utils/logger'
-import Config from '../config'
-import Constants from '../constants'
+import { URL } from '../config'
+import { NETWORK } from '../constants'
 
-const { URL } = Config
-const { NETWORK } = Constants
 const KEY_SELECTED_NETWORK = 'selectedNetwork'
 
 export default class ChainStore {
