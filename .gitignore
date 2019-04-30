@@ -172,4 +172,4 @@ $RECYCLE.BIN/
 /dist
 
 # React-Intl
-/build
+/build/messages
