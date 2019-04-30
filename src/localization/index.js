@@ -4,6 +4,7 @@ import localeZh from 'react-intl/locale-data/zh'
 import messagesEn from './en.json'
 import messagesZh from './zh.json'
 import logger from '../utils/logger'
+import { STORAGE_KEY } from '../config'
 
 // Load locale data
 addLocaleData([...localeEn, ...localeZh])

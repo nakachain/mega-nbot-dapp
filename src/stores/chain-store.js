@@ -1,10 +1,8 @@
 import { observable, action, reaction } from 'mobx'
 import Web3 from 'web3'
 import logger from '../utils/logger'
-import { URL } from '../config'
+import { URL, STORAGE_KEY } from '../config'
 import { NETWORK } from '../constants'
-
-const KEY_SELECTED_NETWORK = 'selectedNetwork'
 
 export default class ChainStore {
   @observable selectedNetwork = NETWORK.MAINNET
@@ -23,9 +21,9 @@ export default class ChainStore {
 
   @action
   loadSelectedNetworkFromStorage = () => {
-    const storedNetwork = localStorage.getItem(KEY_SELECTED_NETWORK)
+    const storedNetwork = localStorage.getItem(STORAGE_KEY.NETWORK)
     if (storedNetwork) this.selectedNetwork = storedNetwork
-    else localStorage.setItem(KEY_SELECTED_NETWORK, this.selectedNetwork)
+    else localStorage.setItem(STORAGE_KEY.NETWORK, this.selectedNetwork)
   }
 
   @action
@@ -56,6 +54,6 @@ export default class ChainStore {
   @action
   setSelectedNetwork = (network) => {
     this.selectedNetwork = network
-    localStorage.setItem(KEY_SELECTED_NETWORK, network)
+    localStorage.setItem(STORAGE_KEY.NETWORK, network)
   }
 }

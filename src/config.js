@@ -1,6 +1,6 @@
-export const LOCAL_STORAGE_KEY = {
+export const STORAGE_KEY = {
   LANGUAGE: 'language',
-  SELECTED_NETWORK: 'selectedNetwork',
+  NETWORK: 'network',
 }
 
 export const CHAIN_ID = {
