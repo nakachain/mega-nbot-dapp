@@ -15,7 +15,7 @@ class LanguageSelectorBar extends Component {
     store: PropTypes.object,
   }
 
-  renderLangLink = (lang, msgId) => {
+  renderLangLink = (lang, formattedMsg) => {
     const { classes } = this.props
     const selected = getCurrentLang() === lang
 
@@ -23,11 +23,9 @@ class LanguageSelectorBar extends Component {
       <Typography
         variant="button"
         className={`${classes.langItem} ${selected && 'selected'}`}
-        onClick={() => {
-          if (!selected) changeLang(lang)
-        }}
+        onClick={() => { if (!selected) changeLang(lang) }}
       >
-        <FormattedMessage id={msgId} />
+        {formattedMsg}
       </Typography>
     )
   }
@@ -37,8 +35,14 @@ class LanguageSelectorBar extends Component {
 
     return (
       <div className={classes.root}>
-        {this.renderLangLink('en', 'english')}
-        {this.renderLangLink('zh', 'chinese')}
+        {this.renderLangLink(
+          'en',
+          <FormattedMessage id="english" defaultMessage="English" />,
+        )}
+        {this.renderLangLink(
+          'zh',
+          <FormattedMessage id="chinese" defaultMessage="汉字" />,
+        )}
       </div>
     )
   }
