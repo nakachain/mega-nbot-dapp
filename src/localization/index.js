@@ -7,39 +7,42 @@ import logger from '../utils/logger'
 import { STORAGE_KEY } from '../config'
 
 const DEFAULT_LANG = 'en'
-
-// Load locale data
-addLocaleData([...localeEn, ...localeZh])
-
 const messages = {
   en: messagesEn,
   zh: messagesZh,
 }
-
-const loadLangFromStorage = () => {
-  localStorage.getItem(STORAGE_KEY.LANGUAGE)
-}
+let currentLang;
 
 const storeLangInStorage = (lang) => {
   localStorage.setItem(STORAGE_KEY.LANGUAGE, lang)
 }
 
+export const getCurrentLang = () => currentLang
+
+export const changeLang = (lang) => {
+  storeLangInStorage(lang)
+  window.location.reload()
+}
+
 export default () => {
+  // Load locale data
+  addLocaleData([...localeEn, ...localeZh])
+
   // Determine language from storage or system
-  let lang = loadLangFromStorage()
-  if (!lang) [lang] = window.navigator.language.split('-')
+  currentLang = localStorage.getItem(STORAGE_KEY.LANGUAGE)
+  if (!currentLang) [currentLang] = window.navigator.language.split('-')
 
   // Default to English if no messages file found for the language
-  if (!messages[lang]) {
-    logger.error(`No translations found for locale: ${lang}. Falling back to en.`)
-    lang = DEFAULT_LANG
+  if (!messages[currentLang]) {
+    logger.error(`No translations found for locale: ${currentLang}. Falling back to en.`)
+    currentLang = DEFAULT_LANG
   }
 
   // Store language
-  storeLangInStorage(lang)
+  storeLangInStorage(currentLang)
 
   return {
-    locale: lang,
-    messages: messages[lang],
+    locale: currentLang,
+    messages: messages[currentLang],
   }
 }

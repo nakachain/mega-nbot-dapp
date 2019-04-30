@@ -6,5 +6,6 @@ export default theme => ({
   },
   langItem: {
     marginRight: theme.spacing.unit,
+    cursor: 'pointer',
   },
 })
