@@ -45,10 +45,10 @@ theme.overrides = {
   MuiTypography: {
     h2: {
       [theme.breakpoints.down('sm')]: {
-        fontSize: 45,
+        fontSize: 50,
       },
       [theme.breakpoints.down('xs')]: {
-        fontSize: 30,
+        fontSize: 40,
       },
     },
     h4: {
@@ -64,15 +64,20 @@ theme.overrides = {
         fontSize: 18,
       },
       [theme.breakpoints.down('xs')]: {
-        fontSize: 12,
+        fontSize: 14,
       },
     },
     body2: {
       [theme.breakpoints.down('sm')]: {
         fontSize: 12,
       },
+    },
+    subtitle2: {
+      [theme.breakpoints.down('sm')]: {
+        fontSize: 12,
+      },
       [theme.breakpoints.down('xs')]: {
-        // fontSize: 10,
+        fontSize: 10,
       },
     },
   },
