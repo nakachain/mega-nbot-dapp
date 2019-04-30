@@ -1,0 +1,10 @@
+[
+  {
+    "id": "english",
+    "defaultMessage": "English"
+  },
+  {
+    "id": "chinese",
+    "defaultMessage": "汉字"
+  }
+]

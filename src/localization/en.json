@@ -1,6 +1,6 @@
 {
-  "approxTimeLeft": "approx. {timeLeft}",
-  "blocksLeft": "Blocks Left",
+  "approxTimeLeft": "Approx. Time Left",
+  "blocksLeft": "Blocks Left: {blocksLeft}",
   "changeWalletNetworkToX": "Change your wallet network to {network}.",
   "currentWinner": "Current Winner",
   "downloadExtension": "Download Naka Wallet Chrome Extension",

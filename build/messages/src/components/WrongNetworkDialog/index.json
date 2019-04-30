@@ -1,0 +1,10 @@
+[
+  {
+    "id": "wrongNetworkDetected",
+    "defaultMessage": "Wrong network detected."
+  },
+  {
+    "id": "changeWalletNetworkToX",
+    "defaultMessage": "Change your wallet network to {network}."
+  }
+]

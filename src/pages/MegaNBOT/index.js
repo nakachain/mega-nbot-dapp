@@ -38,6 +38,31 @@ class MegaNBOT extends Component {
     )
   }
 
+  renderBlocksLeft = () => {
+    const {
+      classes,
+      store: {
+        megaNBOTStore: {
+          blocksLeft,
+          timeLeft,
+        },
+      },
+    } = this.props
+
+    return (
+      <div className={classes.sectionContainer}>
+        <Heading
+          title={<FormattedMessage id="approxTimeLeft" />}
+          classes={classes} />
+        <Content
+          type="normal"
+          text={<span>{timeLeft}</span>}
+          subText={<FormattedMessage id="blocksLeft" values={{ blocksLeft }} />}
+          classes={classes} />
+      </div>
+    )
+  }
+
   getWinnerTypeAndText = (address) => {
     const { store: { walletStore: { account } } } = this.props
     if (!address && !account) return { type: 'normal', text: <span /> }
@@ -95,31 +120,6 @@ class MegaNBOT extends Component {
           title={<FormattedMessage id="yesterdaysFinalWinner" />}
           classes={classes} />
         <Content type={type} text={text} classes={classes} />
-      </div>
-    )
-  }
-
-  renderBlocksLeft = () => {
-    const {
-      classes,
-      store: {
-        megaNBOTStore: {
-          blocksLeft,
-          timeLeft,
-        },
-      },
-    } = this.props
-
-    return (
-      <div className={classes.sectionContainer}>
-        <Heading
-          title={<FormattedMessage id="blocksLeft" />}
-          classes={classes} />
-        <Content
-          type="normal"
-          text={<span>{blocksLeft}</span>}
-          subText={<FormattedMessage id="approxTimeLeft" values={{ timeLeft }} />}
-          classes={classes} />
       </div>
     )
   }
