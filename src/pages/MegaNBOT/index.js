@@ -8,6 +8,7 @@ import Heading from './Heading'
 import Content from './Content'
 import NoWalletDialog from '../../components/NoWalletDialog'
 import WrongNetworkDialog from '../../components/WrongNetworkDialog'
+import LanguageSelectorBar from '../../components/LanguageSelectorBar'
 import Constants from '../../constants'
 import { getExplorerAddressLink } from '../../utils/links'
 
@@ -233,6 +234,7 @@ class MegaNBOT extends Component {
         {this.renderLastWinner()}
         {this.renderEntryButton()}
         {this.renderNotice()}
+        <LanguageSelectorBar />
         <NoWalletDialog />
         <WrongNetworkDialog />
       </div>
