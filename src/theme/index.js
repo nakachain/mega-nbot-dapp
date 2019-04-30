@@ -67,6 +67,14 @@ theme.overrides = {
         fontSize: 12,
       },
     },
+    body2: {
+      [theme.breakpoints.down('sm')]: {
+        fontSize: 12,
+      },
+      [theme.breakpoints.down('xs')]: {
+        // fontSize: 10,
+      },
+    },
   },
 }
 
