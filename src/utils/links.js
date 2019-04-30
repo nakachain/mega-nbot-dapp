@@ -12,6 +12,14 @@ export const getExplorerLink = (network) => {
   }
 }
 
+export const getExplorerAddressLink = (network, address) => {
+  switch (network) {
+    case NETWORK.MAINNET: return `${LINKS.EXPLORER_MAINNET}/address/${address}`
+    case NETWORK.TESTNET: return `${LINKS.EXPLORER_TESTNET}/address/${address}`
+    default: return ''
+  }
+}
+
 export const getDocumentationLink = () => LINKS.DOCUMENTATION
 
 export const getNakaWalletChromeLink = () => LINKS.NAKA_WALLET_CHROME

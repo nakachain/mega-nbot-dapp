@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
-import { Typography, Button, withStyles } from '@material-ui/core'
+import { Typography, Button, Link, withStyles } from '@material-ui/core'
 import { FormattedMessage } from 'react-intl'
 import styles from './styles'
 import Heading from './Heading'
@@ -9,6 +9,7 @@ import Content from './Content'
 import NoWalletDialog from '../../components/NoWalletDialog'
 import WrongNetworkDialog from '../../components/WrongNetworkDialog'
 import Constants from '../../constants'
+import { getExplorerAddressLink } from '../../utils/links'
 
 const { ADDRESS } = Constants
 const TYPE_NORMAL = 'normal'
@@ -86,6 +87,9 @@ class MegaNBOT extends Component {
     const {
       classes,
       store: {
+        walletStore: {
+          network,
+        },
         megaNBOTStore: {
           currentTempWinner,
         },
@@ -98,7 +102,17 @@ class MegaNBOT extends Component {
         <Heading
           title={<FormattedMessage id="currentWinner" />}
           classes={classes} />
-        <Content type={type} text={text} classes={classes} />
+        {currentTempWinner === ADDRESS.INVALID
+          ? <Content type={type} text={text} classes={classes} />
+          : (
+            <Link
+              href={getExplorerAddressLink(network, currentTempWinner)}
+              target="_blank"
+              rel="noopener"
+            >
+              <Content type={type} text={text} classes={classes} />
+            </Link>
+          )}
       </div>
     )
   }
@@ -107,6 +121,9 @@ class MegaNBOT extends Component {
     const {
       classes,
       store: {
+        walletStore: {
+          network,
+        },
         megaNBOTStore: {
           previousWinner,
         },
@@ -119,7 +136,17 @@ class MegaNBOT extends Component {
         <Heading
           title={<FormattedMessage id="yesterdaysFinalWinner" />}
           classes={classes} />
-        <Content type={type} text={text} classes={classes} />
+        {previousWinner === ADDRESS.INVALID
+          ? <Content type={type} text={text} classes={classes} />
+          : (
+            <Link
+              href={getExplorerAddressLink(network, previousWinner)}
+              target="_blank"
+              rel="noopener"
+            >
+              <Content type={type} text={text} classes={classes} />
+            </Link>
+          )}
       </div>
     )
   }
