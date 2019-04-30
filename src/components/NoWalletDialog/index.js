@@ -32,13 +32,19 @@ class NoWalletDialog extends Component {
         <div className={classes.root}>
           <SentimentVeryDissatisfied className={classes.icon} />
           <Typography variant="h6">
-            <FormattedMessage id="notDetected" />
+            <FormattedMessage
+              id="notDetected"
+              defaultMessage="Naka Wallet was not detected."/>
           </Typography>
           <Typography variant="h6" className={classes.loggedInText}>
-            <FormattedMessage id="loggedInAndRefresh" />
+            <FormattedMessage
+              id="loggedInAndRefresh"
+              defaultMessage="Please make sure you are logged in and refresh the page." />
           </Typography>
           <a href={getNakaWalletChromeLink()} target="blank">
-            <FormattedMessage id="downloadExtension" />
+            <FormattedMessage
+              id="downloadExtension"
+              defaultMessage="Download Naka Wallet Chrome Extension" />
           </a>
         </div>
       </Dialog>

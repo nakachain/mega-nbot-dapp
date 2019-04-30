@@ -37,11 +37,14 @@ class WrongNetworkDialog extends Component {
         <div className={classes.root}>
           <SentimentDissatisfied className={classes.icon} />
           <Typography variant="h6">
-            <FormattedMessage id="wrongNetworkDetected" />
+            <FormattedMessage
+              id="wrongNetworkDetected"
+              defaultMessage="Wrong network detected." />
           </Typography>
           <Typography variant="h6" className={classes.loggedInText}>
             <FormattedMessage
               id="changeWalletNetworkToX"
+              defaultMessage="Change your wallet network to {network}."
               values={{ network: selectedNetwork }} />
           </Typography>
         </div>

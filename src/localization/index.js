@@ -6,6 +6,9 @@ import messagesZh from './zh.json'
 import logger from '../utils/logger'
 import { STORAGE_KEY } from '../config'
 
+// Load locale data
+addLocaleData([...localeEn, ...localeZh])
+
 const DEFAULT_LANG = 'en'
 const messages = {
   en: messagesEn,
@@ -25,9 +28,6 @@ export const changeLang = (lang) => {
 }
 
 export default () => {
-  // Load locale data
-  addLocaleData([...localeEn, ...localeZh])
-
   // Determine language from storage or system
   currentLang = localStorage.getItem(STORAGE_KEY.LANGUAGE)
   if (!currentLang) [currentLang] = window.navigator.language.split('-')

@@ -9,7 +9,7 @@ const NotFound = ({ classes }) => (
   <div className={classes.root}>
     <MoodBad className={classes.icon} />
     <Typography variant="h6">
-      <FormattedMessage id="pageNotFound" />
+      <FormattedMessage id="pageNotFound" defaultMessage="Page not found." />
     </Typography>
   </div>
 )
