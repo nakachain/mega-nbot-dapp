@@ -31,11 +31,6 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.json$/,
-        exclude: /node_modules/,
-        loader: 'json-loader',
-      },
-      {
         test: /\.(gif|png|jpe?g|svg)$/i,
         use: [
           'file-loader',
