@@ -2,5 +2,6 @@
 
 ## Deploy
 
-1. Pull latest or branch you want to deploy
-2. `./deploy.sh`
+1. Pull the branch you want to deploy
+2. `npm i`
+3. `./deploy.sh`
