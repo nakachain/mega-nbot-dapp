@@ -1,6 +1,6 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 
-export default createMuiTheme({
+const theme = createMuiTheme({
   palette: {
     primary: {
       main: '#5539df',
@@ -39,3 +39,35 @@ export default createMuiTheme({
     },
   },
 })
+
+theme.overrides = {
+  ...theme.overrides,
+  MuiTypography: {
+    h2: {
+      [theme.breakpoints.down('sm')]: {
+        fontSize: 45,
+      },
+      [theme.breakpoints.down('xs')]: {
+        fontSize: 30,
+      },
+    },
+    h4: {
+      [theme.breakpoints.down('sm')]: {
+        fontSize: 26,
+      },
+      [theme.breakpoints.down('xs')]: {
+        fontSize: 18,
+      },
+    },
+    h5: {
+      [theme.breakpoints.down('sm')]: {
+        fontSize: 18,
+      },
+      [theme.breakpoints.down('xs')]: {
+        fontSize: 12,
+      },
+    },
+  },
+}
+
+export default theme
