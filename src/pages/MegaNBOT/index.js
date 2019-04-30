@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
-import { Typography, Button, Link, withStyles } from '@material-ui/core'
+import { Typography, Button, Link, Divider, withStyles } from '@material-ui/core'
 import { FormattedMessage } from 'react-intl'
 import styles from './styles'
 import Heading from './Heading'
@@ -233,6 +233,7 @@ class MegaNBOT extends Component {
         {this.renderLastWinner()}
         {this.renderEntryButton()}
         {this.renderNotice()}
+        <Divider className={classes.divider} />
         <LanguageSelectorBar />
         <NoWalletDialog />
         <WrongNetworkDialog />

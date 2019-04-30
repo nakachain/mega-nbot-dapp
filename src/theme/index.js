@@ -80,6 +80,14 @@ theme.overrides = {
         fontSize: 10,
       },
     },
+    button: {
+      [theme.breakpoints.down('sm')]: {
+        fontSize: 12,
+      },
+      [theme.breakpoints.down('xs')]: {
+        fontSize: 10,
+      },
+    },
   },
 }
 

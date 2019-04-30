@@ -33,4 +33,7 @@ export default theme => ({
     fontSize: 20,
     padding: `${theme.spacing.two}px ${theme.spacing.six}px`,
   },
+  divider: {
+    width: '100%',
+  },
 })
