@@ -1,4 +1,6 @@
 import { createMuiTheme } from '@material-ui/core/styles'
+import 'typeface-noto-sans'
+import 'typeface-noto-serif-sc'
 
 const theme = createMuiTheme({
   palette: {
@@ -13,7 +15,12 @@ const theme = createMuiTheme({
     },
   },
   typography: {
-    fontFamily: 'Noto Sans, sans-serif',
+    fontFamily: [
+      '"Noto Sans"',
+      '"Noto Sans SC"',
+      'Roboto',
+      'sans-serif',
+    ].join(','),
     useNextVariants: true,
   },
   spacing: {
