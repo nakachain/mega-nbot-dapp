@@ -5,7 +5,11 @@ export default theme => ({
     padding: theme.spacing.unit,
   },
   langItem: {
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing.two,
     cursor: 'pointer',
+    '&.selected': {
+      color: theme.palette.primary.main,
+      cursor: 'default',
+    },
   },
 })

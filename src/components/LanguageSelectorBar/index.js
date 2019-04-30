@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react'
 import { Typography, withStyles } from '@material-ui/core'
 import { FormattedMessage } from 'react-intl'
 import styles from './styles'
-import { changeLang } from '../../localization'
+import { getCurrentLang, changeLang } from '../../localization'
 
 @withStyles(styles)
 @inject('store')
@@ -16,15 +16,16 @@ class LanguageSelectorBar extends Component {
   }
 
   renderLangLink = (lang, msgId) => {
-    const {
-      classes,
-    } = this.props
+    const { classes } = this.props
+    const selected = getCurrentLang() === lang
 
     return (
       <Typography
         variant="button"
-        className={classes.langItem}
-        onClick={() => changeLang(lang)}
+        className={`${classes.langItem} ${selected && 'selected'}`}
+        onClick={() => {
+          if (!selected) changeLang(lang)
+        }}
       >
         <FormattedMessage id={msgId} />
       </Typography>
@@ -32,9 +33,7 @@ class LanguageSelectorBar extends Component {
   }
 
   render() {
-    const {
-      classes,
-    } = this.props
+    const { classes } = this.props
 
     return (
       <div className={classes.root}>
