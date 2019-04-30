@@ -1,7 +1,7 @@
 {
   "approxTimeLeft": "大约还剩下 {timeLeft}",
   "blocksLeft": "剩余区块数",
-  "changeWalletNetworkToX": "Change your wallet network to {network}.",
+  "changeWalletNetworkToX": "修改您的钱包网络为 {network}.",
   "currentWinner": "当前中奖者",
   "downloadExtension": "请下载 Naka 钱包手机 App 或者 Chrome 浏览器插件",
   "drawWinner": "中奖者",
@@ -14,8 +14,8 @@
   "notDetected": "未检测到 Naka 钱包",
   "pageNotFound": "无法查找该页面",
   "unlimitedEntries": "不限次数！",
-  "wrongNetworkDetected": "Wrong network detected.",
+  "wrongNetworkDetected": "检测到错误的区块链网络",
   "xNotDeployedYet": "{name} 还未部署，请耐心等待",
   "yesterdaysFinalWinner": "昨日中奖者",
-  "you": "恭喜你！"
+  "you": "你！"
 }
