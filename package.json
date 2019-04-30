@@ -72,6 +72,7 @@
     "image-webpack-loader": "^4.6.0",
     "json-loader": "^0.5.7",
     "react-hot-loader": "^4.8.2",
+    "react-intl-webpack-plugin": "^0.3.0",
     "style-loader": "^0.23.1",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",

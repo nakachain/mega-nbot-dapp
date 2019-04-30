@@ -40,6 +40,7 @@ export default () => {
 
   // Store language
   storeLangInStorage(currentLang)
+  // TODO: remove after testing
   window.messages = messages[currentLang]
 
   return {

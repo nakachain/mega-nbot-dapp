@@ -1,4 +1,5 @@
 const path = require('path')
+const ReactIntlPlugin = require('react-intl-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = {
@@ -57,6 +58,7 @@ module.exports = {
     extensions: ['*', '.js', '.jsx'],
   },
   plugins: [
+    new ReactIntlPlugin(),
     new CopyPlugin([
       { from: './static/index.html' },
     ]),
