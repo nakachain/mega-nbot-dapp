@@ -6,6 +6,8 @@ import messagesZh from './zh.json'
 import logger from '../utils/logger'
 import { STORAGE_KEY } from '../config'
 
+const DEFAULT_LANG = 'en'
+
 // Load locale data
 addLocaleData([...localeEn, ...localeZh])
 
@@ -14,20 +16,27 @@ const messages = {
   zh: messagesZh,
 }
 
-// const loadLangFromStorage = () => {
-//   const storedNetwork = localStorage.getItem(KEY_SELECTED_NETWORK)
-//   if (storedNetwork) this.selectedNetwork = storedNetwork
-//   else localStorage.setItem(KEY_SELECTED_NETWORK, this.selectedNetwork)
-// }
+const loadLangFromStorage = () => {
+  localStorage.getItem(STORAGE_KEY.LANGUAGE)
+}
+
+const storeLangInStorage = (lang) => {
+  localStorage.setItem(STORAGE_KEY.LANGUAGE, lang)
+}
 
 export default () => {
-  let lang = window.navigator.language.split(/[-_]/)[0]
+  // Determine language from storage or system
+  let lang = loadLangFromStorage()
+  if (!lang) [lang] = window.navigator.language.split('-')
 
   // Default to English if no messages file found for the language
   if (!messages[lang]) {
-    logger.error(`No translations found for locale: ${lang}`)
-    lang = 'en'
+    logger.error(`No translations found for locale: ${lang}. Falling back to en.`)
+    lang = DEFAULT_LANG
   }
+
+  // Store language
+  storeLangInStorage(lang)
 
   return {
     locale: lang,
