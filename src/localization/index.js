@@ -40,6 +40,7 @@ export default () => {
 
   // Store language
   storeLangInStorage(currentLang)
+  window.messages = messages[currentLang]
 
   return {
     locale: currentLang,
