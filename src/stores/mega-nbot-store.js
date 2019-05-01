@@ -60,7 +60,17 @@ export default class MegaNBOTStore {
   }
 
   @computed get drawButtonDisabled() {
+    const {
+      walletStore: { network },
+      nbotStore: { address: nbotAddress, owner: nbotOwner },
+      tokenExchangeStore: { exchangeRate },
+    } = this.appStore
+
     return isUndefined(this.blocksLeft)
+      || isUndefined(network)
+      || isUndefined(nbotAddress)
+      || isUndefined(nbotOwner)
+      || isUndefined(exchangeRate)
   }
 
   toNBOTStr = amount => formatNumberResponse(amount, {
