@@ -3,7 +3,6 @@
   "chinese": "汉字",
   "notDetected": "未检测到 Naka 钱包",
   "loggedInAndRefresh": "请确保您已打开您的钱包并刷新本页面",
-  "downloadExtension": "请下载 Naka 钱包手机 App 或者 Chrome 浏览器插件",
   "wrongNetworkDetected": "检测到错误的区块链网络",
   "changeWalletNetworkToX": "修改您的钱包网络为 {network}.",
   "MegaNBOT.hourSymbol": "小时",
