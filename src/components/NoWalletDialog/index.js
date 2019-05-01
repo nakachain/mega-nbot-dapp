@@ -20,7 +20,7 @@ class NoWalletDialog extends Component {
     const {
       classes,
       store: {
-        megaNBOTStore: { noWalletDialogVisible, hideNoWalletDialog },
+        megaNbotStore: { noWalletDialogVisible, hideNoWalletDialog },
       },
     } = this.props
 

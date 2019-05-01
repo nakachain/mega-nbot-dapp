@@ -42,7 +42,7 @@ class MegaNBOT extends Component {
   }
 
   renderReward = () => {
-    const { classes, store: { megaNBOTStore: { winningAmount } } } = this.props
+    const { classes, store: { megaNbotStore: { winningAmount } } } = this.props
     return (
       <div className={classes.sectionContainer}>
         <Heading
@@ -65,7 +65,7 @@ class MegaNBOT extends Component {
       classes,
       intl,
       store: {
-        megaNBOTStore: {
+        megaNbotStore: {
           blocksLeft,
           timeLeft,
         },
@@ -138,7 +138,7 @@ class MegaNBOT extends Component {
         walletStore: {
           network,
         },
-        megaNBOTStore: {
+        megaNbotStore: {
           currentTempWinner,
         },
       },
@@ -176,7 +176,7 @@ class MegaNBOT extends Component {
         walletStore: {
           network,
         },
-        megaNBOTStore: {
+        megaNbotStore: {
           previousWinner,
         },
       },
@@ -217,7 +217,7 @@ class MegaNBOT extends Component {
         chainStore: {
           selectedNetwork,
         },
-        megaNBOTStore: {
+        megaNbotStore: {
           enterDrawing,
           showNoWalletDialog,
           showWrongNetworkDialog,
@@ -237,7 +237,7 @@ class MegaNBOT extends Component {
     const {
       classes,
       store: {
-        megaNBOTStore: {
+        megaNbotStore: {
           blocksLeft,
           drawButtonDisabled,
         },
