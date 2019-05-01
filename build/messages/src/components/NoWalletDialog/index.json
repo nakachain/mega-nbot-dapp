@@ -6,9 +6,5 @@
   {
     "id": "loggedInAndRefresh",
     "defaultMessage": "Please make sure you are logged in and refresh the page."
-  },
-  {
-    "id": "downloadExtension",
-    "defaultMessage": "Download Naka Wallet Chrome Extension"
   }
 ]

@@ -13,4 +13,13 @@ export default theme => ({
   loggedInText: {
     marginBottom: theme.spacing.three,
   },
+  storeContainer: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignContent: 'space-between',
+  },
+  badgeImg: {
+    height: 40,
+  },
 })
