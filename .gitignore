@@ -170,3 +170,6 @@ $RECYCLE.BIN/
 
 # Webpack
 /dist
+
+# React-Intl
+/build/messages

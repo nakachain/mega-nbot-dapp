@@ -1,10 +1,7 @@
 import { observable, action } from 'mobx'
-import Config from '../config'
-import Constants from '../constants'
+import { CHAIN_ID } from '../config'
+import { NETWORK } from '../constants'
 import logger from '../utils/logger'
-
-const { CHAIN_ID } = Config
-const { NETWORK } = Constants
 
 export default class WalletStore {
   @observable account = undefined

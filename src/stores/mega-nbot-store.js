@@ -7,9 +7,10 @@ import NBOTMeta from '../contracts/nbot'
 import logger from '../utils/logger'
 import { getContractAddress } from '../utils'
 import { formatNumberResponse } from '../utils/format'
-import Config from '../config'
+import { TOKEN, INTERVAL } from '../config'
 
-const { TOKEN: { NBOT }, INTERVAL: { BLOCK_TIME } } = Config
+const { NBOT } = TOKEN
+const { BLOCK_TIME } = INTERVAL
 
 const DEFAULT_VALUES = {
   contract: undefined,

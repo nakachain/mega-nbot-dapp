@@ -1,6 +1,7 @@
 import { createMuiTheme } from '@material-ui/core/styles'
+import 'typeface-roboto'
 
-export default createMuiTheme({
+const theme = createMuiTheme({
   palette: {
     primary: {
       main: '#5539df',
@@ -13,7 +14,10 @@ export default createMuiTheme({
     },
   },
   typography: {
-    fontFamily: 'Lato, sans-serif',
+    fontFamily: [
+      'Roboto',
+      'sans-serif',
+    ].join(','),
     useNextVariants: true,
   },
   spacing: {
@@ -39,3 +43,56 @@ export default createMuiTheme({
     },
   },
 })
+
+theme.overrides = {
+  ...theme.overrides,
+  MuiTypography: {
+    h2: {
+      [theme.breakpoints.down('sm')]: {
+        fontSize: 50,
+      },
+      [theme.breakpoints.down('xs')]: {
+        fontSize: 40,
+      },
+    },
+    h4: {
+      [theme.breakpoints.down('sm')]: {
+        fontSize: 26,
+      },
+      [theme.breakpoints.down('xs')]: {
+        fontSize: 18,
+      },
+    },
+    h5: {
+      [theme.breakpoints.down('sm')]: {
+        fontSize: 18,
+      },
+      [theme.breakpoints.down('xs')]: {
+        fontSize: 14,
+      },
+    },
+    body2: {
+      [theme.breakpoints.down('sm')]: {
+        fontSize: 12,
+      },
+    },
+    subtitle2: {
+      [theme.breakpoints.down('sm')]: {
+        fontSize: 12,
+      },
+      [theme.breakpoints.down('xs')]: {
+        fontSize: 10,
+      },
+    },
+    button: {
+      [theme.breakpoints.down('sm')]: {
+        fontSize: 12,
+      },
+      [theme.breakpoints.down('xs')]: {
+        fontSize: 10,
+      },
+    },
+  },
+}
+
+export default theme

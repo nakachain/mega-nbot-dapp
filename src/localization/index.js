@@ -1,29 +1,47 @@
 import { addLocaleData } from 'react-intl'
 import localeEn from 'react-intl/locale-data/en'
 import localeZh from 'react-intl/locale-data/zh'
-import messagesEn from './en.json'
-import messagesZh from './zh.json'
+import localeMessages from '../../build/locales/data.json'
 import logger from '../utils/logger'
+import { STORAGE_KEY } from '../config'
 
 // Load locale data
 addLocaleData([...localeEn, ...localeZh])
 
-const messages = {
-  en: messagesEn,
-  zh: messagesZh,
+const DEFAULT_LANG = 'en'
+let currentLang;
+
+const getBrowserLang = () => (window.navigator.languages && window.navigator.languages[0])
+  || window.navigator.language
+  || window.navigator.userLanguage
+
+const storeLangInStorage = (lang) => {
+  localStorage.setItem(STORAGE_KEY.LANGUAGE, lang)
+}
+
+export const getCurrentLang = () => currentLang
+
+export const changeLang = (lang) => {
+  storeLangInStorage(lang)
+  window.location.reload()
 }
 
 export default () => {
-  let lang = window.navigator.language.split(/[-_]/)[0]
+  // Determine language from storage or system
+  currentLang = localStorage.getItem(STORAGE_KEY.LANGUAGE)
+  if (!currentLang) [currentLang] = getBrowserLang().split('-')
 
   // Default to English if no messages file found for the language
-  if (!messages[lang]) {
-    logger.error(`No translations found for locale: ${lang}`)
-    lang = 'en'
+  if (!localeMessages[currentLang]) {
+    logger.error(`No translations found for locale: ${currentLang}. Falling back to en.`)
+    currentLang = DEFAULT_LANG
   }
 
+  // Store language
+  storeLangInStorage(currentLang)
+
   return {
-    locale: lang,
-    messages: messages[lang],
+    locale: currentLang,
+    messages: localeMessages[currentLang],
   }
 }

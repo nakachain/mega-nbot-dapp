@@ -1,0 +1,62 @@
+[
+  {
+    "id": "MegaNBOT.hourSymbol",
+    "defaultMessage": "h"
+  },
+  {
+    "id": "MegaNBOT.minuteSymbol",
+    "defaultMessage": "m"
+  },
+  {
+    "id": "MegaNBOT.secondSymbol",
+    "defaultMessage": "s"
+  },
+  {
+    "id": "drawingReward",
+    "defaultMessage": "Drawing Reward"
+  },
+  {
+    "id": "approxTimeLeft",
+    "defaultMessage": "Approx. Time Left"
+  },
+  {
+    "id": "blocksLeft",
+    "defaultMessage": "Blocks Left: {blocksLeft}"
+  },
+  {
+    "id": "none",
+    "defaultMessage": "None"
+  },
+  {
+    "id": "you",
+    "defaultMessage": "You"
+  },
+  {
+    "id": "currentWinner",
+    "defaultMessage": "Current Winner"
+  },
+  {
+    "id": "yesterdaysFinalWinner",
+    "defaultMessage": "Yesterday's Final Winner"
+  },
+  {
+    "id": "drawWinner",
+    "defaultMessage": "Draw Winner"
+  },
+  {
+    "id": "enterDrawing",
+    "defaultMessage": "Enter Drawing"
+  },
+  {
+    "id": "freeDrawingsEveryDay",
+    "defaultMessage": "FREE drawings every day!"
+  },
+  {
+    "id": "enterToWinNBOT",
+    "defaultMessage": "Enter to win NBOT!"
+  },
+  {
+    "id": "unlimitedEntries",
+    "defaultMessage": "Unlimited entries!"
+  }
+]

@@ -1,9 +1,7 @@
-import Constants from '../constants'
-
-const { NETWORK: { MAINNET, TESTNET } } = Constants
+import { NETWORK } from '../constants'
 
 export const getContractAddress = (network, metadata) => {
-  if (network === MAINNET) return metadata.mainnet;
-  if (network === TESTNET) return metadata.testnet;
+  if (network === NETWORK.MAINNET) return metadata.mainnet;
+  if (network === NETWORK.TESTNET) return metadata.testnet;
   return undefined;
 }

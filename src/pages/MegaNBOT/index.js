@@ -1,26 +1,44 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
-import { Typography, Button, withStyles } from '@material-ui/core'
-import { FormattedMessage } from 'react-intl'
+import { Typography, Button, Link, Divider, withStyles } from '@material-ui/core'
+import { injectIntl, intlShape, defineMessages, FormattedMessage } from 'react-intl'
 import styles from './styles'
 import Heading from './Heading'
 import Content from './Content'
 import NoWalletDialog from '../../components/NoWalletDialog'
 import WrongNetworkDialog from '../../components/WrongNetworkDialog'
-import Constants from '../../constants'
+import LanguageSelectorBar from '../../components/LanguageSelectorBar'
+import { ADDRESS } from '../../constants'
+import { getExplorerAddressLink } from '../../utils/links'
 
-const { ADDRESS } = Constants
 const TYPE_NORMAL = 'normal'
 const TYPE_ADDRESS = 'address'
 
+const messages = defineMessages({
+  hourSymbol: {
+    id: 'MegaNBOT.hourSymbol',
+    defaultMessage: 'h',
+  },
+  minuteSymbol: {
+    id: 'MegaNBOT.minuteSymbol',
+    defaultMessage: 'm',
+  },
+  secondSymbol: {
+    id: 'MegaNBOT.secondSymbol',
+    defaultMessage: 's',
+  },
+})
+
 @withStyles(styles)
+@injectIntl
 @inject('store')
 @observer
 class MegaNBOT extends Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
     store: PropTypes.object,
+    intl: intlShape.isRequired,
   }
 
   renderReward = () => {
@@ -28,11 +46,67 @@ class MegaNBOT extends Component {
     return (
       <div className={classes.sectionContainer}>
         <Heading
-          title={<FormattedMessage id="drawingReward" />}
+          title={
+            <FormattedMessage
+              id="drawingReward"
+              defaultMessage="Drawing Reward" />
+          }
           classes={classes} />
         <Content
           type={TYPE_NORMAL}
           text={<span>{winningAmount}</span>}
+          classes={classes} />
+      </div>
+    )
+  }
+
+  renderBlocksLeft = () => {
+    const {
+      classes,
+      intl,
+      store: {
+        megaNBOTStore: {
+          blocksLeft,
+          timeLeft,
+        },
+      },
+    } = this.props
+    let translated = timeLeft
+
+    // Translate hour, minute, second symbols
+    if (translated) {
+      if (translated.includes('h')) {
+        const hour = intl.formatMessage({ id: messages.hourSymbol.id })
+        translated = translated.replace('h', hour)
+      }
+      if (translated.includes('m')) {
+        const min = intl.formatMessage({ id: messages.minuteSymbol.id })
+        translated = translated.replace('m', min)
+      }
+      if (translated.includes('s')) {
+        const sec = intl.formatMessage({ id: messages.secondSymbol.id })
+        translated = translated.replace('s', sec)
+      }
+    }
+
+    return (
+      <div className={classes.sectionContainer}>
+        <Heading
+          title={(
+            <FormattedMessage
+              id="approxTimeLeft"
+              defaultMessage="Approx. Time Left" />
+          )}
+          classes={classes} />
+        <Content
+          type="normal"
+          text={<span>{translated}</span>}
+          subText={
+            <FormattedMessage
+              id="blocksLeft"
+              defaultMessage="Blocks Left: {blocksLeft}"
+              values={{ blocksLeft }} />
+          }
           classes={classes} />
       </div>
     )
@@ -46,10 +120,10 @@ class MegaNBOT extends Component {
     let text
     if (address === ADDRESS.INVALID) {
       type = TYPE_NORMAL
-      text = <FormattedMessage id="none" />
+      text = <FormattedMessage id="none" defaultMessage="None" />
     } else if (account === address) {
       type = TYPE_NORMAL
-      text = <FormattedMessage id="you" />
+      text = <FormattedMessage id="you" defaultMessage="You" />
     } else {
       type = TYPE_ADDRESS
       text = <span>{address}</span>
@@ -61,6 +135,9 @@ class MegaNBOT extends Component {
     const {
       classes,
       store: {
+        walletStore: {
+          network,
+        },
         megaNBOTStore: {
           currentTempWinner,
         },
@@ -71,9 +148,23 @@ class MegaNBOT extends Component {
     return (
       <div className={classes.sectionContainer}>
         <Heading
-          title={<FormattedMessage id="currentWinner" />}
+          title={
+            <FormattedMessage
+              id="currentWinner"
+              defaultMessage="Current Winner" />
+          }
           classes={classes} />
-        <Content type={type} text={text} classes={classes} />
+        {currentTempWinner === ADDRESS.INVALID
+          ? <Content type={type} text={text} classes={classes} />
+          : (
+            <Link
+              href={getExplorerAddressLink(network, currentTempWinner)}
+              target="_blank"
+              rel="noopener"
+            >
+              <Content type={type} text={text} classes={classes} />
+            </Link>
+          )}
       </div>
     )
   }
@@ -82,6 +173,9 @@ class MegaNBOT extends Component {
     const {
       classes,
       store: {
+        walletStore: {
+          network,
+        },
         megaNBOTStore: {
           previousWinner,
         },
@@ -92,34 +186,23 @@ class MegaNBOT extends Component {
     return (
       <div className={classes.sectionContainer}>
         <Heading
-          title={<FormattedMessage id="yesterdaysFinalWinner" />}
+          title={
+            <FormattedMessage
+              id="yesterdaysFinalWinner"
+              defaultMessage="Yesterday's Final Winner" />
+          }
           classes={classes} />
-        <Content type={type} text={text} classes={classes} />
-      </div>
-    )
-  }
-
-  renderBlocksLeft = () => {
-    const {
-      classes,
-      store: {
-        megaNBOTStore: {
-          blocksLeft,
-          timeLeft,
-        },
-      },
-    } = this.props
-
-    return (
-      <div className={classes.sectionContainer}>
-        <Heading
-          title={<FormattedMessage id="blocksLeft" />}
-          classes={classes} />
-        <Content
-          type="normal"
-          text={<span>{blocksLeft}</span>}
-          subText={<FormattedMessage id="approxTimeLeft" values={{ timeLeft }} />}
-          classes={classes} />
+        {previousWinner === ADDRESS.INVALID
+          ? <Content type={type} text={text} classes={classes} />
+          : (
+            <Link
+              href={getExplorerAddressLink(network, previousWinner)}
+              target="_blank"
+              rel="noopener"
+            >
+              <Content type={type} text={text} classes={classes} />
+            </Link>
+          )}
       </div>
     )
   }
@@ -171,8 +254,9 @@ class MegaNBOT extends Component {
           onClick={this.onEntryButtonClick}
         >
           {Number(blocksLeft) === 0
-            ? <FormattedMessage id="drawWinner" />
-            : <FormattedMessage id="enterDrawing" />}
+            ? <FormattedMessage id="drawWinner" defaultMessage="Draw Winner" />
+            : <FormattedMessage id="enterDrawing" defaultMessage="Enter Drawing"/>
+          }
         </Button>
       </div>
     )
@@ -183,13 +267,19 @@ class MegaNBOT extends Component {
     return (
       <div className={classes.sectionContainer}>
         <Typography variant="h5">
-          <FormattedMessage id="freeDrawingsEveryDay" />
+          <FormattedMessage
+            id="freeDrawingsEveryDay"
+            defaultMessage="FREE drawings every day!" />
         </Typography>
         <Typography variant="h5">
-          <FormattedMessage id="enterToWinNBOT" />
+          <FormattedMessage
+            id="enterToWinNBOT"
+            defaultMessage="Enter to win NBOT!" />
         </Typography>
         <Typography variant="h5">
-          <FormattedMessage id="unlimitedEntries" />
+          <FormattedMessage
+            id="unlimitedEntries"
+            defaultMessage="Unlimited entries!" />
         </Typography>
       </div>
     )
@@ -206,6 +296,8 @@ class MegaNBOT extends Component {
         {this.renderLastWinner()}
         {this.renderEntryButton()}
         {this.renderNotice()}
+        <Divider className={classes.divider} />
+        <LanguageSelectorBar />
         <NoWalletDialog />
         <WrongNetworkDialog />
       </div>
