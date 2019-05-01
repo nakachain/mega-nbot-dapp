@@ -41,24 +41,20 @@ export default class TokenExchangeStore {
   fetchExchangeRate = async () => {
     const {
       nbotStore: {
-        contract: nbotContract,
         address: nbotAddress,
+        owner: nbotOwner,
       },
     } = this.appStore
-    if (!this.contract || !nbotContract || !nbotAddress) return
 
-    // Get owner of token
-    let owner
-    try {
-      owner = await nbotContract.methods.owner().call()
-    } catch (err) {
-      logger.error(`Error NBOT.owner(): ${err.message}`)
-    }
-    if (!owner || owner === ADDRESS.INVALID) return
+    if (
+      !this.contract
+      || !nbotAddress
+      || !nbotOwner
+      || nbotOwner === ADDRESS.INVALID
+    ) return
 
-    // Get exchange rate of token owner
     try {
-      const rate = await this.contract.methods.getRate(nbotAddress, owner).call()
+      const rate = await this.contract.methods.getRate(nbotAddress, nbotOwner).call()
       this.exchangeRate = rate._hex // eslint-disable-line
     } catch (err) {
       logger.error(`Error TokenExchange.getRate(): ${err.message}`)
