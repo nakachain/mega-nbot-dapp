@@ -214,7 +214,7 @@ export default class MegaNBOTStore {
     if (!window.naka || !network) return
 
     const { exchangeRate } = this.appStore.tokenExchangeStore
-    const address = getContractAddress(MegaNBOTMeta)
+    const address = getContractAddress(network, MegaNBOTMeta)
     const contract = window.naka.eth.contract(MegaNBOTMeta.abi).at(address)
     if (contract) {
       contract.enterDrawing({
