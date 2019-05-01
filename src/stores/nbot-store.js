@@ -46,7 +46,7 @@ export default class NBOTStore {
     try {
       this.owner = await this.contract.methods.owner().call()
     } catch (err) {
-      logger.error(`Error NBOT.owner(): ${err.message}`)
+      logger.error(`NBOT.owner(): ${err.message}`)
     }
   }
 }

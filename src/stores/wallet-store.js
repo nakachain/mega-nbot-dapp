@@ -18,7 +18,7 @@ export default class WalletStore {
     // Init account
     window.naka.eth.getAccounts((err, accounts) => {
       if (err) {
-        logger.error(`Error getting NakaWallet accounts: ${err.message}`)
+        logger.error(`Error getting wallet accounts: ${err.message}`)
       }
 
       const acct = accounts[0]
@@ -28,7 +28,7 @@ export default class WalletStore {
     // Init network
     window.naka.version.getNetwork((err, network) => {
       if (err) {
-        logger.error(`Error getting NakaWallet network: ${err.message}`)
+        logger.error(`Error getting wallet network: ${err.message}`)
       }
 
       if (network === CHAIN_ID.MAINNET) {

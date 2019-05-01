@@ -57,7 +57,7 @@ export default class TokenExchangeStore {
       const rate = await this.contract.methods.getRate(nbotAddress, nbotOwner).call()
       this.exchangeRate = rate._hex // eslint-disable-line
     } catch (err) {
-      logger.error(`Error TokenExchange.getRate(): ${err.message}`)
+      logger.error(`TokenExchange.getRate(): ${err.message}`)
     }
   }
 }

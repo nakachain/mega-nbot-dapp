@@ -114,7 +114,7 @@ export default class MegaNBOTStore {
       const res = await this.contract.methods.owner().call()
       this.owner = res
     } catch (err) {
-      logger.error(`Error fetching owner: ${err.message}`)
+      logger.error(`MegaNBOT.owner(): ${err.message}`)
     }
   }
 
@@ -126,7 +126,7 @@ export default class MegaNBOTStore {
       const res = await this.contract.methods.drawingInterval().call()
       this.drawingInterval = res.toString()
     } catch (err) {
-      logger.error(`Error fetching withdrawInterval: ${err.message}`)
+      logger.error(`MegaNBOT.withdrawInterval(): ${err.message}`)
     }
   }
 
@@ -138,7 +138,7 @@ export default class MegaNBOTStore {
       const res = await this.contract.methods.winningAmount().call()
       this.winningAmount = this.toNBOTStr(res)
     } catch (err) {
-      logger.error(`Error fetching winningAmount: ${err.message}`)
+      logger.error(`MegaNBOT.winningAmount(): ${err.message}`)
     }
   }
 
@@ -150,7 +150,7 @@ export default class MegaNBOTStore {
       const res = await this.contract.methods.lastDrawingBlockNum().call()
       this.lastDrawingBlockNumber = res.toString()
     } catch (err) {
-      logger.error(`Error fetching lastDrawingBlockNumber: ${err.message}`)
+      logger.error(`MegaNBOT.lastDrawingBlockNumber(): ${err.message}`)
     }
   }
 
@@ -162,7 +162,7 @@ export default class MegaNBOTStore {
       const res = await this.contract.methods.previousWinner().call()
       this.previousWinner = res.toLowerCase()
     } catch (err) {
-      logger.error(`Error fetching previousWinner: ${err.message}`)
+      logger.error(`MegaNBOT.previousWinner(): ${err.message}`)
     }
   }
 
@@ -174,7 +174,7 @@ export default class MegaNBOTStore {
       const res = await this.contract.methods.currentTempWinner().call()
       this.currentTempWinner = res.toLowerCase()
     } catch (err) {
-      logger.error(`Error fetching currentTempWinner: ${err.message}`)
+      logger.error(`MegaNBOT.currentTempWinner(): ${err.message}`)
     }
   }
 
@@ -202,26 +202,35 @@ export default class MegaNBOTStore {
   enterDrawing = () => {
     const {
       walletStore: { network },
-      nbotStore: { address: nbotAddress },
+      nbotStore: { address: nbotAddress, owner: nbotOwner },
+      tokenExchangeStore: { exchangeRate },
     } = this.appStore
-    if (!window.naka || !network) return
 
-    const { exchangeRate } = this.appStore.tokenExchangeStore
+    if (
+      !window.naka
+      || !network
+      || !nbotAddress
+      || !nbotOwner
+      || !exchangeRate
+    ) return
+
     const address = getContractAddress(network, MegaNBOTMeta)
     const contract = window.naka.eth.contract(MegaNBOTMeta.abi).at(address)
     if (contract) {
       contract.enterDrawing({
         token: nbotAddress,
-        exchanger: this.owner,
+        exchanger: nbotOwner,
         exchangeRate,
       }, (err, res) => {
         if (err) {
-          logger.error(`Error enterDrawing: ${err.message}`)
+          logger.error(`Error MegaNBOT.enterDrawing(): ${err.message}`)
           return
         }
 
         logger.info(`txid: ${res}`)
       })
+    } else {
+      logger.error('MegaNBOT contract not valid')
     }
   }
 }
