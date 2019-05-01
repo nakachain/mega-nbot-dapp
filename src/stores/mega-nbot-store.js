@@ -3,7 +3,6 @@ import BN from 'bn.js'
 import { isUndefined } from 'lodash'
 import prettyMs from 'pretty-ms'
 import MegaNBOTMeta from '../contracts/mega-nbot'
-import NBOTMeta from '../contracts/nbot'
 import logger from '../utils/logger'
 import { getContractAddress } from '../utils'
 import { formatNumberResponse } from '../utils/format'
@@ -14,8 +13,6 @@ const { BLOCK_TIME } = INTERVAL
 
 const DEFAULT_VALUES = {
   contract: undefined,
-  nbotContract: undefined,
-  nbotAddress: undefined,
   owner: undefined,
   winningAmount: undefined,
   drawingInterval: undefined,
@@ -30,8 +27,6 @@ const DEFAULT_VALUES = {
 
 export default class MegaNBOTStore {
   contract = undefined
-  nbotContract = undefined
-  nbotAddress = undefined
   @observable owner = undefined
   @observable winningAmount = undefined
   drawingInterval = undefined
@@ -80,13 +75,8 @@ export default class MegaNBOTStore {
 
     const { selectedNetwork, web3 } = this.appStore.chainStore
     const addr = getContractAddress(selectedNetwork, MegaNBOTMeta)
-    const nbotAddr = getContractAddress(selectedNetwork, NBOTMeta)
-
-    if (addr && nbotAddr) {
+    if (addr) {
       this.contract = new web3.eth.Contract(MegaNBOTMeta.abi, addr)
-      this.nbotContract = new web3.eth.Contract(NBOTMeta.abi, nbotAddr)
-      this.nbotAddress = nbotAddr
-
       this.fetchOwner()
       this.fetchDrawingInterval()
       this.fetchWinningAmount()
@@ -210,7 +200,10 @@ export default class MegaNBOTStore {
   }
 
   enterDrawing = () => {
-    const { network } = this.appStore.walletStore
+    const {
+      walletStore: { network },
+      nbotStore: { address: nbotAddress },
+    } = this.appStore
     if (!window.naka || !network) return
 
     const { exchangeRate } = this.appStore.tokenExchangeStore
@@ -218,7 +211,7 @@ export default class MegaNBOTStore {
     const contract = window.naka.eth.contract(MegaNBOTMeta.abi).at(address)
     if (contract) {
       contract.enterDrawing({
-        token: this.nbotAddress,
+        token: nbotAddress,
         exchanger: this.owner,
         exchangeRate,
       }, (err, res) => {
