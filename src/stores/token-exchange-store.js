@@ -40,7 +40,10 @@ export default class TokenExchangeStore {
   @action
   fetchExchangeRate = async () => {
     const {
-      megaNBOTStore: { nbotContract, nbotAddress },
+      nbotStore: {
+        contract: nbotContract,
+        address: nbotAddress,
+      },
     } = this.appStore
     if (!this.contract || !nbotContract || !nbotAddress) return
 
