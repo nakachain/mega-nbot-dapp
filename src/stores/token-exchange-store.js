@@ -1,6 +1,7 @@
 import { observable, action, reaction } from 'mobx'
 import logger from '../utils/logger'
 import TokenExchangeMeta from '../contracts/token-exchange'
+import { ADDRESS } from '../constants'
 
 const DEFAULT_VALUES = {
   contract: undefined,
@@ -38,14 +39,26 @@ export default class TokenExchangeStore {
 
   @action
   fetchExchangeRate = async () => {
-    const { nbotAddress, owner } = this.appStore.megaNBOTStore
-    if (!this.contract || !nbotAddress || !owner) return
+    const {
+      megaNBOTStore: { nbotContract, nbotAddress },
+    } = this.appStore
+    if (!this.contract || !nbotContract || !nbotAddress) return
 
+    // Get owner of token
+    let owner
     try {
-      const res = await this.contract.methods.getRate(nbotAddress, owner).call()
-      this.exchangeRate = res._hex // eslint-disable-line
+      owner = await nbotContract.methods.owner().call()
     } catch (err) {
-      logger.error(`Error getRate: ${err.message}`)
+      logger.error(`Error NBOT.owner(): ${err.message}`)
+    }
+    if (!owner || owner === ADDRESS.INVALID) return
+
+    // Get exchange rate of token owner
+    try {
+      const rate = await this.contract.methods.getRate(nbotAddress, owner).call()
+      this.exchangeRate = rate._hex // eslint-disable-line
+    } catch (err) {
+      logger.error(`Error TokenExchange.getRate(): ${err.message}`)
     }
   }
 }
