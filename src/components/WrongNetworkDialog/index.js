@@ -19,7 +19,7 @@ class WrongNetworkDialog extends Component {
     const {
       classes,
       store: {
-        megaNBOTStore: {
+        megaNbotStore: {
           wrongNetworkDialogVisible,
           hideWrongNetworkDialog,
         },

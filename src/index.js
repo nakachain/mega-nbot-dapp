@@ -12,7 +12,11 @@ import AppStore from './stores/app-store'
 
 // MobX setup
 const store = new AppStore()
-window.store = store // Expose store in window for debugging
+
+// Expose store in window for debugging
+if (process.env.NODE_ENV === 'development') {
+  window.store = store
+}
 
 // React intl setup
 const { locale, messages } = getLocalizedData()

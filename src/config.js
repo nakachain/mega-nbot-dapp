@@ -18,6 +18,9 @@ export const LINKS = {
   EXPLORER_TESTNET: 'https://testnet.explorer.nakachain.org',
   DOCUMENTATION: 'https://docs.nakachain.org',
   NAKA_WALLET_CHROME: 'https://chrome.google.com/webstore/detail/naka-wallet/leopeeejkinfegnjkhpmpkaddnicjlll',
+  NAKA_WALLET_APP_STORE: 'https://itunes.apple.com/us/app/naka-wallet/id1448562757',
+  NAKA_WALLET_PLAY_STORE: 'https://play.google.com/store/apps/details?id=com.nakachain.wallet',
+
 }
 
 export const TOKEN = {

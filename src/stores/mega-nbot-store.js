@@ -3,7 +3,6 @@ import BN from 'bn.js'
 import { isUndefined } from 'lodash'
 import prettyMs from 'pretty-ms'
 import MegaNBOTMeta from '../contracts/mega-nbot'
-import NBOTMeta from '../contracts/nbot'
 import logger from '../utils/logger'
 import { getContractAddress } from '../utils'
 import { formatNumberResponse } from '../utils/format'
@@ -14,8 +13,6 @@ const { BLOCK_TIME } = INTERVAL
 
 const DEFAULT_VALUES = {
   contract: undefined,
-  nbotContract: undefined,
-  nbotAddress: undefined,
   owner: undefined,
   winningAmount: undefined,
   drawingInterval: undefined,
@@ -30,8 +27,6 @@ const DEFAULT_VALUES = {
 
 export default class MegaNBOTStore {
   contract = undefined
-  nbotContract = undefined
-  nbotAddress = undefined
   @observable owner = undefined
   @observable winningAmount = undefined
   drawingInterval = undefined
@@ -65,7 +60,15 @@ export default class MegaNBOTStore {
   }
 
   @computed get drawButtonDisabled() {
+    const {
+      nbotStore: { address: nbotAddress, owner: nbotOwner },
+      tokenExchangeStore: { exchangeRate },
+    } = this.appStore
+
     return isUndefined(this.blocksLeft)
+      || isUndefined(nbotAddress)
+      || isUndefined(nbotOwner)
+      || isUndefined(exchangeRate)
   }
 
   toNBOTStr = amount => formatNumberResponse(amount, {
@@ -80,13 +83,8 @@ export default class MegaNBOTStore {
 
     const { selectedNetwork, web3 } = this.appStore.chainStore
     const addr = getContractAddress(selectedNetwork, MegaNBOTMeta)
-    const nbotAddr = getContractAddress(selectedNetwork, NBOTMeta)
-
-    if (addr && nbotAddr) {
+    if (addr) {
       this.contract = new web3.eth.Contract(MegaNBOTMeta.abi, addr)
-      this.nbotContract = new web3.eth.Contract(NBOTMeta.abi, nbotAddr)
-      this.nbotAddress = nbotAddr
-
       this.fetchOwner()
       this.fetchDrawingInterval()
       this.fetchWinningAmount()
@@ -124,7 +122,7 @@ export default class MegaNBOTStore {
       const res = await this.contract.methods.owner().call()
       this.owner = res
     } catch (err) {
-      logger.error(`Error fetching owner: ${err.message}`)
+      logger.error(`MegaNBOT.owner(): ${err.message}`)
     }
   }
 
@@ -136,7 +134,7 @@ export default class MegaNBOTStore {
       const res = await this.contract.methods.drawingInterval().call()
       this.drawingInterval = res.toString()
     } catch (err) {
-      logger.error(`Error fetching withdrawInterval: ${err.message}`)
+      logger.error(`MegaNBOT.withdrawInterval(): ${err.message}`)
     }
   }
 
@@ -148,7 +146,7 @@ export default class MegaNBOTStore {
       const res = await this.contract.methods.winningAmount().call()
       this.winningAmount = this.toNBOTStr(res)
     } catch (err) {
-      logger.error(`Error fetching winningAmount: ${err.message}`)
+      logger.error(`MegaNBOT.winningAmount(): ${err.message}`)
     }
   }
 
@@ -160,7 +158,7 @@ export default class MegaNBOTStore {
       const res = await this.contract.methods.lastDrawingBlockNum().call()
       this.lastDrawingBlockNumber = res.toString()
     } catch (err) {
-      logger.error(`Error fetching lastDrawingBlockNumber: ${err.message}`)
+      logger.error(`MegaNBOT.lastDrawingBlockNumber(): ${err.message}`)
     }
   }
 
@@ -172,7 +170,7 @@ export default class MegaNBOTStore {
       const res = await this.contract.methods.previousWinner().call()
       this.previousWinner = res.toLowerCase()
     } catch (err) {
-      logger.error(`Error fetching previousWinner: ${err.message}`)
+      logger.error(`MegaNBOT.previousWinner(): ${err.message}`)
     }
   }
 
@@ -184,7 +182,7 @@ export default class MegaNBOTStore {
       const res = await this.contract.methods.currentTempWinner().call()
       this.currentTempWinner = res.toLowerCase()
     } catch (err) {
-      logger.error(`Error fetching currentTempWinner: ${err.message}`)
+      logger.error(`MegaNBOT.currentTempWinner(): ${err.message}`)
     }
   }
 
@@ -210,25 +208,37 @@ export default class MegaNBOTStore {
   }
 
   enterDrawing = () => {
-    const { network } = this.appStore.walletStore
-    if (!window.naka || !network) return
+    const {
+      walletStore: { network },
+      nbotStore: { address: nbotAddress, owner: nbotOwner },
+      tokenExchangeStore: { exchangeRate },
+    } = this.appStore
 
-    const { exchangeRate } = this.appStore.tokenExchangeStore
-    const address = getContractAddress(MegaNBOTMeta)
+    if (
+      !window.naka
+      || !network
+      || !nbotAddress
+      || !nbotOwner
+      || !exchangeRate
+    ) return
+
+    const address = getContractAddress(network, MegaNBOTMeta)
     const contract = window.naka.eth.contract(MegaNBOTMeta.abi).at(address)
     if (contract) {
       contract.enterDrawing({
-        token: this.nbotAddress,
-        exchanger: this.owner,
+        token: nbotAddress,
+        exchanger: nbotOwner,
         exchangeRate,
       }, (err, res) => {
         if (err) {
-          logger.error(`Error enterDrawing: ${err.message}`)
+          logger.error(`Error MegaNBOT.enterDrawing(): ${err.message}`)
           return
         }
 
         logger.info(`txid: ${res}`)
       })
+    } else {
+      logger.error('MegaNBOT contract not valid')
     }
   }
 }

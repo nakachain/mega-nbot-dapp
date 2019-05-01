@@ -39,7 +39,7 @@ class WinnersTable extends Component {
         walletStore: {
           account,
         },
-        megaNBOTStore: {
+        megaNbotStore: {
           winners,
         },
       },

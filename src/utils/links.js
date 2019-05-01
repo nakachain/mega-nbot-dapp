@@ -19,4 +19,8 @@ export const getExplorerAddressLink = (network, address) => {
 
 export const getDocumentationLink = () => LINKS.DOCUMENTATION
 
-export const getNakaWalletChromeLink = () => LINKS.NAKA_WALLET_CHROME
+export const getWalletAppStoreLink = () => LINKS.NAKA_WALLET_APP_STORE
+
+export const getWalletPlayStoreLink = () => LINKS.NAKA_WALLET_PLAY_STORE
+
+export const getWalletChromeLink = () => LINKS.NAKA_WALLET_CHROME
