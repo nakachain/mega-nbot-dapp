@@ -1,5 +1,17 @@
 [
   {
+    "id": "MegaNBOT.hourSymbol",
+    "defaultMessage": "h"
+  },
+  {
+    "id": "MegaNBOT.minuteSymbol",
+    "defaultMessage": "m"
+  },
+  {
+    "id": "MegaNBOT.secondSymbol",
+    "defaultMessage": "s"
+  },
+  {
     "id": "drawingReward",
     "defaultMessage": "Drawing Reward"
   },

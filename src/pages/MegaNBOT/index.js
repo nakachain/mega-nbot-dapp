@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import { Typography, Button, Link, Divider, withStyles } from '@material-ui/core'
-import { FormattedMessage } from 'react-intl'
+import { injectIntl, intlShape, defineMessages, FormattedMessage } from 'react-intl'
 import styles from './styles'
 import Heading from './Heading'
 import Content from './Content'
@@ -15,13 +15,30 @@ import { getExplorerAddressLink } from '../../utils/links'
 const TYPE_NORMAL = 'normal'
 const TYPE_ADDRESS = 'address'
 
+const messages = defineMessages({
+  hourSymbol: {
+    id: 'MegaNBOT.hourSymbol',
+    defaultMessage: 'h',
+  },
+  minuteSymbol: {
+    id: 'MegaNBOT.minuteSymbol',
+    defaultMessage: 'm',
+  },
+  secondSymbol: {
+    id: 'MegaNBOT.secondSymbol',
+    defaultMessage: 's',
+  },
+})
+
 @withStyles(styles)
+@injectIntl
 @inject('store')
 @observer
 class MegaNBOT extends Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
     store: PropTypes.object,
+    intl: intlShape.isRequired,
   }
 
   renderReward = () => {
@@ -46,6 +63,7 @@ class MegaNBOT extends Component {
   renderBlocksLeft = () => {
     const {
       classes,
+      intl,
       store: {
         megaNBOTStore: {
           blocksLeft,
@@ -53,6 +71,23 @@ class MegaNBOT extends Component {
         },
       },
     } = this.props
+    let translated = timeLeft
+
+    // Translate hour, minute, second symbols
+    if (translated) {
+      if (translated.includes('h')) {
+        const hour = intl.formatMessage({ id: messages.hourSymbol.id })
+        translated = translated.replace('h', hour)
+      }
+      if (translated.includes('m')) {
+        const min = intl.formatMessage({ id: messages.minuteSymbol.id })
+        translated = translated.replace('m', min)
+      }
+      if (translated.includes('s')) {
+        const sec = intl.formatMessage({ id: messages.secondSymbol.id })
+        translated = translated.replace('s', sec)
+      }
+    }
 
     return (
       <div className={classes.sectionContainer}>
@@ -65,7 +100,7 @@ class MegaNBOT extends Component {
           classes={classes} />
         <Content
           type="normal"
-          text={<span>{timeLeft}</span>}
+          text={<span>{translated}</span>}
           subText={
             <FormattedMessage
               id="blocksLeft"
