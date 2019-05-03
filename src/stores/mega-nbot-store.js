@@ -191,18 +191,17 @@ export default class MegaNBOTStore {
     if (this.appStore.chainStore.blockNumber
       && this.drawingInterval
       && this.lastDrawingBlockNumber) {
-      const nextDrawing = new BN(this.lastDrawingBlockNumber)
-        .add(new BN(this.drawingInterval))
-      const blocksLeft = nextDrawing.sub(
-        new BN(this.appStore.chainStore.blockNumber),
-      )
+      const blocksSinceLastDraw = new BN(this.appStore.chainStore.blockNumber)
+        .sub(new BN(this.lastDrawingBlockNumber))
 
-      if (blocksLeft.isZero() || blocksLeft.isNeg()) {
+      if (blocksSinceLastDraw.gte(new BN(this.drawingInterval))) {
         this.blocksLeft = '0'
         this.timeLeft = prettyMs(0)
       } else {
-        this.blocksLeft = blocksLeft.toString()
-        this.timeLeft = prettyMs(blocksLeft.toNumber() * BLOCK_TIME)
+        const blocksRemaining = new BN(this.drawingInterval)
+          .sub(blocksSinceLastDraw)
+        this.blocksLeft = blocksRemaining.toString()
+        this.timeLeft = prettyMs(blocksRemaining.toNumber() * BLOCK_TIME)
       }
     }
   }

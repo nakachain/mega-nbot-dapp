@@ -41,27 +41,37 @@ class TopBar extends Component {
               <Grid item sm={6} xs={12} className={classes.gridItem}>
                 <div className={classes.leftContainer}>
                   <img src={Logo} className={classes.logo} />
-                  <Typography variant="h4" color="secondary">MegaNBOT</Typography>
+                  <Typography
+                    variant="h4"
+                    color="secondary"
+                  >
+                    MegaNBOT
+                  </Typography>
                 </div>
               </Grid>
               <Grid item sm={6} xs={12} className={classes.gridItem}>
                 <div className={classes.infoContainer}>
-                  <FormControl variant="outlined" className={classes.formControl}>
-                    <Select
-                      className={classes.networkSelect}
-                      inputProps={{
-                        classes: {
-                          icon: classes.networkSelectIcon,
-                        },
-                      }}
-                      value={selectedNetwork}
-                      onChange={this.onChange}
-                      disableUnderline
+                  {selectedNetwork && (
+                    <FormControl
+                      variant="outlined"
+                      className={classes.formControl}
                     >
-                      <MenuItem value={MAINNET}>Mainnet</MenuItem>
-                      <MenuItem value={TESTNET}>Testnet</MenuItem>
-                    </Select>
-                  </FormControl>
+                      <Select
+                        className={classes.networkSelect}
+                        inputProps={{
+                          classes: {
+                            icon: classes.networkSelectIcon,
+                          },
+                        }}
+                        value={selectedNetwork}
+                        onChange={this.onChange}
+                        disableUnderline
+                      >
+                        <MenuItem value={MAINNET}>Mainnet</MenuItem>
+                        <MenuItem value={TESTNET}>Testnet</MenuItem>
+                      </Select>
+                    </FormControl>
+                  )}
                   <Typography color="secondary">{account}</Typography>
                 </div>
               </Grid>
