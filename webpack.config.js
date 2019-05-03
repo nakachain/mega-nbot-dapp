@@ -1,18 +1,28 @@
 const path = require('path')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ReactIntlPlugin = require('react-intl-webpack-plugin')
-const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   entry: './src/index.js',
-  devServer: {
-    contentBase: './dist',
-    historyApiFallback: true,
-  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
-    filename: 'bundle.js',
+    filename: '[name].[contenthash].js',
   },
+  devServer: {
+    contentBase: path.resolve(__dirname, 'dist'),
+    historyApiFallback: true,
+  },
+  plugins: [
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      title: 'Nakachain MegaNBOT',
+      favicon: './static/images/favicon.ico',
+      template: './src/index.html',
+    }),
+    new ReactIntlPlugin(),
+  ],
   module: {
     rules: [
       {
@@ -57,15 +67,6 @@ module.exports = {
   resolve: {
     extensions: ['*', '.js', '.jsx'],
   },
-  plugins: [
-    new ReactIntlPlugin(),
-    new CopyPlugin([
-      { from: './static/index.html' },
-    ]),
-    new CopyPlugin([
-      { from: './static/images/favicon.ico' },
-    ]),
-  ],
   node: {
     global: true,
   },
