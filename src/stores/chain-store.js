@@ -33,8 +33,6 @@ export default class ChainStore {
       this.selectedNetwork = NETWORK.TESTNET
       localStorage.setItem(STORAGE_KEY.NETWORK, this.selectedNetwork)
     }
-
-    console.log('NAKA: ChainStore -> init -> this.selectedNetwork', this.selectedNetwork)
   }
 
   @action
@@ -64,7 +62,6 @@ export default class ChainStore {
         logger.info(`Subscribed newBlockHeaders: ${res}`)
       },
     ).on('data', (blockHeader) => {
-      console.log('NAKA: blockHeader.number', blockHeader.number)
       this.blockNumber = blockHeader.number
     })
   }
@@ -72,10 +69,8 @@ export default class ChainStore {
   @action
   setWeb3 = () => {
     if (this.selectedNetwork === NETWORK.MAINNET) {
-      console.log('NAKA: ChainStore -> setWeb3 mainnet')
       this.web3 = new Web3(URL.RPC_WS_MAINNET)
     } else if (this.selectedNetwork === NETWORK.TESTNET) {
-      console.log('NAKA: ChainStore -> setWeb3 testnet')
       this.web3 = new Web3(URL.RPC_WS_TESTNET)
     }
   }
@@ -83,7 +78,6 @@ export default class ChainStore {
   @action
   setSelectedNetwork = (network) => {
     this.selectedNetwork = network
-    console.log('NAKA: ChainStore -> setSelectedNetwork -> this.selectedNetwork', this.selectedNetwork)
     localStorage.setItem(STORAGE_KEY.NETWORK, network)
   }
 }

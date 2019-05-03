@@ -195,11 +195,9 @@ export default class MegaNBOTStore {
         .sub(new BN(this.lastDrawingBlockNumber))
 
       if (blocksSinceLastDraw.gte(new BN(this.drawingInterval))) {
-        console.log('ready')
         this.blocksLeft = '0'
         this.timeLeft = prettyMs(0)
       } else {
-        console.log('not ready')
         const blocksRemaining = new BN(this.drawingInterval)
           .sub(blocksSinceLastDraw)
         this.blocksLeft = blocksRemaining.toString()
