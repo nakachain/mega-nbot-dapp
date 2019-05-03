@@ -14,7 +14,6 @@ export default class AppStore {
 
     // Wait for window to finish loading so we ensure web3 is injected first
     window.onload = () => {
-      console.log('NAKA: AppStore -> window.onload')
       this.walletStore.init()
       this.chainStore.init()
     }
