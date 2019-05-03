@@ -36,6 +36,7 @@ export default class WalletStore {
       } else if (network === CHAIN_ID.TESTNET) {
         this.network = NETWORK.TESTNET
       }
+      console.log('NAKA: WalletStore -> init -> this.network', this.network)
     })
   }
 }

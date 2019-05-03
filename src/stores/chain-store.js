@@ -5,55 +5,85 @@ import { URL, STORAGE_KEY } from '../config'
 import { NETWORK } from '../constants'
 
 export default class ChainStore {
-  @observable selectedNetwork = NETWORK.MAINNET
+  @observable selectedNetwork = undefined
   @observable web3 = undefined
   @observable blockNumber = undefined
+  newBlockHeadersSubscription = undefined
 
   constructor(appStore) {
     this.appStore = appStore
-    this.setWeb3()
 
     reaction(
       () => this.selectedNetwork,
-      () => this.setWeb3(),
+      () => {
+        this.unsubscribeToBlockHeaders()
+        this.setWeb3()
+        this.subscribeToBlockHeaders()
+      },
     )
   }
 
   @action
-  loadSelectedNetworkFromStorage = () => {
-    const storedNetwork = localStorage.getItem(STORAGE_KEY.NETWORK)
-    if (storedNetwork) this.selectedNetwork = storedNetwork
-    else localStorage.setItem(STORAGE_KEY.NETWORK, this.selectedNetwork)
-  }
-
-  @action
-  setWeb3 = () => {
-    if (this.selectedNetwork === NETWORK.MAINNET) {
-      this.web3 = new Web3(URL.RPC_WS_MAINNET)
-    } else {
-      this.web3 = new Web3(URL.RPC_WS_TESTNET)
-    }
-  }
-
-  @action
   init = () => {
-    this.loadSelectedNetworkFromStorage()
+    // Try to load selected network from storage
+    const storedNetwork = localStorage.getItem(STORAGE_KEY.NETWORK)
+    if (storedNetwork) {
+      this.selectedNetwork = storedNetwork
+    } else {
+      this.selectedNetwork = NETWORK.TESTNET
+      localStorage.setItem(STORAGE_KEY.NETWORK, this.selectedNetwork)
+    }
 
-    this.web3.eth.clearSubscriptions()
-    this.web3.eth.subscribe('newBlockHeaders', (err, res) => {
+    console.log('NAKA: ChainStore -> init -> this.selectedNetwork', this.selectedNetwork)
+  }
+
+  @action
+  unsubscribeToBlockHeaders = () => {
+    if (!this.newBlockHeadersSubscription) return
+
+    this.newBlockHeadersSubscription.unsubscribe((err, res) => {
       if (err) {
-        logger.error(`Error subscribing to newBlockHeaders: ${err.message}`)
+        logger.error(`Error unsubscribing newBlockHeaders: ${err.message}`)
         return
       }
-      logger.info(`Subscribed to newBlockHeaders: ${res}`)
-    }).on('data', (blockHeader) => {
+      logger.info(`Unsubscribed newBlockHeaders: ${res}`)
+    })
+  }
+
+  @action
+  subscribeToBlockHeaders = () => {
+    if (!this.web3) return
+
+    this.newBlockHeadersSubscription = this.web3.eth.subscribe(
+      'newBlockHeaders',
+      (err, res) => {
+        if (err) {
+          logger.error(`Error subscribing newBlockHeaders: ${err.message}`)
+          return
+        }
+        logger.info(`Subscribed newBlockHeaders: ${res}`)
+      },
+    ).on('data', (blockHeader) => {
+      console.log('NAKA: blockHeader.number', blockHeader.number)
       this.blockNumber = blockHeader.number
     })
   }
 
   @action
+  setWeb3 = () => {
+    if (this.selectedNetwork === NETWORK.MAINNET) {
+      console.log('NAKA: ChainStore -> setWeb3 mainnet')
+      this.web3 = new Web3(URL.RPC_WS_MAINNET)
+    } else if (this.selectedNetwork === NETWORK.TESTNET) {
+      console.log('NAKA: ChainStore -> setWeb3 testnet')
+      this.web3 = new Web3(URL.RPC_WS_TESTNET)
+    }
+  }
+
+  @action
   setSelectedNetwork = (network) => {
     this.selectedNetwork = network
+    console.log('NAKA: ChainStore -> setSelectedNetwork -> this.selectedNetwork', this.selectedNetwork)
     localStorage.setItem(STORAGE_KEY.NETWORK, network)
   }
 }
