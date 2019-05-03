@@ -41,7 +41,7 @@ class LanguageSelectorBar extends Component {
         )}
         {this.renderLangLink(
           'zh',
-          <FormattedMessage id="chinese" defaultMessage="汉字" />,
+          <FormattedMessage id="chinese" defaultMessage="中文" />,
         )}
       </div>
     )

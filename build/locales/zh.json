@@ -1,6 +1,6 @@
 {
   "english": "English",
-  "chinese": "汉字",
+  "chinese": "中文",
   "notDetected": "未检测到 Naka 钱包",
   "loggedInAndRefresh": "请确保您已打开您的钱包并刷新本页面",
   "wrongNetworkDetected": "检测到错误的区块链网络",
