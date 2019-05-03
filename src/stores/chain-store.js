@@ -30,9 +30,14 @@ export default class ChainStore {
     if (storedNetwork) {
       this.selectedNetwork = storedNetwork
     } else {
-      this.selectedNetwork = NETWORK.TESTNET
-      localStorage.setItem(STORAGE_KEY.NETWORK, this.selectedNetwork)
+      this.setSelectedNetwork(NETWORK.TESTNET)
     }
+  }
+
+  @action
+  setSelectedNetwork = (network) => {
+    this.selectedNetwork = network
+    localStorage.setItem(STORAGE_KEY.NETWORK, network)
   }
 
   @action
@@ -73,11 +78,5 @@ export default class ChainStore {
     } else if (this.selectedNetwork === NETWORK.TESTNET) {
       this.web3 = new Web3(URL.RPC_WS_TESTNET)
     }
-  }
-
-  @action
-  setSelectedNetwork = (network) => {
-    this.selectedNetwork = network
-    localStorage.setItem(STORAGE_KEY.NETWORK, network)
   }
 }
