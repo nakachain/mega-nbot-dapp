@@ -1,6 +1,8 @@
+/* eslint-disable */
 import { observable, action, reaction } from 'mobx'
 import Web3 from 'web3'
 import logger from '../utils/logger'
+import ExplorerAPIs from '../utils/explorerAPIs'
 import { URL, STORAGE_KEY } from '../config'
 import { NETWORK } from '../constants'
 
@@ -8,8 +10,8 @@ export default class ChainStore {
   @observable selectedNetwork = undefined
   @observable web3 = undefined
   @observable blockNumber = undefined
+  @observable explorerAPIs = undefined
   newBlockHeadersSubscription = undefined
-
   constructor(appStore) {
     this.appStore = appStore
 
@@ -27,6 +29,7 @@ export default class ChainStore {
   init = () => {
     // Try to load selected network from storage
     const storedNetwork = localStorage.getItem(STORAGE_KEY.NETWORK)
+    this.explorerAPIs = new ExplorerAPIs({ type: storedNetwork || NETWORK.TESTNET })
     if (storedNetwork) {
       this.selectedNetwork = storedNetwork
     } else {
@@ -36,7 +39,10 @@ export default class ChainStore {
 
   @action
   setSelectedNetwork = (network) => {
+    console.log('comes')
     this.selectedNetwork = network
+    console.info(this.selectedNetwork)
+    this.explorerAPIs.setBaseUrl({ type: network })
     localStorage.setItem(STORAGE_KEY.NETWORK, network)
   }
 

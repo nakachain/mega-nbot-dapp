@@ -1,3 +1,5 @@
+const NAKABASE_URL = 'https://base.nakachain.org'
+
 export const STORAGE_KEY = {
   LANGUAGE: 'language',
   NETWORK: 'network',
@@ -20,7 +22,8 @@ export const LINKS = {
   NAKA_WALLET_CHROME: 'https://chrome.google.com/webstore/detail/naka-wallet/leopeeejkinfegnjkhpmpkaddnicjlll',
   NAKA_WALLET_APP_STORE: 'https://itunes.apple.com/us/app/naka-wallet/id1448562757',
   NAKA_WALLET_PLAY_STORE: 'https://play.google.com/store/apps/details?id=com.nakachain.wallet',
-
+  TESTNET_EXPLORER_API_HOST: `${NAKABASE_URL}/testnet/explorer?apikey=${process.env.APIKEY}`,
+  MAINNET_EXPLORER_API_HOST: `${NAKABASE_URL}/mainnet/explorer?apikey=${process.env.APIKEY}`,
 }
 
 export const TOKEN = {
