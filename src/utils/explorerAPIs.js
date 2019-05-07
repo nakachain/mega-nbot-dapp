@@ -1,7 +1,7 @@
 const axios = require('axios')
 const logger = require('../utils/logger')
-const { MAINNET, TESTNET } = require('../constants')
-const { TESTNET_EXPLORER_API_HOST, MAINNET_EXPLORER_API_HOST } = require('../config')
+const { NETWORK: { MAINNET, TESTNET } } = require('../constants')
+const { LINKS: { TESTNET_EXPLORER_API_HOST, MAINNET_EXPLORER_API_HOST } } = require('../config')
 
 class ExplorerAPIs {
   constructor({ type }) {
@@ -16,13 +16,17 @@ class ExplorerAPIs {
     }
   }
 
-  async tokentx(accountAddr, selectedTokenAddress) {
+  async getLogs(fromBlock, toBlock, address, topic0) {
     if (!this.baseUrl) {
       return {
         result: [],
       }
     }
-    const url = `${this.baseUrl}&module=account&action=tokentx&address=${accountAddr}&contractaddress=${selectedTokenAddress}`
+    let url = `${this.baseUrl}&module=logs&action=getLogs&fromBlock=${fromBlock}&toBlock=${toBlock}&address=${address}`
+    if (topic0) {
+      url += `&topic0=${topic0}`
+    }
+    console.log(url)
     try {
       const { data } = await axios.get(url)
       return data

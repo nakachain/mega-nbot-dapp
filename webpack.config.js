@@ -2,6 +2,7 @@ const { resolve } = require('path')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ReactIntlPlugin = require('react-intl-webpack-plugin')
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: resolve('./src/index.js'),
@@ -22,6 +23,7 @@ module.exports = {
       template: resolve(__dirname, './src/index.html'),
     }),
     new ReactIntlPlugin(),
+    new Dotenv(),
   ],
   module: {
     rules: [

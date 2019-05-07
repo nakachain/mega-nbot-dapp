@@ -5,7 +5,7 @@ import logger from '../utils/logger'
 import ExplorerAPIs from '../utils/explorerAPIs'
 import { URL, STORAGE_KEY } from '../config'
 import { NETWORK } from '../constants'
-
+import abi from '../contracts/mega-nbot'
 export default class ChainStore {
   @observable selectedNetwork = undefined
   @observable web3 = undefined
@@ -23,6 +23,27 @@ export default class ChainStore {
         this.subscribeToBlockHeaders()
       },
     )
+
+    reaction(
+      () => this.blockNumber,
+      async () => {
+        console.log('block changes')
+        const data = await this.explorerAPIs.getLogs(0, 'latest', '0x0d04564444df4e52832f185aab2a019f69c72fb4', "0x686a25b238841254ec7d1d7788183f5cd09a2b80ea78993c598e123768914fba")
+        console.log(this.appStore.megaNbotStore.contract.jsonInterface)
+        console.log("TCL: ChainStore -> constructor -> data", data)
+        console.log(abi.abi)
+        const eventJsonInterface = _.find(
+          abi.abi,
+          o => o.name === "EntrySubmitted" && o.type === 'event',
+        )
+        console.log(eventJsonInterface)
+
+
+				console.log("TCL: ChainStore -> constructor -> data.result[0].data", typeof data.result[0].data)
+				console.log("TCL: ChainStore -> constructor -> data.result[0].topics", data.result[0].topics.slice(1))
+        console.log(this.web3.eth.abi.decodeLog(eventJsonInterface.inputs, data.result[0].data,data.result[0].topics.slice(1) ))
+      }
+    )
   }
 
   @action
@@ -39,9 +60,7 @@ export default class ChainStore {
 
   @action
   setSelectedNetwork = (network) => {
-    console.log('comes')
     this.selectedNetwork = network
-    console.info(this.selectedNetwork)
     this.explorerAPIs.setBaseUrl({ type: network })
     localStorage.setItem(STORAGE_KEY.NETWORK, network)
   }
@@ -83,6 +102,21 @@ export default class ChainStore {
       this.web3 = new Web3(URL.RPC_WS_MAINNET)
     } else if (this.selectedNetwork === NETWORK.TESTNET) {
       this.web3 = new Web3(URL.RPC_WS_TESTNET)
+      const a = this.web3.eth.abi.decodeLog([{
+        type: 'string',
+        name: 'myString'
+      },{
+          type: 'uint256',
+          name: 'myNumber',
+          indexed: true
+      },{
+          type: 'uint8',
+          name: 'mySmallNumber',
+          indexed: true
+      }],
+      '0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000748656c6c6f252100000000000000000000000000000000000000000000000000',
+      ['0x000000000000000000000000000000000000000000000000000000000000f310', '0x0000000000000000000000000000000000000000000000000000000000000010']);
+			console.log("TCL: ChainStore -> a", a)
     }
   }
 }
