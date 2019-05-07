@@ -38,7 +38,15 @@ export default class ChainStore {
         )
         console.log(eventJsonInterface)
 
-
+        const result = data.result
+        let showText = []
+        result.forEach(element => {
+          const eventJsonInterface = _.find(
+            abi.abi,
+            o => o.signature === element.topics[0],
+          )
+          showText.push(this.web3.eth.abi.decodeLog(eventJsonInterface.inputs, null,element.topics.slice(1) ))
+        });
 				console.log("TCL: ChainStore -> constructor -> data.result[0].data", typeof data.result[0].data)
 				console.log("TCL: ChainStore -> constructor -> data.result[0].topics", data.result[0].topics.slice(1))
         console.log(this.web3.eth.abi.decodeLog(eventJsonInterface.inputs, data.result[0].data,data.result[0].topics.slice(1) ))
@@ -102,20 +110,15 @@ export default class ChainStore {
       this.web3 = new Web3(URL.RPC_WS_MAINNET)
     } else if (this.selectedNetwork === NETWORK.TESTNET) {
       this.web3 = new Web3(URL.RPC_WS_TESTNET)
-      const a = this.web3.eth.abi.decodeLog([{
-        type: 'string',
-        name: 'myString'
-      },{
-          type: 'uint256',
-          name: 'myNumber',
-          indexed: true
-      },{
-          type: 'uint8',
-          name: 'mySmallNumber',
-          indexed: true
-      }],
-      '0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000748656c6c6f252100000000000000000000000000000000000000000000000000',
-      ['0x000000000000000000000000000000000000000000000000000000000000f310', '0x0000000000000000000000000000000000000000000000000000000000000010']);
+      console.log(abi.abi)
+        const eventJsonInterface = _.find(
+          abi.abi,
+          o => o.signature === "0x686a25b238841254ec7d1d7788183f5cd09a2b80ea78993c598e123768914fba",
+        )
+        console.log(eventJsonInterface)
+      const a = this.web3.eth.abi.decodeLog(eventJsonInterface.inputs,
+      null,
+      ["0x000000000000000000000000bc4b8726f9619c871fad66030116964480205b9d"]);
 			console.log("TCL: ChainStore -> a", a)
     }
   }
