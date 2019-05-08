@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
-import { Typography, Button, Link, Divider, withStyles } from '@material-ui/core'
+import { Typography, Button, Link, Divider, withStyles, Tabs, Tab, AppBar, List, ListItem, ListItemText } from '@material-ui/core'
 import { injectIntl, intlShape, defineMessages, FormattedMessage } from 'react-intl'
 import styles from './styles'
 import Heading from './Heading'
 import Content from './Content'
 import NoWalletDialog from '../../components/NoWalletDialog'
 import WrongNetworkDialog from '../../components/WrongNetworkDialog'
-import LanguageSelectorBar from '../../components/LanguageSelectorBar'
 import { ADDRESS } from '../../constants'
 import { getExplorerAddressLink } from '../../utils/links'
 
@@ -30,6 +29,19 @@ const messages = defineMessages({
   },
 })
 
+
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
+    </Typography>
+  );
+}
+
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
 @withStyles(styles)
 @injectIntl
 @inject('store')
@@ -39,6 +51,10 @@ class MegaNBOT extends Component {
     classes: PropTypes.object.isRequired,
     store: PropTypes.object,
     intl: intlShape.isRequired,
+  }
+
+  state = {
+    value: 0,
   }
 
   renderReward = () => {
@@ -285,6 +301,42 @@ class MegaNBOT extends Component {
     )
   }
 
+  renderActivityHistory = () => {
+    const {
+      classes,
+      store: {
+        megaNbotStore: {
+          activityHistory,
+          tab,
+          handleChange,
+        },
+      },
+    } = this.props
+    console.log(activityHistory)
+    return (
+      <div className={classes.activities}>
+        <AppBar position="static">
+          <Tabs value={tab} onChange={handleChange}>
+            <Tab label="Activity History" />
+            <Tab label="Winning History" />
+          </Tabs>
+        </AppBar>
+        {tab === 0
+        && <TabContainer>
+          <List component="nav">
+            {activityHistory.map((item, idx) => <ListItem key={idx}>{item.player}</ListItem>)}
+          </List>
+        </TabContainer>}
+        {tab === 1
+        && <TabContainer>
+          <List component="nav">
+            {activityHistory.map((item, idx) => <ListItem key={idx}>{item.winner}</ListItem>)}
+          </List>
+        </TabContainer>}
+      </div>
+    );
+  }
+
   render() {
     const { classes } = this.props
 
@@ -297,7 +349,7 @@ class MegaNBOT extends Component {
         {this.renderEntryButton()}
         {this.renderNotice()}
         <Divider className={classes.divider} />
-        <LanguageSelectorBar />
+        {this.renderActivityHistory()}
         <NoWalletDialog />
         <WrongNetworkDialog />
       </div>

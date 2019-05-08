@@ -1,11 +1,10 @@
-/* eslint-disable */
 import { observable, action, reaction } from 'mobx'
 import Web3 from 'web3'
 import logger from '../utils/logger'
 import ExplorerAPIs from '../utils/explorerAPIs'
 import { URL, STORAGE_KEY } from '../config'
 import { NETWORK } from '../constants'
-import abi from '../contracts/mega-nbot'
+
 export default class ChainStore {
   @observable selectedNetwork = undefined
   @observable web3 = undefined
@@ -22,35 +21,6 @@ export default class ChainStore {
         this.setWeb3()
         this.subscribeToBlockHeaders()
       },
-    )
-
-    reaction(
-      () => this.blockNumber,
-      async () => {
-        console.log('block changes')
-        const data = await this.explorerAPIs.getLogs(0, 'latest', '0x0d04564444df4e52832f185aab2a019f69c72fb4', "0x686a25b238841254ec7d1d7788183f5cd09a2b80ea78993c598e123768914fba")
-        console.log(this.appStore.megaNbotStore.contract.jsonInterface)
-        console.log("TCL: ChainStore -> constructor -> data", data)
-        console.log(abi.abi)
-        const eventJsonInterface = _.find(
-          abi.abi,
-          o => o.name === "EntrySubmitted" && o.type === 'event',
-        )
-        console.log(eventJsonInterface)
-
-        const result = data.result
-        let showText = []
-        result.forEach(element => {
-          const eventJsonInterface = _.find(
-            abi.abi,
-            o => o.signature === element.topics[0],
-          )
-          showText.push(this.web3.eth.abi.decodeLog(eventJsonInterface.inputs, null,element.topics.slice(1) ))
-        });
-				console.log("TCL: ChainStore -> constructor -> data.result[0].data", typeof data.result[0].data)
-				console.log("TCL: ChainStore -> constructor -> data.result[0].topics", data.result[0].topics.slice(1))
-        console.log(this.web3.eth.abi.decodeLog(eventJsonInterface.inputs, data.result[0].data,data.result[0].topics.slice(1) ))
-      }
     )
   }
 
@@ -110,16 +80,6 @@ export default class ChainStore {
       this.web3 = new Web3(URL.RPC_WS_MAINNET)
     } else if (this.selectedNetwork === NETWORK.TESTNET) {
       this.web3 = new Web3(URL.RPC_WS_TESTNET)
-      console.log(abi.abi)
-        const eventJsonInterface = _.find(
-          abi.abi,
-          o => o.signature === "0x686a25b238841254ec7d1d7788183f5cd09a2b80ea78993c598e123768914fba",
-        )
-        console.log(eventJsonInterface)
-      const a = this.web3.eth.abi.decodeLog(eventJsonInterface.inputs,
-      null,
-      ["0x000000000000000000000000bc4b8726f9619c871fad66030116964480205b9d"]);
-			console.log("TCL: ChainStore -> a", a)
     }
   }
 }

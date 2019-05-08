@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { observable, action, reaction, computed } from 'mobx'
 import BN from 'bn.js'
 import { isUndefined } from 'lodash'
@@ -7,10 +9,13 @@ import logger from '../utils/logger'
 import { getContractAddress } from '../utils'
 import { formatNumberResponse } from '../utils/format'
 import { TOKEN, INTERVAL } from '../config'
+import { TOPIC } from '../constants'
 
 const { NBOT } = TOKEN
 const { BLOCK_TIME } = INTERVAL
-
+const { USER_WON, DRAW } = TOPIC
+console.log(USER_WON)
+const TOPICS = [DRAW, USER_WON]
 const DEFAULT_VALUES = {
   contract: undefined,
   owner: undefined,
@@ -37,6 +42,8 @@ export default class MegaNBOTStore {
   @observable currentTempWinner = undefined
   @observable noWalletDialogVisible = false
   @observable wrongNetworkDialogVisible = false
+  @observable activityHistory = []
+  @observable tab = 0
 
   constructor(appStore) {
     this.appStore = appStore
@@ -55,6 +62,25 @@ export default class MegaNBOTStore {
         this.fetchPreviousWinner()
         this.fetchCurrentTempWinner()
         this.calculateBlocksLeft()
+      },
+    )
+
+    reaction(
+      () => this.appStore.chainStore.blockNumber + this.tab,
+      async () => {
+        const data = await this.appStore.chainStore.explorerAPIs.getLogs(0, 'latest', '0x0d04564444df4e52832f185aab2a019f69c72fb4', TOPICS[this.tab])
+        const result = data.result
+        let showText = []
+        result.forEach(element => {
+          const eventJsonInterface = _.find(
+            MegaNBOTMeta.abi,
+            o => o.signature === element.topics[0],
+          )
+          const info = this.appStore.chainStore.web3.eth.abi.decodeLog(eventJsonInterface.inputs, null, element.topics.slice(1))
+          info['type'] = eventJsonInterface.name
+          showText.push(info)
+        });
+        this.activityHistory = showText
       },
     )
   }
@@ -92,6 +118,11 @@ export default class MegaNBOTStore {
       this.fetchPreviousWinner()
       this.fetchCurrentTempWinner()
     }
+  }
+
+  @action
+  handleChange = (event, value) => {
+    this.tab = value
   }
 
   @action

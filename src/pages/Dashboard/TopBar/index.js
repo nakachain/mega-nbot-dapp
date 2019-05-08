@@ -6,6 +6,7 @@ import { inject, observer } from 'mobx-react'
 import styles from './styles'
 import { NETWORK } from '../../../constants'
 import Logo from '../../../../static/images/naka_text_logo_white.png'
+import LanguageSelectorBar from '../../../components/LanguageSelectorBar'
 
 const { MAINNET, TESTNET } = NETWORK
 
@@ -51,6 +52,7 @@ class TopBar extends Component {
               </Grid>
               <Grid item sm={6} xs={12} className={classes.gridItem}>
                 <div className={classes.infoContainer}>
+                  <LanguageSelectorBar />
                   {selectedNetwork && (
                     <FormControl
                       variant="outlined"

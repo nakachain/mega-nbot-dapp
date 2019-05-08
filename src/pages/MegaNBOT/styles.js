@@ -5,6 +5,9 @@ export default theme => ({
     alignItems: 'center',
     padding: theme.spacing.four,
   },
+  activities: {
+    width: '100%',
+  },
   sectionContainer: {
     display: 'flex',
     flexDirection: 'column',
