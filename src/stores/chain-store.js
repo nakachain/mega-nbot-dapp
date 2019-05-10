@@ -30,7 +30,7 @@ export default class ChainStore {
     if (storedNetwork) {
       this.selectedNetwork = storedNetwork
     } else {
-      this.setSelectedNetwork(NETWORK.TESTNET)
+      this.setSelectedNetwork(NETWORK.MAINNET)
     }
   }
 
