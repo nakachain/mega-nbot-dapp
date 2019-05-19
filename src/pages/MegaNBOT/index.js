@@ -127,8 +127,8 @@ class MegaNBOT extends Component {
         <Heading
           title={
             <FormattedMessage
-              id="numberOfPlayers"
-              defaultMessage="Number of Players" />
+              id="numberOfEntries"
+              defaultMessage="Number of Entries" />
           }
           classes={classes} />
         <Content
