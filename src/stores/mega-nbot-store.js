@@ -56,6 +56,7 @@ export default class MegaNBOTStore {
         this.fetchLastDrawingBlockNumber()
         this.fetchPreviousWinner()
         this.fetchCurrentTempWinner()
+        this.fetchNumOfEntries()
         this.calculateBlocksLeft()
       },
     )
@@ -93,6 +94,7 @@ export default class MegaNBOTStore {
       this.fetchLastDrawingBlockNumber()
       this.fetchPreviousWinner()
       this.fetchCurrentTempWinner()
+      this.fetchNumOfEntries()
     }
   }
 
@@ -185,6 +187,18 @@ export default class MegaNBOTStore {
       this.currentTempWinner = res.toLowerCase()
     } catch (err) {
       logger.error(`MegaNBOT.currentTempWinner(): ${err.message}`)
+    }
+  }
+
+  @action
+  fetchNumOfEntries = async () => {
+    if (!this.contract) return
+
+    try {
+      const res = await this.contract.methods.numOfEntries().call()
+      this.currentTempWinner = res.toString()
+    } catch (err) {
+      logger.error(`MegaNBOT.numOfEntries(): ${err.message}`)
     }
   }
 
