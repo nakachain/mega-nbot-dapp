@@ -167,6 +167,18 @@ export default class MegaNBOTStore {
   }
 
   @action
+  fetchNumOfEntries = async () => {
+    if (!this.contract) return
+
+    try {
+      const res = await this.contract.methods.numOfEntries().call()
+      this.numOfEntries = res.toString()
+    } catch (err) {
+      logger.error(`MegaNBOT.numOfEntries(): ${err.message}`)
+    }
+  }
+
+  @action
   fetchPreviousWinner = async () => {
     if (!this.contract) return
 
@@ -187,18 +199,6 @@ export default class MegaNBOTStore {
       this.currentTempWinner = res.toLowerCase()
     } catch (err) {
       logger.error(`MegaNBOT.currentTempWinner(): ${err.message}`)
-    }
-  }
-
-  @action
-  fetchNumOfEntries = async () => {
-    if (!this.contract) return
-
-    try {
-      const res = await this.contract.methods.numOfEntries().call()
-      this.currentTempWinner = res.toString()
-    } catch (err) {
-      logger.error(`MegaNBOT.numOfEntries(): ${err.message}`)
     }
   }
 
