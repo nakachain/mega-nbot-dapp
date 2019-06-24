@@ -112,6 +112,33 @@ class MegaNBOT extends Component {
     )
   }
 
+  renderNumOfPlayers = () => {
+    const {
+      classes,
+      store: {
+        megaNbotStore: {
+          numOfEntries,
+        },
+      },
+    } = this.props
+
+    return (
+      <div className={classes.sectionContainer}>
+        <Heading
+          title={
+            <FormattedMessage
+              id="numberOfEntries"
+              defaultMessage="Number of Entries" />
+          }
+          classes={classes} />
+        <Content
+          type={TYPE_NORMAL}
+          text={<span>{numOfEntries}</span>}
+          classes={classes} />
+      </div>
+    )
+  }
+
   getWinnerTypeAndText = (address) => {
     const { store: { walletStore: { account } } } = this.props
     if (!address && !account) return { type: 'normal', text: <span /> }
@@ -292,6 +319,7 @@ class MegaNBOT extends Component {
       <div className={classes.root}>
         {this.renderReward()}
         {this.renderBlocksLeft()}
+        {this.renderNumOfPlayers()}
         {this.renderCurrentWinner()}
         {this.renderLastWinner()}
         {this.renderEntryButton()}

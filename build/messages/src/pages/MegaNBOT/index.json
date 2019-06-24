@@ -24,6 +24,10 @@
     "defaultMessage": "Blocks Left: {blocksLeft}"
   },
   {
+    "id": "numberOfPlayers",
+    "defaultMessage": "Number of Players"
+  },
+  {
     "id": "none",
     "defaultMessage": "None"
   },

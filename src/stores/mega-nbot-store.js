@@ -21,22 +21,24 @@ const DEFAULT_VALUES = {
   timeLeft: undefined,
   previousWinner: undefined,
   currentTempWinner: undefined,
+  numOfEntries: undefined,
   noWalletDialogVisible: false,
   wrongNetworkDialogVisible: false,
 }
 
 export default class MegaNBOTStore {
-  contract = undefined
-  @observable owner = undefined
-  @observable winningAmount = undefined
-  drawingInterval = undefined
-  lastDrawingBlockNumber = undefined
-  @observable blocksLeft = undefined
-  @observable timeLeft = undefined
-  @observable previousWinner = undefined
-  @observable currentTempWinner = undefined
-  @observable noWalletDialogVisible = false
-  @observable wrongNetworkDialogVisible = false
+  contract = DEFAULT_VALUES.contract
+  @observable owner = DEFAULT_VALUES.owner
+  @observable winningAmount = DEFAULT_VALUES.winningAmount
+  drawingInterval = DEFAULT_VALUES.drawingInterval
+  lastDrawingBlockNumber = DEFAULT_VALUES.lastDrawingBlockNumber
+  @observable blocksLeft = DEFAULT_VALUES.blocksLeft
+  @observable timeLeft = DEFAULT_VALUES.timeLeft
+  @observable previousWinner = DEFAULT_VALUES.previousWinner
+  @observable currentTempWinner = DEFAULT_VALUES.currentTempWinner
+  @observable numOfEntries = DEFAULT_VALUES.numOfEntries
+  @observable noWalletDialogVisible = DEFAULT_VALUES.noWalletDialogVisible
+  @observable wrongNetworkDialogVisible = DEFAULT_VALUES.wrongNetworkDialogVisible
 
   constructor(appStore) {
     this.appStore = appStore
@@ -54,6 +56,7 @@ export default class MegaNBOTStore {
         this.fetchLastDrawingBlockNumber()
         this.fetchPreviousWinner()
         this.fetchCurrentTempWinner()
+        this.fetchNumOfEntries()
         this.calculateBlocksLeft()
       },
     )
@@ -91,6 +94,7 @@ export default class MegaNBOTStore {
       this.fetchLastDrawingBlockNumber()
       this.fetchPreviousWinner()
       this.fetchCurrentTempWinner()
+      this.fetchNumOfEntries()
     }
   }
 
@@ -159,6 +163,18 @@ export default class MegaNBOTStore {
       this.lastDrawingBlockNumber = res.toString()
     } catch (err) {
       logger.error(`MegaNBOT.lastDrawingBlockNumber(): ${err.message}`)
+    }
+  }
+
+  @action
+  fetchNumOfEntries = async () => {
+    if (!this.contract) return
+
+    try {
+      const res = await this.contract.methods.numOfEntries().call()
+      this.numOfEntries = res.toString()
+    } catch (err) {
+      logger.error(`MegaNBOT.numOfEntries(): ${err.message}`)
     }
   }
 
